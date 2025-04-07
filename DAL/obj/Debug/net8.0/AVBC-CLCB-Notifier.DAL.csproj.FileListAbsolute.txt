@@ -1,0 +1,17 @@
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.DAL\obj\Debug\net8.0\AVBC-CLCB-Notifier.DAL.csproj.AssemblyReference.cache
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.DAL\obj\Debug\net8.0\AVBC-CLCB-Notifier.DAL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.DAL\obj\Debug\net8.0\AVBC-CLCB-Notifier.DAL.AssemblyInfoInputs.cache
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.DAL\obj\Debug\net8.0\AVBC-CLCB-Notifier.DAL.AssemblyInfo.cs
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.DAL\obj\Debug\net8.0\AVBC-CLCB-Notifier.DAL.csproj.CoreCompileInputs.cache
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.DAL\bin\Debug\net8.0\AVBC-CLCB-Notifier.DAL.deps.json
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.DAL\bin\Debug\net8.0\AVBC-CLCB-Notifier.DAL.runtimeconfig.json
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.DAL\bin\Debug\net8.0\AVBC-CLCB-Notifier.DAL.dll
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.DAL\bin\Debug\net8.0\AVBC-CLCB-Notifier.DAL.pdb
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.DAL\bin\Debug\net8.0\AVBC-CLCB-Notifier.MODEL.dll
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.DAL\bin\Debug\net8.0\AVBC-CLCB-Notifier.MODEL.pdb
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.DAL\obj\Debug\net8.0\AVBC-CLC.768DCD84.Up2Date
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.DAL\obj\Debug\net8.0\AVBC-CLCB-Notifier.DAL.dll
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.DAL\obj\Debug\net8.0\refint\AVBC-CLCB-Notifier.DAL.dll
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.DAL\obj\Debug\net8.0\AVBC-CLCB-Notifier.DAL.pdb
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.DAL\obj\Debug\net8.0\AVBC-CLCB-Notifier.DAL.genruntimeconfig.cache
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.DAL\obj\Debug\net8.0\ref\AVBC-CLCB-Notifier.DAL.dll

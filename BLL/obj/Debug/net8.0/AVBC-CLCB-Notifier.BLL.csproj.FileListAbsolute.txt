@@ -1,0 +1,17 @@
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.BLL\obj\Debug\net8.0\AVBC-CLCB-Notifier.BLL.csproj.AssemblyReference.cache
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.BLL\obj\Debug\net8.0\AVBC-CLCB-Notifier.BLL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.BLL\obj\Debug\net8.0\AVBC-CLCB-Notifier.BLL.AssemblyInfoInputs.cache
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.BLL\obj\Debug\net8.0\AVBC-CLCB-Notifier.BLL.AssemblyInfo.cs
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.BLL\obj\Debug\net8.0\AVBC-CLCB-Notifier.BLL.csproj.CoreCompileInputs.cache
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.BLL\bin\Debug\net8.0\AVBC-CLCB-Notifier.BLL.deps.json
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.BLL\bin\Debug\net8.0\AVBC-CLCB-Notifier.BLL.dll
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.BLL\bin\Debug\net8.0\AVBC-CLCB-Notifier.BLL.pdb
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.BLL\bin\Debug\net8.0\AVBC-CLCB-Notifier.DAL.dll
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.BLL\bin\Debug\net8.0\AVBC-CLCB-Notifier.MODEL.dll
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.BLL\bin\Debug\net8.0\AVBC-CLCB-Notifier.DAL.pdb
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.BLL\bin\Debug\net8.0\AVBC-CLCB-Notifier.MODEL.pdb
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.BLL\obj\Debug\net8.0\AVBC-CLC.550F99C7.Up2Date
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.BLL\obj\Debug\net8.0\AVBC-CLCB-Notifier.BLL.dll
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.BLL\obj\Debug\net8.0\refint\AVBC-CLCB-Notifier.BLL.dll
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.BLL\obj\Debug\net8.0\AVBC-CLCB-Notifier.BLL.pdb
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.BLL\obj\Debug\net8.0\ref\AVBC-CLCB-Notifier.BLL.dll

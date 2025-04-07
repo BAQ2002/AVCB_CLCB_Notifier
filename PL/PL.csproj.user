@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Compile Update="CustomControls\CustomControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Edit_Forms\ProcessEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Edit_Forms\EstablishmentEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Edit_Forms\ClientEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CustomControls\imp.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="CustomControls\RoundedButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="CustomControls\RoundedComboBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="CustomControls\RoundedDatePicker.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="CustomControls\RoundedTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Edit_Forms\ProcessEditorForm.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

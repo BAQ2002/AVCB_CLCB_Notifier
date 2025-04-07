@@ -1,0 +1,11 @@
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.MODEL\bin\Debug\net8.0\AVBC-CLCB-Notifier.MODEL.deps.json
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.MODEL\bin\Debug\net8.0\AVBC-CLCB-Notifier.MODEL.dll
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.MODEL\bin\Debug\net8.0\AVBC-CLCB-Notifier.MODEL.pdb
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.MODEL\obj\Debug\net8.0\AVBC-CLCB-Notifier.MODEL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.MODEL\obj\Debug\net8.0\AVBC-CLCB-Notifier.MODEL.AssemblyInfoInputs.cache
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.MODEL\obj\Debug\net8.0\AVBC-CLCB-Notifier.MODEL.AssemblyInfo.cs
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.MODEL\obj\Debug\net8.0\AVBC-CLCB-Notifier.MODEL.csproj.CoreCompileInputs.cache
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.MODEL\obj\Debug\net8.0\AVBC-CLCB-Notifier.MODEL.dll
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.MODEL\obj\Debug\net8.0\refint\AVBC-CLCB-Notifier.MODEL.dll
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.MODEL\obj\Debug\net8.0\AVBC-CLCB-Notifier.MODEL.pdb
+C:\Users\anton\source\repos\AVBC-CLCB-Notifier\AVBC-CLCB-Notifier.MODEL\obj\Debug\net8.0\ref\AVBC-CLCB-Notifier.MODEL.dll
