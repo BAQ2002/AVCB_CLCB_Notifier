@@ -22,3 +22,4 @@ C:\Users\anton\source\repos\AVBC_CLCB_Notifier\BLL\obj\Debug\net8.0\refint\BLL.d
 C:\Users\anton\source\repos\AVBC_CLCB_Notifier\BLL\obj\Debug\net8.0\BLL.pdb
 C:\Users\anton\source\repos\AVBC_CLCB_Notifier\BLL\obj\Debug\net8.0\BLL.genruntimeconfig.cache
 C:\Users\anton\source\repos\AVBC_CLCB_Notifier\BLL\obj\Debug\net8.0\ref\BLL.dll
+C:\Users\anton\source\repos\AVBC_CLCB_Notifier\BLL\obj\Debug\net8.0\BLL.sourcelink.json

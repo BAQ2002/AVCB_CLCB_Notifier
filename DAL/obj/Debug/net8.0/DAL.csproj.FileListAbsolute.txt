@@ -32,3 +32,4 @@ C:\Users\anton\source\repos\AVBC_CLCB_Notifier\DAL\obj\Debug\net8.0\refint\DAL.d
 C:\Users\anton\source\repos\AVBC_CLCB_Notifier\DAL\obj\Debug\net8.0\DAL.pdb
 C:\Users\anton\source\repos\AVBC_CLCB_Notifier\DAL\obj\Debug\net8.0\DAL.genruntimeconfig.cache
 C:\Users\anton\source\repos\AVBC_CLCB_Notifier\DAL\obj\Debug\net8.0\ref\DAL.dll
+C:\Users\anton\source\repos\AVBC_CLCB_Notifier\DAL\obj\Debug\net8.0\DAL.sourcelink.json

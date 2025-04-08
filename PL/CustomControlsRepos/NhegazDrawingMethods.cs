@@ -21,8 +21,8 @@ namespace AVBC_CLCB_Notifier.PL
 
             using (GraphicsPath path = new GraphicsPath())
             {
-                int diameter = 18;//OnFocusBool ? (borderRadius * 2) + borderFocusExtraWidth : borderRadius * 2;
-                int radius = diameter / 2;              //int centerX = (borderRadius % 2 == 0) ? borderRadius / 2 : (borderRadius + 1) / 2;
+                int diameter = 2*control.BorderRadius;//OnFocusBool ? (borderRadius * 2) + borderFocusExtraWidth : borderRadius * 2;
+                //int radius = diameter / 2;              //int centerX = (borderRadius % 2 == 0) ? borderRadius / 2 : (borderRadius + 1) / 2;
 
                 path.AddArc(rect.Left, rect.Top, diameter, diameter, 180, 90); //Arco superior Esquerdo
                 path.AddArc(rect.Right - diameter, rect.Top, diameter, diameter, 270, 90); //Arco superior Direito
@@ -51,15 +51,16 @@ namespace AVBC_CLCB_Notifier.PL
 
 
                 int ExtraLenght = (pen.Width > 1) ? 1 : 0;
-                e.Graphics.DrawLine(pen, rect.Left + radius, rect.Top, rect.Right - radius + ExtraLenght, rect.Top); //Linha Superior
-                e.Graphics.DrawLine(pen, rect.Left, rect.Top + radius, rect.Left, rect.Bottom - radius + ExtraLenght); //Linha Esquerda
-                e.Graphics.DrawLine(pen, rect.Right, rect.Top + radius, rect.Right, rect.Bottom - radius + ExtraLenght); //Linha Direita
-                e.Graphics.DrawLine(pen, rect.Left + radius, rect.Bottom, rect.Right - radius + ExtraLenght, rect.Bottom); //Linha Inferior
+                //e.Graphics.DrawLine(pen, rect.Left + radius, rect.Top, rect.Right - radius + ExtraLenght, rect.Top); //Linha Superior
+                //e.Graphics.DrawLine(pen, rect.Left, rect.Top + radius, rect.Left, rect.Bottom - radius + ExtraLenght); //Linha Esquerda
+                //e.Graphics.DrawLine(pen, rect.Right, rect.Top + radius, rect.Right, rect.Bottom - radius + ExtraLenght); //Linha Direita
+                //e.Graphics.DrawLine(pen, rect.Left + radius, rect.Bottom, rect.Right - radius + ExtraLenght, rect.Bottom); //Linha Inferior
                 //SmoothBorderArcs(diameter, rect, pen, e);
+                DrawPreciseRoundedBorder(control, e);
             }
         }
 
-        private static List<PointF> GenerateCornerArcPoints(float radius, int segments = 12)
+        private static List<PointF> GenerateCornerArcPoints(bool isInner, float radius, int segments = 12)
         {
             List<PointF> points = new();
 
@@ -71,6 +72,10 @@ namespace AVBC_CLCB_Notifier.PL
                 float y = radius * (1 - (float)Math.Sin(angle)); //Gera o Y do ponto atual
                 points.Add(new PointF(x, y)); //Adiciona o ponto a lista de pontos
             }
+            if (isInner) 
+            {
+                points.Reverse();
+            }          
             return points;
         }
 
@@ -79,7 +84,7 @@ namespace AVBC_CLCB_Notifier.PL
             int borderRadius = control.BorderRadius;
             if (borderRadius <= 0) return;
 
-            float radius = borderRadius; //Transforma o valor de BorderRadius em float
+            float BorderRadius = borderRadius; //Transforma o valor de BorderRadius em float
             float width = control.Width - 1; //Ajuste necessario do Width para ficar dentro do tamanho do control
             float height = control.Height - 1; //Ajuste necessario do Height para ficar dentro do tamanho do control
             int borderWidth = (control.BorderWidth * 2) - 1; //Ajuste necessario para o enquadramento da caneta
@@ -87,91 +92,71 @@ namespace AVBC_CLCB_Notifier.PL
 
             int penWidth = control.OnFocusBool ? borderFocusWidth : borderWidth; //Largura da caneta
             Color baseColor = control.OnFocusBool ? control.BorderColorFocus : control.BorderColor; //Cor da caneta       
-            Pen pen = new(baseColor, penWidth);
+            Pen pen = new(baseColor, 1);
 
-            var arcPoints = GenerateCornerArcPoints(radius, 12);
-            var innerArcPoints = GenerateCornerArcPoints(radius*0.9f, 12);
+            var arcPoints = GenerateCornerArcPoints(false, borderRadius, borderRadius/2);
+            var innerArcPoints = GenerateCornerArcPoints(true, borderRadius*0.9f, borderRadius/2);
 
-            GraphicsPath path = new();
+            GraphicsPath topLeftPath = new();
+            GraphicsPath topRightPath = new();
+            GraphicsPath bottomLeftPath = new();
+            GraphicsPath bottomRightPath = new();
 
-            foreach (var p in arcPoints) //Arco Superior Esquerdo
-                path.AddLine(new PointF(p.X, p.Y), new PointF(p.X, p.Y)); //Para cada ponto na lista de Pontos, cria uma Line de um unico ponto
-
-
-            foreach (var p in arcPoints) //Arco Superior Direito
+            foreach (var p in arcPoints)
             {
-                float x = width - p.Y;
-                float y = p.X;
-                path.AddLine(new PointF(x, y), new PointF(x, y)); //Para cada ponto na lista de Pontos, cria uma Line de um unico ponto
+                // Arco Superior Esquerdo
+                topLeftPath.AddLine(new PointF(p.X, p.Y), new PointF(p.X, p.Y));
+
+                // Arco Superior Direito
+                topRightPath.AddLine(new PointF(width - p.Y, p.X), new PointF(width - p.Y, p.X));
+
+                // Arco Inferior Direito
+                bottomRightPath.AddLine(new PointF(width - p.X, height - p.Y), new PointF(width - p.X, height - p.Y));
+
+                // Arco Inferior Esquerdo
+                bottomLeftPath.AddLine(new PointF(p.Y, height - p.X), new PointF(p.Y, height - p.X));
+
             }
 
-            foreach (var p in arcPoints) // Arco inferior Direito
-            {
-                float x = width - p.X;
-                float y = height - p.Y;
-                path.AddLine(new PointF(x, y), new PointF(x, y)); //Para cada ponto na lista de Pontos, cria uma Line de um unico ponto
-            }
-
-            foreach (var p in arcPoints) // Arco inferior Esquerdo
-            {
-                float x = p.Y;
-                float y = height - p.X;
-                path.AddLine(new PointF(x, y), new PointF(x, y)); //Para cada ponto na lista de Pontos, cria uma Line de um unico ponto
-            }
-            foreach (var p in arcPoints) //Arco Superior Esquerdo
-                path.AddLine(new PointF(p.X, p.Y), new PointF(p.X, p.Y)); //Para cada ponto na lista de Pontos, cria uma Line de um unico ponto
-
-            foreach (var p in arcPoints) //Arco Superior Direito
-            {
-                float x = width - p.Y;
-                float y = p.X;
-                path.AddLine(new PointF(x, y), new PointF(x, y)); //Para cada ponto na lista de Pontos, cria uma Line de um unico ponto
-            }
-
-            foreach (var p in arcPoints) // Arco inferior Direito
-            {
-                float x = width - p.X;
-                float y = height - p.Y;
-                path.AddLine(new PointF(x, y), new PointF(x, y)); //Para cada ponto na lista de Pontos, cria uma Line de um unico ponto
-            }
-
-            foreach (var p in arcPoints) // Arco inferior Esquerdo
-            {
-                float x = p.Y;
-                float y = height - p.X;
-                path.AddLine(new PointF(x, y), new PointF(x, y)); //Para cada ponto na lista de Pontos, cria uma Line de um unico ponto
-            }
             if (control.BorderWidth > 1)
             {
+                int offSet = control.BorderWidth - 1;
                 foreach (var p in innerArcPoints) //Arco Superior Esquerdo
-                    path.AddLine(new PointF(p.X + 1, p.Y + 1), new PointF(p.X + 1, p.Y + 1)); //Para cada ponto na lista de Pontos, cria uma Line de um unico ponto
+                    topLeftPath.AddLine(new PointF(p.X + offSet, p.Y + offSet), new PointF(p.X + offSet, p.Y + offSet)); //Para cada ponto na lista de Pontos, cria uma Line de um unico ponto
 
                 foreach (var p in innerArcPoints) //Arco Superior Direito
                 {
                     float x = width - p.Y;
                     float y = p.X;
-                    path.AddLine(new PointF(x - 1, y + 1), new PointF(x - 1, y + 1)); //Para cada ponto na lista de Pontos, cria uma Line de um unico ponto
-
-                }
-
-                foreach (var p in innerArcPoints) // Arco inferior Direito
-                {
-                    float x = width - p.X;
-                    float y = height - p.Y;
-                    path.AddLine(new PointF(x - 1, y - 1), new PointF(x - 1, y - 1)); //Para cada ponto na lista de Pontos, cria uma Line de um unico ponto
+                    topRightPath.AddLine(new PointF(x - offSet, y + offSet), new PointF(x - offSet, y + offSet)); //Para cada ponto na lista de Pontos, cria uma Line de um unico ponto
                 }
 
                 foreach (var p in innerArcPoints) // Arco inferior Esquerdo
                 {
                     float x = p.Y;
                     float y = height - p.X;
-                    path.AddLine(new PointF(x + 1, y - 1), new PointF(x + 1, y - 1)); //Para cada ponto na lista de Pontos, cria uma Line de um unico ponto
+                    bottomLeftPath.AddLine(new PointF(x + offSet, y - offSet), new PointF(x + offSet, y - offSet)); //Para cada ponto na lista de Pontos, cria uma Line de um unico ponto
                 }
+
+                foreach  (var p in innerArcPoints) // Arco inferior Direito
+                {
+                    float x = width - p.X;
+                    float y = height - p.Y;
+                    bottomRightPath.AddLine(new PointF(x - offSet, y - offSet), new PointF(x - offSet, y - offSet)); //Para cada ponto na lista de Pontos, cria uma Line de um unico ponto
+                }
+
+                SolidBrush brush = new SolidBrush(baseColor);
+                e.Graphics.FillPath(brush, topLeftPath);
+                e.Graphics.FillPath(brush, topRightPath);
+                e.Graphics.FillPath(brush, bottomLeftPath);
+                e.Graphics.FillPath(brush, bottomRightPath);
             }
+            
             e.Graphics.SmoothingMode = SmoothingMode.None;
-            e.Graphics.DrawPath(pen, path);
-
-
+            e.Graphics.DrawPath(pen, topLeftPath);
+            e.Graphics.DrawPath(pen, topRightPath);
+            e.Graphics.DrawPath(pen, bottomLeftPath);
+            e.Graphics.DrawPath(pen, bottomRightPath);
         }
     }
 }

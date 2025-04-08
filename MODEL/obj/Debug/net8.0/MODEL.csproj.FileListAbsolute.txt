@@ -20,3 +20,4 @@ C:\Users\anton\source\repos\AVBC_CLCB_Notifier\MODEL\obj\Debug\net8.0\MODEL.dll
 C:\Users\anton\source\repos\AVBC_CLCB_Notifier\MODEL\obj\Debug\net8.0\refint\MODEL.dll
 C:\Users\anton\source\repos\AVBC_CLCB_Notifier\MODEL\obj\Debug\net8.0\MODEL.pdb
 C:\Users\anton\source\repos\AVBC_CLCB_Notifier\MODEL\obj\Debug\net8.0\ref\MODEL.dll
+C:\Users\anton\source\repos\AVBC_CLCB_Notifier\MODEL\obj\Debug\net8.0\MODEL.sourcelink.json
