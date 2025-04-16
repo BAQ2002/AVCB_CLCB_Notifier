@@ -74,7 +74,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             processNumberInput.BorderFocusExtraWidth = 1;
             processNumberInput.BorderRadius = 5;
             processNumberInput.BorderWidth = 1;
-            processNumberInput.Horizontalpadding = 1;
+            processNumberInput.HorizontalPadding = 1;
             processNumberInput.Location = new Point(163, 37);
             processNumberInput.MinimumSize = new Size(50, 23);
             processNumberInput.Name = "processNumberInput";
@@ -82,7 +82,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             processNumberInput.Padding = new Padding(5);
             processNumberInput.Size = new Size(149, 23);
             processNumberInput.TabIndex = 1;
-            processNumberInput.Verticalpadding = 1;
+            processNumberInput.VerticalPadding = 1;
             // 
             // processGroupBox
             // 
@@ -127,15 +127,14 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             processTypeComboBox.BorderRadius = 6;
             processTypeComboBox.BorderWidth = 1;
             processTypeComboBox.ForeColor = SystemColors.MenuHighlight;
-            processTypeComboBox.Horizontalpadding = 2;
-            processTypeComboBox.ItemList = (List<string>)resources.GetObject("processTypeComboBox.ItemList");
+            processTypeComboBox.HorizontalPadding = 2;
             processTypeComboBox.Location = new Point(8, 37);
             processTypeComboBox.MinimumSize = new Size(100, 1);
             processTypeComboBox.Name = "processTypeComboBox";
             processTypeComboBox.OnFocusBool = false;
             processTypeComboBox.Size = new Size(128, 23);
             processTypeComboBox.TabIndex = 3;
-            processTypeComboBox.Verticalpadding = 4;
+            processTypeComboBox.VerticalPadding = 4;
             // 
             // establishmentGroupBox
             // 
@@ -187,7 +186,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             establishmentFantasyNameInput.BorderFocusExtraWidth = 1;
             establishmentFantasyNameInput.BorderRadius = 5;
             establishmentFantasyNameInput.BorderWidth = 1;
-            establishmentFantasyNameInput.Horizontalpadding = 1;
+            establishmentFantasyNameInput.HorizontalPadding = 1;
             establishmentFantasyNameInput.Location = new Point(8, 21);
             establishmentFantasyNameInput.MinimumSize = new Size(50, 23);
             establishmentFantasyNameInput.Name = "establishmentFantasyNameInput";
@@ -195,7 +194,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             establishmentFantasyNameInput.Padding = new Padding(5);
             establishmentFantasyNameInput.Size = new Size(276, 23);
             establishmentFantasyNameInput.TabIndex = 6;
-            establishmentFantasyNameInput.Verticalpadding = 1;
+            establishmentFantasyNameInput.VerticalPadding = 1;
             // 
             // clientGroupBox
             // 
@@ -227,7 +226,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             clientNameInput.BorderFocusExtraWidth = 1;
             clientNameInput.BorderRadius = 5;
             clientNameInput.BorderWidth = 1;
-            clientNameInput.Horizontalpadding = 1;
+            clientNameInput.HorizontalPadding = 1;
             clientNameInput.Location = new Point(8, 22);
             clientNameInput.MinimumSize = new Size(50, 23);
             clientNameInput.Name = "clientNameInput";
@@ -235,7 +234,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             clientNameInput.Padding = new Padding(5);
             clientNameInput.Size = new Size(276, 23);
             clientNameInput.TabIndex = 0;
-            clientNameInput.Verticalpadding = 1;
+            clientNameInput.VerticalPadding = 1;
             // 
             // editClientButton
             // 
@@ -313,7 +312,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             statusOutput.BorderFocusExtraWidth = 1;
             statusOutput.BorderRadius = 5;
             statusOutput.BorderWidth = 1;
-            statusOutput.Horizontalpadding = 1;
+            statusOutput.HorizontalPadding = 1;
             statusOutput.Location = new Point(244, 37);
             statusOutput.MinimumSize = new Size(50, 23);
             statusOutput.Name = "statusOutput";
@@ -321,7 +320,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             statusOutput.Padding = new Padding(5);
             statusOutput.Size = new Size(98, 23);
             statusOutput.TabIndex = 12;
-            statusOutput.Verticalpadding = 1;
+            statusOutput.VerticalPadding = 1;
             // 
             // issuanceDateInput
             // 
@@ -350,7 +349,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             extraInfoInput.BorderFocusExtraWidth = 1;
             extraInfoInput.BorderRadius = 5;
             extraInfoInput.BorderWidth = 1;
-            extraInfoInput.Horizontalpadding = 1;
+            extraInfoInput.HorizontalPadding = 1;
             extraInfoInput.Location = new Point(6, 19);
             extraInfoInput.MinimumSize = new Size(50, 23);
             extraInfoInput.Name = "extraInfoInput";
@@ -358,7 +357,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             extraInfoInput.Padding = new Padding(5);
             extraInfoInput.Size = new Size(350, 23);
             extraInfoInput.TabIndex = 7;
-            extraInfoInput.Verticalpadding = 1;
+            extraInfoInput.VerticalPadding = 1;
             extraInfoInput.TextChanged += textBox4_TextChanged;
             // 
             // saveButton

@@ -10,14 +10,14 @@ using System.Windows.Forms;
 
 namespace AVBC_CLCB_Notifier.PL.Edit_Forms
 {
-    public partial class EstablishmentEditorForm : Form
+    public partial class Form1 : Form
     {
-        public EstablishmentEditorForm()
+        public Form1()
         {
             InitializeComponent();
         }
 
-        private void cnpjInput_TextChanged(object sender, EventArgs e)
+        private void roundedDatePicker1_Load(object sender, EventArgs e)
         {
 
         }

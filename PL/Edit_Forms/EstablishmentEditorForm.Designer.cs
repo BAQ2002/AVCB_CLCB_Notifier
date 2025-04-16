@@ -54,6 +54,7 @@
             cnpjInput.Name = "cnpjInput";
             cnpjInput.Size = new Size(100, 23);
             cnpjInput.TabIndex = 2;
+            cnpjInput.TextChanged += cnpjInput_TextChanged;
             // 
             // addressInput
             // 

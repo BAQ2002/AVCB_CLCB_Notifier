@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System;
 using System.Drawing;
+using System.ComponentModel;
+using System.Collections.Specialized;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
@@ -17,17 +19,16 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
     public class RoundedComboBox : CustomControl
     {
 
-        private List<String> itemList = new List<String>(); //Opções da combo Box     
+        private StringCollection itemList  = new StringCollection(); //Opções da combo Box     
         public Label selectIndex = new Label(); //Opção atualmente selecionada
         public Label dropDownIcon = new Label(); //Icone de visual
         private DropDownInstance dropDownInstance = null;
-
-        public List<string> ItemList
-        {
-            get { return itemList; } 
+         
+        public StringCollection ItemList { 
+            get { return itemList; }
             set { itemList = value; Invalidate(); }
         }
-        
+   
         public override Font Font
         {
             get { return selectIndex.Font; }
@@ -39,7 +40,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             this.DoubleBuffered = true;
             this.Size = new Size(121, 23);            
             this.BackColor = Color.Transparent;
-            this.Horizontalpadding += BorderWidth;
+            this.HorizontalPadding += BorderWidth;
             this.MinimumSize =new Size(5, 5);
             this.Controls.Add(selectIndex);
             selectIndex.Text = "Teste123456";
@@ -47,7 +48,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             selectIndex.Click += (s, e) => { this.Focus(); this.OnClick(e); };
             selectIndex.GotFocus += (s, e) => { this.OnGotFocus(e); };
             selectIndex.LostFocus += (s, e) => { this.OnLostFocus(e); };
-
+            selectIndex.BackColor = Color.Red;
             this.Controls.Add(dropDownIcon);
             dropDownIcon.Text = "▼";
             dropDownIcon.DoubleClick += (s, e) => { this.Focus(); this.OnClick(e); };
@@ -63,15 +64,15 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         {                        
             string referenceText = string.IsNullOrEmpty(selectIndex.Text) ? "A" : selectIndex.Text;
             int textHeight = TextRenderer.MeasureText(referenceText, selectIndex.Font).Height;
-            Verticalpadding = (this.Height - textHeight) / 2;
+            VerticalPadding = (this.Height - textHeight) / 2;
 
-            selectIndex.Location = new Point(Horizontalpadding, Verticalpadding);
-            selectIndex.Width = this.Width - (dropDownIcon.Width + Horizontalpadding); // Deixa espaço para o ícone
+            selectIndex.Location = new Point(HorizontalPadding, VerticalPadding);
+            selectIndex.Width = this.Width - (dropDownIcon.Width + HorizontalPadding); // Deixa espaço para o ícone
             selectIndex.Height = selectIndex.Font.Height;
 
+            dropDownIcon.Location = new Point(this.Width - (dropDownIcon.Width + HorizontalPadding), this.VerticalPadding);
             dropDownIcon.Width = dropDownIcon.Font.Height;
             dropDownIcon.Height = dropDownIcon.Font.Height;
-            dropDownIcon.Location = new Point(this.Width - (dropDownIcon.Width + Horizontalpadding), this.Verticalpadding);
             Invalidate();
         }
 
@@ -143,7 +144,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         private Color itemFocusColor;
         private RoundedComboBox parentComboBox;
         private int hoveredIndex = -1;
-        private List<string> itemList = new List<string>();
+        private StringCollection itemList = new StringCollection();
 
         public DropDownInstance(RoundedComboBox _roundedComboBox)
         {
@@ -154,8 +155,8 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             this.itemFocusColor = _roundedComboBox.BorderColorFocus;
             this.BackgroundColor = _roundedComboBox.BackgroundColor;
             this.Width = _roundedComboBox.Width;
-            this.Horizontalpadding = _roundedComboBox.Horizontalpadding;
-            this.Verticalpadding = _roundedComboBox.Verticalpadding;
+            this.HorizontalPadding = _roundedComboBox.HorizontalPadding;
+            this.VerticalPadding = _roundedComboBox.VerticalPadding;
             this.MinimumSize = new Size(5, 5);
             this.DoubleBuffered = true;
             this.itemList = _roundedComboBox.ItemList;
@@ -170,11 +171,11 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         {
             string referenceText = "A";
             int textHeight = TextRenderer.MeasureText(referenceText, this.Font).Height;
-            this.Height = (textHeight + Verticalpadding) * _sender.ItemList.Count;
+            this.Height = (textHeight + VerticalPadding) * _sender.ItemList.Count;
             
         
             this.Controls.Clear(); // Limpa labels antigos se necessário
-            int y = Verticalpadding/2; // Posição inicial vertical
+            int y = VerticalPadding/2; // Posição inicial vertical
             if (_sender.ItemList == null || _sender.ItemList.Count == 0) return;
 
             for (int i = 0; i < _sender.ItemList.Count; i++) //Cria uma Label para cada item do ItemList
@@ -183,9 +184,9 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 {
                     Name = $"Item{i}", // Define um nome único para cada Label
                     Text = _sender.ItemList[i],
-                    Location = new System.Drawing.Point( _sender.Horizontalpadding, y), 
+                    Location = new System.Drawing.Point( _sender.HorizontalPadding, y), 
                     Height = textHeight,                 
-                    Width = _sender.Width - _sender.Horizontalpadding - (2 * _sender.BorderWidth),
+                    Width = _sender.Width - _sender.HorizontalPadding - (2 * _sender.BorderWidth),
                     ForeColor = _sender.ForeColor
                 };
 
@@ -206,7 +207,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 lbl.Click += (s, e) => OnLabelClick(lbl.Text);              
 
                 this.Controls.Add(lbl);
-                y += textHeight + Verticalpadding; // Ajuste da posição vertical para o próximo label
+                y += textHeight + VerticalPadding; // Ajuste da posição vertical para o próximo label
             }
         }
 

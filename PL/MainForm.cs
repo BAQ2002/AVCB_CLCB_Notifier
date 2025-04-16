@@ -96,5 +96,10 @@ namespace PL
         {
 
         }
+
+        private void roundedComboBox2_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -13,8 +13,8 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         private int borderRadius = 5;
         private int borderWidth = 1;
         private int borderFocusExtraWidth = 1;
-        private int horizontalpadding = 1;
-        private int verticalpadding = 1;
+        private int horizontalPadding = 1;
+        private int verticalPadding = 1;
         private Color borderColor = Color.Red;
         private Color dropdownBorderColor = Color.Green;
         private Color borderColorFocus = Color.Blue; //Cor da borda
@@ -30,15 +30,15 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             get { return onFocusBool; }
             set { onFocusBool = value; Invalidate(); }
         }
-        public int Horizontalpadding
+        public int HorizontalPadding
         {
-            get { return horizontalpadding; }
-            set { horizontalpadding = value; Invalidate(); }
+            get { return horizontalPadding; }
+            set { horizontalPadding = value; Invalidate(); }
         }
-        public int Verticalpadding
+        public int VerticalPadding
         {
-            get { return verticalpadding; }
-            set { verticalpadding = value; Invalidate(); }
+            get { return verticalPadding; }
+            set { verticalPadding = value; Invalidate(); }
         }
         public int BorderWidth
         {
