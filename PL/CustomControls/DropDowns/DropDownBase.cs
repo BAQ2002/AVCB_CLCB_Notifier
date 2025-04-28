@@ -33,6 +33,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             this.DoubleBuffered = true;
             this.BackColor = Color.Transparent;
             this.TabStop = true;
+            this.ForeColor = _control.ForeColor;
             this.Font = _control.Font;
         }
 
@@ -143,25 +144,31 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         private InnerLabel decadeLabel = new InnerLabel(); 
         private InnerLabel backwardIcon = new InnerLabel(); //Label&&Button para passar para a década anteriror
         private InnerLabel forwardIcon = new InnerLabel(); //Label&&Button para passar para a década posterior
+        private List<InnerLabel> yearLabels = new List<InnerLabel>();
+
         private int currentDecade;
-        
+        private int decadeLastYear;
         public DropDownYear(CustomControl control) : base(control)
         {
             itemList = GenerateFullYearList();
             currentDecade = (DateTime.Now.Year / 10) * 10;
-            
+            decadeLastYear = currentDecade + 9;
 
             this.Controls.Add(backwardIcon);
             backwardIcon.Text = "<";
             backwardIcon.ForeColor = this.ForeColor;
-            backwardIcon.Click += (s, e) => ChangeDecade(-10);
+            backwardIcon.Click += (s, e) => { ChangeDecade(-10); Invalidate();};
+            backwardIcon.DoubleClick += (s, e) => { ChangeDecade(-20); Invalidate();};
 
             this.Controls.Add(forwardIcon);
             forwardIcon.Text = ">";
             forwardIcon.ForeColor = this.ForeColor;
-            forwardIcon.Click += (s, e) => ChangeDecade(10);           
+            forwardIcon.Click += (s, e) => { ChangeDecade(10); Invalidate();};
+            forwardIcon.DoubleClick += (s, e) => { ChangeDecade(20); Invalidate();};
 
             this.Controls.Add(decadeLabel);
+            decadeLabel.Text = $"{currentDecade} - {decadeLastYear}";
+            decadeLabel.ForeColor = this.ForeColor;
 
             AdjustControlSize(4);
         }
@@ -169,11 +176,10 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         private StringCollection GenerateFullYearList()
         {
             var list = new StringCollection(); //Cria uma Nova StringCollection
-            for (int i = 0; i <= 2100; i++) //Cria um int para cada ano de 1900 ate 2100
+            for (int i = 0; i <= 2099; i++) //Cria um int para cada ano de 1900 ate 2100
                 list.Add(i.ToString()); //Adiciona int.ToString na StringCollection
             return list;
         }
-
         
         private Size textExactSize(string text, Font font)
         {
@@ -189,15 +195,21 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
 
         private void ChangeDecade(int offset)
         {
+            if (currentDecade + offset >= itemList.Count)
+            {
+                return;
+            }
             currentDecade += offset;
+            decadeLastYear = currentDecade + 9;
+            
+            decadeLabel.Text = $"{currentDecade} - {decadeLastYear}";
+            AdjustControlSize(4); // Atualiza os anos no lugar!
         }
         protected void AdjustControlSize(int maxItemsPerLine)
         {           
-            //this.Controls.Clear();
-            if (itemList == null || itemList.Count == 0 || maxItemsPerLine <= 0)
-                return;
 
-            
+            if (itemList == null || itemList.Count == 0 || maxItemsPerLine <= 0)
+               return;        
 
             int itemWidth = textExactSize("0000", this.Font).Width;
             int itemHeight = textExactSize("0000", this.Font).Height;
@@ -206,20 +218,35 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
 
             int numRows = (int)Math.Ceiling((double)10 / maxItemsPerLine); //Calcula a quantidade de linhas"row" necessarias de acordo com o maxItemsPerLine 
             this.Height = (numRows + 1) * (itemHeight + yPadding) + yPadding;
-
+           
             backwardIcon.Location = new Point(HorizontalPadding, VerticalPadding);
             forwardIcon.Location = new Point(Width - (forwardIcon.Width + HorizontalPadding), VerticalPadding);
-            
-            for (int i = 0; i <=9; i++)
+            decadeLabel.Location = new Point((Width - decadeLabel.Width) / 2, yPadding);
+            if (yearLabels.Count == 0) 
+            { 
+                for (int i = 0; i <= 9; i++)
+                {
+                    int row = i / maxItemsPerLine; //Define a linha"row" em que o item"Label" deve ser inserido
+                    int col = i % maxItemsPerLine; //Define a coluna"column" em que o item"Label" deve ser inserido
+                    int x = xPadding + ((Width / maxItemsPerLine) * col); //Define a coordenada X em que o item"Label" deve ser inserido
+                    int y = (backwardIcon.Height + 2 * yPadding) + (row * (itemHeight + yPadding)); //Define a coordenada y em que o item"Label" deve ser inserido
+                    int yearIndex = currentDecade + i; //Define o ano/índice(ano==índice) da lista que será referenciado
+                                                       
+                    InnerLabel lbl = CreateDateLabel(i, itemList[yearIndex], x, y, itemWidth, itemHeight);
+                    yearLabels.Add(lbl);
+                    this.Controls.Add(lbl);
+                }
+            }
+            else // Atualiza apenas os textos
             {
-                int row = i / maxItemsPerLine; //Define a linha"row" em que o item"Label" deve ser inserido
-                int col = i % maxItemsPerLine; //Define a coluna"column" em que o item"Label" deve ser inserido
-                int x = xPadding + ((Width / maxItemsPerLine) * col); //Define a coordenada X em que o item"Label" deve ser inserido
-                int y = (backwardIcon.Height + 2 * yPadding) + (row * (itemHeight+ yPadding)); //Define a coordenada y em que o item"Label" deve ser inserido
-                int yearIndex = currentDecade + i; //Define o ano/índice(ano==índice) da lista que será referenciado
-                                                   //
-                InnerLabel lbl = CreateDateLabel(i, itemList[yearIndex], x, y, itemWidth, itemHeight);
-                this.Controls.Add(lbl);
+                for (int i = 0; i <= 9; i++)
+                {
+                    int yearIndex = currentDecade + i;
+                    if (yearIndex >= 0 && yearIndex < itemList.Count)
+                    {
+                        yearLabels[i].Text = itemList[yearIndex];
+                    }
+                }
             }
         }
         protected override void OnLabelClick(string selectedText)
