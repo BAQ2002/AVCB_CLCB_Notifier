@@ -21,5 +21,10 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
         {
 
         }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

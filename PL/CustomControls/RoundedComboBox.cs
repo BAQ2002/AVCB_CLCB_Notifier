@@ -12,7 +12,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Collections;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
-using AVBC_CLCB_Notifier.PL;
+using AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos;
 
 namespace AVBC_CLCB_Notifier.PL.CustomControls
 {
@@ -42,6 +42,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             this.BackColor = Color.Transparent;
             this.HorizontalPadding += BorderWidth;
             this.MinimumSize =new Size(5, 5);
+
             this.Controls.Add(selectIndex);
             selectIndex.Text = "Teste123456";
             selectIndex.DoubleClick += (s, e) => { this.Focus(); this.OnClick(e); };
@@ -49,6 +50,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             selectIndex.GotFocus += (s, e) => { this.OnGotFocus(e); };
             selectIndex.LostFocus += (s, e) => { this.OnLostFocus(e); };
             selectIndex.BackColor = Color.Red;
+
             this.Controls.Add(dropDownIcon);
             dropDownIcon.Text = "▼";
             dropDownIcon.DoubleClick += (s, e) => { this.Focus(); this.OnClick(e); };

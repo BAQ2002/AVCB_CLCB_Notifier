@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="CustomControls\CustomControls\" />
     <Folder Include="images\" />
   </ItemGroup>
 

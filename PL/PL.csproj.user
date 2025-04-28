@@ -1,6 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Compile Update="CustomControls\DropDowns\DropDownBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="CustomControls\WIPInnerLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="CustomControls\WIPinnerTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Update="CustomControls\InnerTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -39,6 +48,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Update="Edit_Forms\Form1.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Update="Edit_Forms\ProcessEditorForm.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>

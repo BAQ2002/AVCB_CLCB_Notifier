@@ -8,22 +8,27 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 using System.Xml;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
+using AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos;
 
 
-namespace AVBC_CLCB_Notifier.PL.Templates
+namespace AVBC_CLCB_Notifier.PL.CustomControls
 {
     public class RoundedDatePicker : CustomControl
     {
 
         private List<StringCollection> itemListsIndexes = new List<StringCollection>();
-        private StringCollection itemList = new StringCollection(); //Opções da combo Box     
+        private StringCollection itemList = new StringCollection(); //Opções da combo Box
+                                                                    //
         public TextBox selectedDay = new TextBox(); //Opção atualmente selecionada Dia
         public TextBox selectedMonth = new TextBox(); //Opção atualmente selecionada mes
         public TextBox selectedYear = new TextBox(); //Opção atualmente selecionada ano
+
         public Label dayDropDownIcon = new Label(); //Icone de visual
         public Label monthDropDownIcon = new Label();//Icone de visual
         public Label yearDropDownIcon = new Label();//Icone de visual
-        private DropDownInstanceDate dropDownInstance = null;
+
+        private CustomControl dropDownInstance = null;
 
         public StringCollection ItemList
         {
@@ -52,55 +57,59 @@ namespace AVBC_CLCB_Notifier.PL.Templates
             
             this.Controls.Add(selectedDay);
             selectedDay.Name = this.Name + "selectedDay";
-            selectedDay.Text = " 01";
-            selectedDay.BorderStyle = BorderStyle.None; 
+            selectedDay.Text = $"{DateTime.Now.Day}";
+            selectedDay.BorderStyle = BorderStyle.None;
+            selectedDay.ForeColor = this.ForeColor;
             selectedDay.DoubleClick += (s, e) => { this.Focus(); this.OnClick(e); };
             selectedDay.Click += (s, e) => { this.Focus(); this.OnClick(e); };
             selectedDay.GotFocus += (s, e) => { this.OnGotFocus(e); };
             selectedDay.LostFocus += (s, e) => { this.OnLostFocus(e); };
-            //selectedDay.BackColor = Color.Transparent;
+            selectedDay.BackColor = Color.Red;
 
             this.Controls.Add(dayDropDownIcon);
-            dayDropDownIcon.Text = "";
-            dayDropDownIcon.DoubleClick += (s, e) => { this.Focus(); this.OnClick(e, "day"); };
-            dayDropDownIcon.Click += (s, e) => { this.Focus(); this.OnClick(e, "day"); };
+            dayDropDownIcon.Text = "";           
+            dayDropDownIcon.DoubleClick += (s, e) => { this.Focus(); this.OnClick(e, new DropDownDay(this)); };
+            dayDropDownIcon.Click += (s, e) => { this.Focus(); this.OnClick(e, new DropDownDay(this)); };
             dayDropDownIcon.GotFocus += (s, e) => { this.OnGotFocus(e); };
             dayDropDownIcon.LostFocus += (s, e) => { this.OnLostFocus(e); };
-            //dayDropDownIcon.BackColor = Color.Transparent;
+            //dayDropDownIcon.BackColor = Color.Blue;
 
             this.Controls.Add(selectedMonth);
-            selectedMonth.Text = " 01";
+            selectedMonth.Text = $"{DateTime.Now.Month}";
             selectedMonth.BorderStyle = BorderStyle.None;
+            selectedMonth.ForeColor = this.ForeColor;
             selectedMonth.DoubleClick += (s, e) => { this.Focus(); this.OnClick(e); };
             selectedMonth.Click += (s, e) => { this.Focus(); this.OnClick(e); };
             selectedMonth.GotFocus += (s, e) => { this.OnGotFocus(e); };
             selectedMonth.LostFocus += (s, e) => { this.OnLostFocus(e); };
-            //selectedMonth.BackColor = Color.Transparent;
+            selectedMonth.BackColor = Color.Red;
 
             this.Controls.Add(monthDropDownIcon);
             monthDropDownIcon.Text = "";
-            monthDropDownIcon.DoubleClick += (s, e) => { this.Focus(); this.OnClick(e, "month"); };
-            monthDropDownIcon.Click += (s, e) => { this.Focus(); this.OnClick(e, "month"); };
+            monthDropDownIcon.DoubleClick += (s, e) => { this.Focus(); this.OnClick(e, new DropDownMonth(this)); };
+            monthDropDownIcon.Click += (s, e) => { this.Focus(); this.OnClick(e, new DropDownMonth(this)); };
             monthDropDownIcon.GotFocus += (s, e) => { this.OnGotFocus(e); };
             monthDropDownIcon.LostFocus += (s, e) => { this.OnLostFocus(e); };
-            //monthDropDownIcon.BackColor = Color.Transparent;
+            //monthDropDownIcon.BackColor = Color.Blue;
 
             this.Controls.Add(selectedYear);
-            selectedYear.Text = " 1990";
+            selectedYear.Text = $"{DateTime.Now.Year}";
             selectedYear.BorderStyle = BorderStyle.None;
+            selectedYear.Font = this.Font;
+            selectedYear.ForeColor = this.ForeColor;
             selectedYear.DoubleClick += (s, e) => { this.Focus(); this.OnClick(e); };
             selectedYear.Click += (s, e) => { this.Focus(); this.OnClick(e); };
             selectedYear.GotFocus += (s, e) => { this.OnGotFocus(e); };
             selectedYear.LostFocus += (s, e) => { this.OnLostFocus(e); };
-            //selectedYear.BackColor = Color.Transparent;
+            //selectedYear.BackColor = Color.Red;
 
             this.Controls.Add(yearDropDownIcon);
             yearDropDownIcon.Text = "";
-            yearDropDownIcon.DoubleClick += (s, e) => { this.Focus(); this.OnClick(e, "year"); };
-            yearDropDownIcon.Click += (s, e) => { this.Focus(); this.OnClick(e, "year"); };
+            yearDropDownIcon.DoubleClick += (s, e) => { this.Focus(); this.OnClick(e, new DropDownYear(this)); };
+            yearDropDownIcon.Click += (s, e) => { this.Focus(); this.OnClick(e, new DropDownYear(this)); };
             yearDropDownIcon.GotFocus += (s, e) => { this.OnGotFocus(e); };
             yearDropDownIcon.LostFocus += (s, e) => { this.OnLostFocus(e); };
-            //yearDropDownIcon.BackColor = Color.Transparent;
+            //yearDropDownIcon.BackColor = Color.Blue;
             
             AdjustControlSize();
         }
@@ -119,17 +128,17 @@ namespace AVBC_CLCB_Notifier.PL.Templates
 
         //Método para ajuste automatizado do tamanho dos componentes internos e do Padding vertical
         private void AdjustControlSize()
-        {
-            string referenceSlashText = "/"; int SlashTextWidth = textExactSize(referenceSlashText, selectedDay.Font).Width;
-            string referenceDropDownText = "▼"; int dropDownIconTextWidth = textExactSize(referenceDropDownText, selectedDay.Font).Width;
-            string referenceDayAndMonthText = "000"; int dayAndMonthTextWidth = textExactSize(referenceDayAndMonthText, selectedDay.Font).Width;
-            string referenceYearText = "00000"; int yearTextWidth = textExactSize(referenceYearText, selectedDay.Font).Width;
+        {          
+            int SlashTextWidth = textExactSize("/", selectedDay.Font).Width; //Define a Lrgura"Width"    
+            int dropDownIconTextWidth = textExactSize("▼", selectedDay.Font).Width; //Define a Lrgura"Width"  
+            int dayAndMonthTextWidth = textExactSize("000", selectedDay.Font).Width; //Define a Lrgura"Width"  
+            int yearTextWidth = textExactSize("00000", selectedDay.Font).Width; //Define a Lrgura"Width"  
 
-            int textHeight = TextRenderer.MeasureText(referenceDayAndMonthText, selectedDay.Font).Height;
+            int textHeight = textExactSize("0", selectedDay.Font).Height;
 
             VerticalPadding = (this.Height - textHeight) / 2;
             
-            selectedDay.Width = dayAndMonthTextWidth; // Deixa espaço para o ícone
+            selectedDay.Width = dayAndMonthTextWidth;
             selectedDay.Height = selectedDay.Font.Height;
             selectedDay.Location = new Point(HorizontalPadding, VerticalPadding);
 
@@ -154,26 +163,27 @@ namespace AVBC_CLCB_Notifier.PL.Templates
             yearDropDownIcon.Location = new Point(selectedYear.Location.X + selectedYear.Width, VerticalPadding);
 
             int minimumWidth = yearDropDownIcon.Location.X + yearDropDownIcon.Width + HorizontalPadding;
+            int mininumHeight = textHeight * 2;
             MinimumSize = new Size(minimumWidth, 5);
             Invalidate();
             
         }
 
         //Sobrescrever o Click para ter o comportamento adequado
-        protected void OnClick(EventArgs e, string dateElementReference)
+        protected void OnClick(EventArgs e, CustomControl dropDown)
         {
             base.OnClick(e);
             if (dropDownInstance != null) // Se o dropdown já estiver aberto, fecha ele
             {
                 Form parentForm = this.FindForm();
-                parentForm.Controls.Remove(dropDownInstance);
-                dropDownInstance = null;
-                OnFocusBool = false;
+                parentForm.Controls.Remove(dropDownInstance); 
+                dropDownInstance = null; //Define o dropDownInstance como Null
+                OnFocusBool = false; //Define que o elemento nao esta em foco
             }
             else
             {
                 AdjustControlSize();
-                dropDownInstance = new DropDownInstanceDate(this, dateElementReference);
+                dropDownInstance = dropDown;
                 Form parentForm = this.FindForm();
                 if (parentForm == null)
                 {
@@ -203,8 +213,8 @@ namespace AVBC_CLCB_Notifier.PL.Templates
             TextRenderer.DrawText(g, "/", Font, new Point(dayDropDownIcon.Right, dayDropDownIcon.Location.Y), this.ForeColor, textFormat);
             TextRenderer.DrawText(g, "/", Font, new Point(monthDropDownIcon.Right, monthDropDownIcon.Location.Y), this.ForeColor, textFormat);
 
-            TextRenderer.DrawText(g, "▼", Font, new Point(dayDropDownIcon.Left, dayDropDownIcon.Location.Y), this.ForeColor, textFormat);
-            TextRenderer.DrawText(g, "▼", Font, new Point(monthDropDownIcon.Left, monthDropDownIcon.Location.Y), this.ForeColor, textFormat);
+            TextRenderer.DrawText(g, "▼", Font, new Point(selectedDay.Right, dayDropDownIcon.Location.Y), this.ForeColor, textFormat);
+            TextRenderer.DrawText(g, "▼", Font, new Point(selectedMonth.Right, monthDropDownIcon.Location.Y), this.ForeColor, textFormat);
             TextRenderer.DrawText(g, "▼", Font, new Point(selectedYear.Right, yearDropDownIcon.Location.Y), this.ForeColor, textFormat);
         }
 
@@ -257,20 +267,36 @@ namespace AVBC_CLCB_Notifier.PL.Templates
             this.BackColor = Color.Transparent;
             this.TabStop = true;
             this.Font = _control.Font;
-            int row = 0;
+            int elementsPerRow = 0;
             switch (dateElement.ToLower())
             {
                 case "day":
-                    row = 7;
+                    elementsPerRow = 7;
                     break;
                 case "month":
-                    row = 1;
+                    elementsPerRow = 1;
                     break;
                 case "year":
-                    row = 4;
+                    elementsPerRow = 4;
                     break;
             }
-            AdjustControlSize(_control, row);
+            if(dateElement.ToLower() == "year")
+            {
+                int currentYear = DateTime.Now.Year;
+                int currentDecade = (currentYear / 10) * 10;
+                int decadeLastYear = currentDecade + 9;
+                string decadeRange = $"{currentDecade} - {decadeLastYear}";
+
+                Label backwardIcon = new Label();
+                Label forwardIcon = new Label();
+                Label decadeIndex = new Label();
+                this.Controls.Add(backwardIcon);
+                this.Controls.Add(forwardIcon);
+                this.Controls.Add(decadeIndex);
+                decadeIndex.Text = decadeRange;
+            }
+
+            AdjustControlSize(_control, elementsPerRow);
         }
 
         //Método para ajuste automatizado do tamanho do elemento

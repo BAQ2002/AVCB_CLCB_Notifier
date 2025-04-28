@@ -42,9 +42,12 @@ namespace PL
             label2 = new Label();
             groupBox1 = new GroupBox();
             dataGridView1 = new DataGridView();
-            roundedDatePicker1 = new AVBC_CLCB_Notifier.PL.Templates.RoundedDatePicker();
             dateTimePicker1 = new DateTimePicker();
             innerTextBox1 = new InnerTextBox();
+            innerTextBox2 = new InnerTextBox();
+            textBox1 = new TextBox();
+            roundedDatePicker1 = new RoundedDatePicker();
+            label3 = new Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
@@ -76,7 +79,7 @@ namespace PL
             comboBox1.BorderFocusExtraWidth = 1;
             comboBox1.BorderRadius = 7;
             comboBox1.BorderWidth = 1;
-            comboBox1.ForeColor = SystemColors.ControlText;
+            comboBox1.ForeColor = SystemColors.ActiveCaption;
             comboBox1.HorizontalPadding = 2;
             comboBox1.ItemList = (System.Collections.Specialized.StringCollection)resources.GetObject("comboBox1.ItemList");
             comboBox1.Location = new Point(386, 91);
@@ -100,12 +103,13 @@ namespace PL
             // 
             // addButton
             // 
+            addButton.BackColor = SystemColors.Control;
             addButton.Location = new Point(309, 63);
             addButton.Margin = new Padding(3, 2, 3, 2);
             addButton.Name = "addButton";
             addButton.Size = new Size(136, 22);
             addButton.TabIndex = 6;
-            addButton.UseVisualStyleBackColor = true;
+            addButton.UseVisualStyleBackColor = false;
             addButton.Click += addButton_Click;
             // 
             // deleteButton
@@ -155,39 +159,19 @@ namespace PL
             // dataGridView1
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(10, 133);
+            dataGridView1.Location = new Point(9, 130);
             dataGridView1.Margin = new Padding(3, 2, 3, 2);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 51;
             dataGridView1.Size = new Size(721, 230);
             dataGridView1.TabIndex = 10;
             // 
-            // roundedDatePicker1
-            // 
-            roundedDatePicker1.BackColor = Color.Transparent;
-            roundedDatePicker1.BackgroundColor = Color.White;
-            roundedDatePicker1.BorderColor = Color.Red;
-            roundedDatePicker1.BorderColorFocus = Color.Blue;
-            roundedDatePicker1.BorderFocusExtraWidth = 1;
-            roundedDatePicker1.BorderRadius = 5;
-            roundedDatePicker1.BorderWidth = 1;
-            roundedDatePicker1.ForeColor = SystemColors.ActiveCaption;
-            roundedDatePicker1.HorizontalPadding = 2;
-            roundedDatePicker1.ItemList = (System.Collections.Specialized.StringCollection)resources.GetObject("roundedDatePicker1.ItemList");
-            roundedDatePicker1.Location = new Point(221, 231);
-            roundedDatePicker1.MinimumSize = new Size(117, 5);
-            roundedDatePicker1.Name = "roundedDatePicker1";
-            roundedDatePicker1.OnFocusBool = false;
-            roundedDatePicker1.Size = new Size(117, 23);
-            roundedDatePicker1.TabIndex = 11;
-            roundedDatePicker1.VerticalPadding = 4;
-            // 
             // dateTimePicker1
             // 
             dateTimePicker1.Format = DateTimePickerFormat.Short;
             dateTimePicker1.Location = new Point(92, 300);
             dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(79, 23);
+            dateTimePicker1.Size = new Size(89, 23);
             dateTimePicker1.TabIndex = 12;
             // 
             // innerTextBox1
@@ -201,15 +185,67 @@ namespace PL
             innerTextBox1.TabIndex = 13;
             innerTextBox1.Text = "innerTextBox1";
             // 
+            // innerTextBox2
+            // 
+            innerTextBox2.BackColor = Color.White;
+            innerTextBox2.Font = new Font("Segoe UI", 10F);
+            innerTextBox2.ForeColor = Color.Black;
+            innerTextBox2.Location = new Point(228, 44);
+            innerTextBox2.Name = "innerTextBox2";
+            innerTextBox2.Size = new Size(75, 23);
+            innerTextBox2.TabIndex = 14;
+            innerTextBox2.Text = "innerTextBox2";
+            // 
+            // textBox1
+            // 
+            textBox1.ForeColor = SystemColors.MenuHighlight;
+            textBox1.Location = new Point(436, 227);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(100, 23);
+            textBox1.TabIndex = 15;
+            textBox1.Text = "ssss";
+            // 
+            // roundedDatePicker1
+            // 
+            roundedDatePicker1.BackColor = Color.Transparent;
+            roundedDatePicker1.BackgroundColor = Color.IndianRed;
+            roundedDatePicker1.BorderColor = Color.Red;
+            roundedDatePicker1.BorderColorFocus = Color.Blue;
+            roundedDatePicker1.BorderFocusExtraWidth = 1;
+            roundedDatePicker1.BorderRadius = 5;
+            roundedDatePicker1.BorderWidth = 1;
+            roundedDatePicker1.ForeColor = SystemColors.ActiveCaption;
+            roundedDatePicker1.HorizontalPadding = 2;
+            roundedDatePicker1.ItemList = (System.Collections.Specialized.StringCollection)resources.GetObject("roundedDatePicker1.ItemList");
+            roundedDatePicker1.Location = new Point(226, 227);
+            roundedDatePicker1.MinimumSize = new Size(110, 5);
+            roundedDatePicker1.Name = "roundedDatePicker1";
+            roundedDatePicker1.OnFocusBool = false;
+            roundedDatePicker1.Size = new Size(110, 23);
+            roundedDatePicker1.TabIndex = 16;
+            roundedDatePicker1.VerticalPadding = 4;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(564, 288);
+            label3.Name = "label3";
+            label3.Size = new Size(38, 15);
+            label3.TabIndex = 17;
+            label3.Text = "label3";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
             ClientSize = new Size(742, 371);
+            Controls.Add(label3);
+            Controls.Add(roundedDatePicker1);
+            Controls.Add(textBox1);
+            Controls.Add(innerTextBox2);
             Controls.Add(innerTextBox1);
             Controls.Add(dateTimePicker1);
-            Controls.Add(roundedDatePicker1);
             Controls.Add(dataGridView1);
             Controls.Add(groupBox1);
             Controls.Add(deleteButton);
@@ -240,8 +276,11 @@ namespace PL
         private Label label2;
         private GroupBox groupBox1;
         private DataGridView dataGridView1;
-        private AVBC_CLCB_Notifier.PL.Templates.RoundedDatePicker roundedDatePicker1;
         private DateTimePicker dateTimePicker1;
         private InnerTextBox innerTextBox1;
+        private InnerTextBox innerTextBox2;
+        private TextBox textBox1;
+        private RoundedDatePicker roundedDatePicker1;
+        private Label label3;
     }
 }

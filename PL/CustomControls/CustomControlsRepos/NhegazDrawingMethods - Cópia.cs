@@ -9,11 +9,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace AVBC_CLCB_Notifier.PL
+namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
 {
     public static class NhegazDrawingMethodsExplanation
-    {      
-        public static void DrawControl( CustomControl control, PaintEventArgs e)
+    {
+        public static void DrawControl(CustomControl control, PaintEventArgs e)
         {
             int borderRadius = control.BorderRadius;
             Color BackgroundColor = control.BackgroundColor;
@@ -32,25 +32,25 @@ namespace AVBC_CLCB_Notifier.PL
                 using (Region region = new Region(path))
                 {
                     e.Graphics.Clip = region;
-                    
+
                     using (SolidBrush brush = new SolidBrush(BackgroundColor))
                     {
                         e.Graphics.FillRectangle(brush, rect);
-                   }
+                    }
                     e.Graphics.ResetClip();
                 }
 
-                int borderWidth = (control.BorderWidth * 2) - 1;
-                int borderFocusWidth = ((control.BorderWidth + control.BorderFocusExtraWidth) * 2)-1;
-                
+                int borderWidth = control.BorderWidth * 2 - 1;
+                int borderFocusWidth = (control.BorderWidth + control.BorderFocusExtraWidth) * 2 - 1;
+
                 Pen pen = new(control.OnFocusBool ? control.BorderColorFocus : control.BorderColor,
                               control.OnFocusBool ? borderFocusWidth : borderWidth);
 
-                Color arcsColor = Color.FromArgb(128, pen.Color.R, pen.Color.G, pen.Color.B);               
+                Color arcsColor = Color.FromArgb(128, pen.Color.R, pen.Color.G, pen.Color.B);
                 Pen arcsPen = new(arcsColor, 1);
 
-                int innerDiameter = Math.Max(1,diameter - ((control.BorderWidth - 1) * 2));
-                int positiveOffSet = control.BorderWidth - 1;              
+                int innerDiameter = Math.Max(1, diameter - (control.BorderWidth - 1) * 2);
+                int positiveOffSet = control.BorderWidth - 1;
                 int negativeOffSet = diameter - positiveOffSet;
 
                 using (GraphicsPath path2 = new GraphicsPath()) //Arco Superior Direito
@@ -147,11 +147,7 @@ namespace AVBC_CLCB_Notifier.PL
                         }
                     }
                 }
-
-                
-
-
-                int ExtraLenght = (pen.Width > 1) ? 1 : 0;
+                int ExtraLenght = pen.Width > 1 ? 1 : 0;
                 e.Graphics.DrawLine(pen, rect.Left + radius, rect.Top, rect.Right - radius + ExtraLenght, rect.Top); //Linha Superior
                 e.Graphics.DrawLine(pen, rect.Left, rect.Top + radius, rect.Left, rect.Bottom - radius + ExtraLenght); //Linha Esquerda
                 e.Graphics.DrawLine(pen, rect.Right, rect.Top + radius, rect.Right, rect.Bottom - radius + ExtraLenght); //Linha Direita
@@ -161,18 +157,18 @@ namespace AVBC_CLCB_Notifier.PL
         }
 
         public static void SmoothBorderArcs(int diameter, Rectangle rect, Pen pen, PaintEventArgs e)
-        {           
+        {
             Color smoothingColor = Color.FromArgb(32, pen.Color.R, pen.Color.G, pen.Color.B);
             Pen smoothArcPen = new(smoothingColor, pen.Width + 0.75f);
-            
+
             e.Graphics.DrawArc(smoothArcPen, rect.Left, rect.Top, diameter, diameter, 190, 70); //Arco superior Esquerdo
             e.Graphics.DrawArc(smoothArcPen, rect.Right - diameter, rect.Top, diameter, diameter, 280, 70); //Arco superior Direito
             e.Graphics.DrawArc(smoothArcPen, rect.Right - diameter, rect.Bottom - diameter, diameter, diameter, 10, 70); //Arco Infeiror Direito
             e.Graphics.DrawArc(smoothArcPen, rect.Left, rect.Bottom - diameter, diameter, diameter, 100, 70); //Arco Infeiror Esquerdo
-                        
+
             Color extraSmoothingColor = Color.FromArgb(16, pen.Color.R, pen.Color.G, pen.Color.B);
             Pen extraSmoothArcPen = new(extraSmoothingColor, pen.Width + 1.5f);
-            
+
             e.Graphics.DrawArc(extraSmoothArcPen, rect.Left, rect.Top, diameter, diameter, 180, 90); //Arco superior Esquerdo
             e.Graphics.DrawArc(extraSmoothArcPen, rect.Right - diameter, rect.Top, diameter, diameter, 0, -90); //Arco superior Direito
             e.Graphics.DrawArc(extraSmoothArcPen, rect.Right - diameter, rect.Bottom - diameter, diameter, diameter, 0, 90); //Arco Infeiror Direito
