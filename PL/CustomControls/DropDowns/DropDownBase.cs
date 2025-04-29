@@ -37,6 +37,126 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             this.Font = _control.Font;
         }
 
+        
+
+        protected InnerLabel CreateDateLabel(int index, string text, int x, int y, int width, int height)
+        {
+            InnerLabel lbl = new InnerLabel()
+            {
+                Name = $"Item{index}",
+                Text = text,
+                Font = Font,
+                Location = new Point(x, y),
+                Width = width,
+                Height = height,
+                BackgroundColor = parentControl.BackgroundColor,
+                ForeColor = parentControl.ForeColor,                
+            };
+
+            lbl.MouseEnter += (s, e) =>
+            {
+                hoveredIndex = index;
+                //lbl.ForeColor = this.BackColor;
+                lbl.ForeColor = BackgroundColor;
+                lbl.BackgroundColor = BorderColorFocus;
+                Invalidate();
+            };
+
+            lbl.MouseLeave += (s, e) =>
+            {
+                if (hoveredIndex == index) hoveredIndex = -1;
+                lbl.ForeColor = ForeColor;
+                lbl.BackgroundColor = BackgroundColor;
+                Invalidate();
+            };
+
+            lbl.Click += (s, e) => OnLabelClick(lbl.Text);
+            return lbl;
+        }
+
+        protected abstract void OnLabelClick(string selectedText);
+    }
+
+    public class DropDownDay : DropDownDateBase
+    {
+        
+        
+        public DropDownDay(CustomControl control) : base(control)
+        {
+
+            if (parentControl is CustomDatePicker dp)
+            {
+               int year = int.Parse(dp.selectedYear.Text);
+               int month = int.Parse(dp.selectedMonth.Text);
+               int daysInMonth = DateTime.DaysInMonth(year, month);
+
+                for (int i = 1; i <= daysInMonth; i++)
+                    itemList.Add(i.ToString("D2"));
+            }              
+            
+            AdjustControlSize(7);
+        }
+        protected void AdjustControlSize(int maxItemsPerLine)
+        {
+            string referenceText = "0";
+            int textHeight = TextRenderer.MeasureText(referenceText, this.Font).Height;
+            int itemHeight = textHeight + VerticalPadding;
+            //int itemWidth = textExactSize("0000", this.Font).Width;
+            this.Controls.Clear();
+            if (itemList == null || itemList.Count == 0 || maxItemsPerLine <= 0)
+                return;
+
+            int xPadding = HorizontalPadding;
+            int yPadding = VerticalPadding;
+            int totalItems = itemList.Count;
+
+            int numRows = (int)Math.Ceiling((double)totalItems / maxItemsPerLine);
+            int itemWidth = (this.Width - (2 * xPadding)) / maxItemsPerLine;
+            this.Height = numRows * itemHeight + yPadding;
+
+            for (int i = 0; i < totalItems; i++)
+            {
+                int row = i / maxItemsPerLine;
+                int col = i % maxItemsPerLine;
+                int x = xPadding + col * itemWidth;
+                int y = yPadding + row * itemHeight;
+
+                InnerLabel lbl = CreateDateLabel(i, itemList[i], x, y, itemWidth, textHeight);
+                this.Controls.Add(lbl);
+            }
+        }
+        protected override void OnLabelClick(string selectedText)
+        {
+            if (parentControl is CustomDatePicker dp)
+                dp.selectedDay.Text = selectedText;
+
+            this.Parent?.Controls.Remove(this);
+        }
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            NhegazDrawingMethods.DrawControl(this, e);
+        }
+    }
+
+    public class DropDownMonth : DropDownDateBase
+    {
+        public DropDownMonth(CustomControl control) : base(control)
+        {
+            for (int i = 1; i <= 12; i++)
+                itemList.Add(i.ToString("D2"));
+
+            AdjustControlSize(1);
+        }
+
+        protected override void OnLabelClick(string selectedText)
+        {
+            if (parentControl is CustomDatePicker dp)
+                dp.selectedMonth.Text = selectedText;
+
+            this.Parent?.Controls.Remove(this);
+        }
+
         protected void AdjustControlSize(int maxItemsPerLine)
         {
             string referenceText = "0";
@@ -66,77 +186,6 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 this.Controls.Add(lbl);
             }
         }
-
-        protected InnerLabel CreateDateLabel(int index, string text, int x, int y, int width, int height)
-        {
-            InnerLabel lbl = new InnerLabel()
-            {
-                Name = $"Item{index}",
-                Text = text,
-                Font = Font,
-                Location = new Point(x, y),
-                Width = width,
-                Height = height,
-                ForeColor = parentControl.ForeColor,                
-            };
-
-            lbl.MouseEnter += (s, e) =>
-            {
-                hoveredIndex = index;
-                lbl.ForeColor = this.BackColor;
-                Invalidate();
-            };
-
-            lbl.MouseLeave += (s, e) =>
-            {
-                if (hoveredIndex == index) hoveredIndex = -1;
-                lbl.ForeColor = parentControl.ForeColor;
-                Invalidate();
-            };
-
-            lbl.Click += (s, e) => OnLabelClick(lbl.Text);
-            return lbl;
-        }
-
-        protected abstract void OnLabelClick(string selectedText);
-    }
-
-    public class DropDownDay : DropDownDateBase
-    {
-        public DropDownDay(CustomControl control) : base(control)
-        {
-            for (int i = 1; i <= 31; i++)
-                itemList.Add(i.ToString("D2"));
-
-            AdjustControlSize(7);
-        }
-
-        protected override void OnLabelClick(string selectedText)
-        {
-            if (parentControl is RoundedDatePicker dp)
-                dp.selectedDay.Text = selectedText;
-
-            this.Parent?.Controls.Remove(this);
-        }
-    }
-
-    public class DropDownMonth : DropDownDateBase
-    {
-        public DropDownMonth(CustomControl control) : base(control)
-        {
-            for (int i = 1; i <= 12; i++)
-                itemList.Add(i.ToString("D2"));
-
-            AdjustControlSize(1);
-        }
-
-        protected override void OnLabelClick(string selectedText)
-        {
-            if (parentControl is RoundedDatePicker dp)
-                dp.selectedMonth.Text = selectedText;
-
-            this.Parent?.Controls.Remove(this);
-        }
     }
     
     public class DropDownYear : DropDownDateBase
@@ -155,20 +204,24 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             decadeLastYear = currentDecade + 9;
 
             this.Controls.Add(backwardIcon);
-            backwardIcon.Text = "<";
+            backwardIcon.Text = "◀";          
             backwardIcon.ForeColor = this.ForeColor;
+            backwardIcon.BackgroundColor = BackgroundColor;
             backwardIcon.Click += (s, e) => { ChangeDecade(-10); Invalidate();};
             backwardIcon.DoubleClick += (s, e) => { ChangeDecade(-20); Invalidate();};
 
             this.Controls.Add(forwardIcon);
-            forwardIcon.Text = ">";
+            forwardIcon.Text = "▶";
             forwardIcon.ForeColor = this.ForeColor;
+            forwardIcon.BackgroundColor = BackgroundColor;
             forwardIcon.Click += (s, e) => { ChangeDecade(10); Invalidate();};
             forwardIcon.DoubleClick += (s, e) => { ChangeDecade(20); Invalidate();};
 
             this.Controls.Add(decadeLabel);
             decadeLabel.Text = $"{currentDecade} - {decadeLastYear}";
             decadeLabel.ForeColor = this.ForeColor;
+            decadeLabel.BackgroundColor = BackgroundColor;
+
 
             AdjustControlSize(4);
         }
@@ -251,7 +304,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         }
         protected override void OnLabelClick(string selectedText)
         {
-            if (parentControl is RoundedDatePicker dp)
+            if (parentControl is CustomDatePicker dp)
                 dp.selectedYear.Text = selectedText;
 
             this.Parent?.Controls.Remove(this);
@@ -261,6 +314,10 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         {
             base.OnPaint(e);
             NhegazDrawingMethods.DrawControl(this, e);
+            Pen pen = new Pen(this.BorderColor, 1);
+            Point leftPoint = new Point(BorderWidth, backwardIcon.Bottom);
+            Point rightPoint = new Point(Width-BorderWidth, forwardIcon.Bottom);
+            e.Graphics.DrawLine(pen, leftPoint, rightPoint);
         }
     }
 

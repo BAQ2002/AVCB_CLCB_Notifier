@@ -34,7 +34,7 @@ namespace PL
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             searchButton = new Button();
             editButton = new Button();
-            comboBox1 = new RoundedComboBox();
+            comboBox1 = new CustomComboBox();
             label1 = new Label();
             addButton = new Button();
             deleteButton = new Button();
@@ -42,12 +42,12 @@ namespace PL
             label2 = new Label();
             groupBox1 = new GroupBox();
             dataGridView1 = new DataGridView();
-            dateTimePicker1 = new DateTimePicker();
             innerTextBox1 = new InnerTextBox();
             innerTextBox2 = new InnerTextBox();
             textBox1 = new TextBox();
-            roundedDatePicker1 = new RoundedDatePicker();
             label3 = new Label();
+            dateTimePicker1 = new DateTimePicker();
+            customDatePicker1 = new CustomDatePicker();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
@@ -165,14 +165,7 @@ namespace PL
             dataGridView1.RowHeadersWidth = 51;
             dataGridView1.Size = new Size(721, 230);
             dataGridView1.TabIndex = 10;
-            // 
-            // dateTimePicker1
-            // 
-            dateTimePicker1.Format = DateTimePickerFormat.Short;
-            dateTimePicker1.Location = new Point(92, 300);
-            dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(89, 23);
-            dateTimePicker1.TabIndex = 12;
+            dataGridView1.CellContentClick += dataGridView1_CellContentClick_1;
             // 
             // innerTextBox1
             // 
@@ -205,26 +198,6 @@ namespace PL
             textBox1.TabIndex = 15;
             textBox1.Text = "ssss";
             // 
-            // roundedDatePicker1
-            // 
-            roundedDatePicker1.BackColor = Color.Transparent;
-            roundedDatePicker1.BackgroundColor = Color.IndianRed;
-            roundedDatePicker1.BorderColor = Color.Red;
-            roundedDatePicker1.BorderColorFocus = Color.Blue;
-            roundedDatePicker1.BorderFocusExtraWidth = 1;
-            roundedDatePicker1.BorderRadius = 5;
-            roundedDatePicker1.BorderWidth = 1;
-            roundedDatePicker1.ForeColor = SystemColors.ActiveCaption;
-            roundedDatePicker1.HorizontalPadding = 2;
-            roundedDatePicker1.ItemList = (System.Collections.Specialized.StringCollection)resources.GetObject("roundedDatePicker1.ItemList");
-            roundedDatePicker1.Location = new Point(226, 227);
-            roundedDatePicker1.MinimumSize = new Size(110, 5);
-            roundedDatePicker1.Name = "roundedDatePicker1";
-            roundedDatePicker1.OnFocusBool = false;
-            roundedDatePicker1.Size = new Size(110, 23);
-            roundedDatePicker1.TabIndex = 16;
-            roundedDatePicker1.VerticalPadding = 4;
-            // 
             // label3
             // 
             label3.AutoSize = true;
@@ -234,18 +207,43 @@ namespace PL
             label3.TabIndex = 17;
             label3.Text = "label3";
             // 
+            // dateTimePicker1
+            // 
+            dateTimePicker1.Location = new Point(184, 302);
+            dateTimePicker1.Name = "dateTimePicker1";
+            dateTimePicker1.Size = new Size(232, 23);
+            dateTimePicker1.TabIndex = 18;
+            // 
+            // customDatePicker1
+            // 
+            customDatePicker1.BackColor = Color.Transparent;
+            customDatePicker1.BackgroundColor = Color.White;
+            customDatePicker1.BorderColor = Color.Red;
+            customDatePicker1.BorderColorFocus = Color.Blue;
+            customDatePicker1.BorderFocusExtraWidth = 1;
+            customDatePicker1.BorderRadius = 5;
+            customDatePicker1.BorderWidth = 1;
+            customDatePicker1.HorizontalPadding = 2;
+            customDatePicker1.Location = new Point(119, 227);
+            customDatePicker1.MinimumSize = new Size(110, 5);
+            customDatePicker1.Name = "customDatePicker1";
+            customDatePicker1.OnFocusBool = false;
+            customDatePicker1.Size = new Size(113, 23);
+            customDatePicker1.TabIndex = 19;
+            customDatePicker1.VerticalPadding = 4;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
             ClientSize = new Size(742, 371);
+            Controls.Add(customDatePicker1);
+            Controls.Add(dateTimePicker1);
             Controls.Add(label3);
-            Controls.Add(roundedDatePicker1);
             Controls.Add(textBox1);
             Controls.Add(innerTextBox2);
             Controls.Add(innerTextBox1);
-            Controls.Add(dateTimePicker1);
             Controls.Add(dataGridView1);
             Controls.Add(groupBox1);
             Controls.Add(deleteButton);
@@ -268,7 +266,7 @@ namespace PL
         #endregion
         private Button searchButton;
         private Button editButton;
-        private RoundedComboBox comboBox1;
+        private CustomComboBox comboBox1;
         private Label label1;
         private Button addButton;
         private Button deleteButton;
@@ -276,11 +274,11 @@ namespace PL
         private Label label2;
         private GroupBox groupBox1;
         private DataGridView dataGridView1;
-        private DateTimePicker dateTimePicker1;
         private InnerTextBox innerTextBox1;
         private InnerTextBox innerTextBox2;
         private TextBox textBox1;
-        private RoundedDatePicker roundedDatePicker1;
         private Label label3;
+        private DateTimePicker dateTimePicker1;
+        private CustomDatePicker customDatePicker1;
     }
 }

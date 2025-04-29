@@ -31,16 +31,13 @@
     <Compile Update="Edit_Forms\ClientEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="CustomControls\imp.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Update="CustomControls\RoundedButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="CustomControls\RoundedComboBox.cs">
+    <Compile Update="CustomControls\CustomComboBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="CustomControls\RoundedDatePicker.cs">
+    <Compile Update="CustomControls\CustomDatePicker.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="CustomControls\RoundedTextBox.cs">

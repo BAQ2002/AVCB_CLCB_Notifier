@@ -85,10 +85,10 @@ C:\Users\anton\source\repos\AVBC_CLCB_Notifier\PL\obj\Debug\net8.0-windows\PL.Ma
 C:\Users\anton\source\repos\AVBC_CLCB_Notifier\PL\obj\Debug\net8.0-windows\AVBC_CLCB_Notifier.PL.Edit_Forms.EstablishmentEditorForm.resources
 C:\Users\anton\source\repos\AVBC_CLCB_Notifier\PL\obj\Debug\net8.0-windows\AVBC_CLCB_Notifier.PL.Properties.Resources.resources
 C:\Users\anton\source\repos\AVBC_CLCB_Notifier\PL\obj\Debug\net8.0-windows\AVBC_CLCB_Notifier.PL.Templates.RoundedButton.resources
-C:\Users\anton\source\repos\AVBC_CLCB_Notifier\PL\obj\Debug\net8.0-windows\AVBC_CLCB_Notifier.PL.CustomControls.RoundedComboBox.resources
 C:\Users\anton\source\repos\AVBC_CLCB_Notifier\PL\obj\Debug\net8.0-windows\AVBC_CLCB_Notifier.PL.CustomControls.RoundedTextBox.resources
 C:\Users\anton\source\repos\AVBC_CLCB_Notifier\PL\obj\Debug\net8.0-windows\AVBC_CLCB_Notifier.PL.CustomControls.CustomControl.resources
 C:\Users\anton\source\repos\AVBC_CLCB_Notifier\PL\obj\Debug\net8.0-windows\PL.sourcelink.json
 C:\Users\anton\source\repos\AVBC_CLCB_Notifier\PL\obj\Debug\net8.0-windows\AVBC_CLCB_Notifier.PL.Edit_Forms.Form1.resources
 C:\Users\anton\source\repos\AVBC_CLCB_Notifier\PL\obj\Debug\net8.0-windows\AVBC_CLCB_Notifier.PL.CustomControls.InnerTextBox.resources
-C:\Users\anton\source\repos\AVBC_CLCB_Notifier\PL\obj\Debug\net8.0-windows\AVBC_CLCB_Notifier.PL.CustomControls.RoundedDatePicker.resources
+C:\Users\anton\source\repos\AVBC_CLCB_Notifier\PL\obj\Debug\net8.0-windows\AVBC_CLCB_Notifier.PL.CustomControls.CustomComboBox.resources
+C:\Users\anton\source\repos\AVBC_CLCB_Notifier\PL\obj\Debug\net8.0-windows\AVBC_CLCB_Notifier.PL.CustomControls.CustomDatePicker.resources

@@ -23,7 +23,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             }
         }
 
-        public Color Backgroundcolor
+        public Color BackgroundColor
         {
             get { return backgroundColor; }
             set { backgroundColor = value; Invalidate(); }

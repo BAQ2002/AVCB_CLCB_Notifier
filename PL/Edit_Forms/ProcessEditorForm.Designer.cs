@@ -36,7 +36,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             processGroupBox = new GroupBox();
             processNumberLabel = new Label();
             processTypeLabel = new Label();
-            processTypeComboBox = new RoundedComboBox();
+            processTypeComboBox = new CustomComboBox();
             establishmentGroupBox = new GroupBox();
             removeEstablishmentButton = new Button();
             addEstablishmentButton = new Button();
@@ -420,6 +420,6 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
         private Label processTypeLabel;
         private GroupBox extraInfoGroupBox;
         private Button removeEstablishmentButton;
-        private RoundedComboBox processTypeComboBox;
+        private CustomComboBox processTypeComboBox;
     }
 }

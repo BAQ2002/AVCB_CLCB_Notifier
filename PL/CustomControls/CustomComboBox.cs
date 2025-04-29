@@ -16,7 +16,7 @@ using AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos;
 
 namespace AVBC_CLCB_Notifier.PL.CustomControls
 {
-    public class RoundedComboBox : CustomControl
+    public class CustomComboBox : CustomControl
     {
 
         private StringCollection itemList  = new StringCollection(); //Opções da combo Box     
@@ -35,7 +35,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             set { selectIndex.Font = value; dropDownIcon.Font = value; AdjustControlSize(); }
         }
 
-        public RoundedComboBox()
+        public CustomComboBox()
         {          
             this.DoubleBuffered = true;
             this.Size = new Size(121, 23);            
@@ -144,11 +144,11 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
     public class DropDownInstance : CustomControl
     {      
         private Color itemFocusColor;
-        private RoundedComboBox parentComboBox;
+        private CustomComboBox parentComboBox;
         private int hoveredIndex = -1;
         private StringCollection itemList = new StringCollection();
 
-        public DropDownInstance(RoundedComboBox _roundedComboBox)
+        public DropDownInstance(CustomComboBox _roundedComboBox)
         {
             this.parentComboBox = _roundedComboBox;
             this.BorderRadius = _roundedComboBox.BorderRadius;
@@ -169,7 +169,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         }
 
         //Método para ajuste automatizado do tamanho do elemento
-        private void AdjustControlSize(RoundedComboBox _sender)
+        private void AdjustControlSize(CustomComboBox _sender)
         {
             string referenceText = "A";
             int textHeight = TextRenderer.MeasureText(referenceText, this.Font).Height;
