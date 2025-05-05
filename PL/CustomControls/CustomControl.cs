@@ -15,10 +15,11 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         private int borderFocusExtraWidth = 1;
         private int horizontalPadding = 1;
         private int verticalPadding = 1;
-        private Color borderColor = Color.Red;
+        private Color secondaryForeColor = SystemColors.GrayText;
+        private Color borderColor = SystemColors.WindowFrame;
         private Color dropdownBorderColor = Color.Green;
-        private Color borderColorFocus = Color.Blue; //Cor da borda
-        private Color backgroundColor = Color.White;
+        private Color borderColorFocus = SystemColors.Highlight; //Cor da borda
+        private Color backgroundColor = SystemColors.Window;
 
         public int BorderRadius
         {
@@ -49,6 +50,11 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         {
             get { return borderFocusExtraWidth; }
             set { borderFocusExtraWidth = value; Invalidate(); }
+        }
+        public Color SecondaryForeColor
+        {
+            get { return secondaryForeColor; }
+            set { secondaryForeColor = value; Invalidate(); }
         }
         public Color BorderColor
         {

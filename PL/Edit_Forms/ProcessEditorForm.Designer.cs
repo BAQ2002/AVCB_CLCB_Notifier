@@ -67,7 +67,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             // 
             // processNumberInput
             // 
-            processNumberInput.BackColor = SystemColors.Control;
+            processNumberInput.BackColor = SystemColors.ButtonHighlight;
             processNumberInput.BackgroundColor = Color.White;
             processNumberInput.BorderColor = Color.Crimson;
             processNumberInput.BorderColorFocus = Color.Blue;
@@ -80,6 +80,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             processNumberInput.Name = "processNumberInput";
             processNumberInput.OnFocusBool = false;
             processNumberInput.Padding = new Padding(5);
+            processNumberInput.SecondaryForeColor = SystemColors.GrayText;
             processNumberInput.Size = new Size(149, 23);
             processNumberInput.TabIndex = 1;
             processNumberInput.VerticalPadding = 1;
@@ -128,10 +129,12 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             processTypeComboBox.BorderWidth = 1;
             processTypeComboBox.ForeColor = SystemColors.MenuHighlight;
             processTypeComboBox.HorizontalPadding = 2;
+            processTypeComboBox.ItemList = (System.Collections.Specialized.StringCollection)resources.GetObject("processTypeComboBox.ItemList");
             processTypeComboBox.Location = new Point(8, 37);
             processTypeComboBox.MinimumSize = new Size(100, 1);
             processTypeComboBox.Name = "processTypeComboBox";
             processTypeComboBox.OnFocusBool = false;
+            processTypeComboBox.SecondaryForeColor = SystemColors.GrayText;
             processTypeComboBox.Size = new Size(128, 23);
             processTypeComboBox.TabIndex = 3;
             processTypeComboBox.VerticalPadding = 4;
@@ -192,6 +195,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             establishmentFantasyNameInput.Name = "establishmentFantasyNameInput";
             establishmentFantasyNameInput.OnFocusBool = false;
             establishmentFantasyNameInput.Padding = new Padding(5);
+            establishmentFantasyNameInput.SecondaryForeColor = SystemColors.GrayText;
             establishmentFantasyNameInput.Size = new Size(276, 23);
             establishmentFantasyNameInput.TabIndex = 6;
             establishmentFantasyNameInput.VerticalPadding = 1;
@@ -232,6 +236,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             clientNameInput.Name = "clientNameInput";
             clientNameInput.OnFocusBool = false;
             clientNameInput.Padding = new Padding(5);
+            clientNameInput.SecondaryForeColor = SystemColors.GrayText;
             clientNameInput.Size = new Size(276, 23);
             clientNameInput.TabIndex = 0;
             clientNameInput.VerticalPadding = 1;
@@ -318,6 +323,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             statusOutput.Name = "statusOutput";
             statusOutput.OnFocusBool = false;
             statusOutput.Padding = new Padding(5);
+            statusOutput.SecondaryForeColor = SystemColors.GrayText;
             statusOutput.Size = new Size(98, 23);
             statusOutput.TabIndex = 12;
             statusOutput.VerticalPadding = 1;
@@ -355,6 +361,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             extraInfoInput.Name = "extraInfoInput";
             extraInfoInput.OnFocusBool = false;
             extraInfoInput.Padding = new Padding(5);
+            extraInfoInput.SecondaryForeColor = SystemColors.GrayText;
             extraInfoInput.Size = new Size(350, 23);
             extraInfoInput.TabIndex = 7;
             extraInfoInput.VerticalPadding = 1;

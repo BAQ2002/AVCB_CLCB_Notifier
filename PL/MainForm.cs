@@ -111,5 +111,10 @@ namespace PL
         {
 
         }
+
+        private void customDatePicker1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

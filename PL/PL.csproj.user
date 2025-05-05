@@ -4,6 +4,12 @@
     <Compile Update="CustomControls\DropDowns\DropDownBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="CustomControls\DropDowns\DropDownDay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="CustomControls\DropDowns\DropDownYear.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="CustomControls\WIPInnerLabel.cs">
       <SubType>Component</SubType>
     </Compile>

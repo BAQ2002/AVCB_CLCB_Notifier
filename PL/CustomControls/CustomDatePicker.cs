@@ -41,11 +41,9 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
 
         public CustomDatePicker()
         {
-            this.DoubleBuffered = true;
-            this.Size = new Size(121, 23);
+            this.DoubleBuffered = true;            
             this.BackColor = Color.Transparent;
             this.HorizontalPadding += BorderWidth;
-            this.MinimumSize = new Size(5, 5);       
             
             this.Controls.Add(selectedDay);
             selectedDay.Name = this.Name + "selectedDay";
@@ -56,7 +54,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             selectedDay.Click += (s, e) => { this.Focus(); this.OnClick(e); };
             selectedDay.GotFocus += (s, e) => { this.OnGotFocus(e); };
             selectedDay.LostFocus += (s, e) => { this.OnLostFocus(e); };
-            selectedDay.BackColor = Color.Red;
+            //selectedDay.BackColor = Color.Red;
 
             this.Controls.Add(dayDropDownIcon);
             dayDropDownIcon.Text = "▼";           
@@ -64,7 +62,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             dayDropDownIcon.Click += (s, e) => { this.Focus(); this.OnClick(e, new DropDownDay(this)); };
             dayDropDownIcon.GotFocus += (s, e) => { this.OnGotFocus(e); };
             dayDropDownIcon.LostFocus += (s, e) => { this.OnLostFocus(e); };
-            //dayDropDownIcon.BackColor = Color.Blue;
+            dayDropDownIcon.BackgroundColor = BackgroundColor;
 
             this.Controls.Add(selectedMonth);
             selectedMonth.Text = DateTime.Now.Month.ToString("D2");
@@ -74,8 +72,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             selectedMonth.Click += (s, e) => { this.Focus(); this.OnClick(e); };
             selectedMonth.GotFocus += (s, e) => { this.OnGotFocus(e); };
             selectedMonth.LostFocus += (s, e) => { this.OnLostFocus(e); };
-            Color newColor = this.BackgroundColor;
-            selectedMonth.BackColor = Color.Red;//FromArgb(BackgroundColor.R, BackgroundColor.G, BackgroundColor.B);
+            //selectedMonth.BackColor = Color.Red;//FromArgb(BackgroundColor.R, BackgroundColor.G, BackgroundColor.B);
            
             this.Controls.Add(monthDropDownIcon);
             monthDropDownIcon.Text = "▼";
@@ -83,7 +80,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             monthDropDownIcon.Click += (s, e) => { this.Focus(); this.OnClick(e, new DropDownMonth(this)); };
             monthDropDownIcon.GotFocus += (s, e) => { this.OnGotFocus(e); };
             monthDropDownIcon.LostFocus += (s, e) => { this.OnLostFocus(e); };
-            //monthDropDownIcon.BackColor = Color.Blue;
+            monthDropDownIcon.BackgroundColor = BackgroundColor;
 
             this.Controls.Add(selectedYear);
             selectedYear.Text = DateTime.Now.Year.ToString();
@@ -102,9 +99,9 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             yearDropDownIcon.Click += (s, e) => { this.Focus(); this.OnClick(e, new DropDownYear(this)); };
             yearDropDownIcon.GotFocus += (s, e) => { this.OnGotFocus(e); };
             yearDropDownIcon.LostFocus += (s, e) => { this.OnLostFocus(e); };
-            //yearDropDownIcon.BackColor = Color.Blue;
-            
-            AdjustControlSize();
+            yearDropDownIcon.BackgroundColor = BackgroundColor;
+
+            AdjustControlSize(); this.Size = this.MinimumSize;
         }
 
         private Size textExactSize(string text, Font font)
@@ -122,42 +119,45 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         //Método para ajuste automatizado do tamanho dos componentes internos e do Padding vertical
         private void AdjustControlSize()
         {          
-            int SlashTextWidth = textExactSize("/", selectedDay.Font).Width; //Define a Lrgura"Width"    
-            int dropDownIconTextWidth = textExactSize("▼", selectedDay.Font).Width; //Define a Lrgura"Width"  
-            int dayAndMonthTextWidth = textExactSize("000", selectedDay.Font).Width; //Define a Lrgura"Width"  
-            int yearTextWidth = textExactSize("00000", selectedDay.Font).Width; //Define a Lrgura"Width"  
+            int SlashTextWidth = textExactSize("/", Font).Width; //Define a Largura"Width"    
+            int dropDownIconTextWidth = textExactSize("▼", Font).Width; //Define a Largura"Width"  
+            int dayAndMonthTextWidth = textExactSize("00", Font).Width; //Define a Largura"Width"  
+            int yearTextWidth = textExactSize("0000", Font).Width; //Define a Largura"Width"  
 
-            int textHeight = textExactSize("0", selectedDay.Font).Height;
+            Size textUnitSize = textExactSize("0", Font);
 
-            VerticalPadding = (this.Height - textHeight) / 2;
-            
+            HorizontalPadding = (int)Math.Round(textUnitSize.Width * (2f / 3f));
+            VerticalPadding = (int)Math.Round(textUnitSize.Height / 4f);
+
             selectedDay.Width = dayAndMonthTextWidth;
-            selectedDay.Height = selectedDay.Font.Height;
+            selectedDay.Height = Font.Height;
             selectedDay.Location = new Point(HorizontalPadding, VerticalPadding);
 
             dayDropDownIcon.Width = dropDownIconTextWidth;
-            dayDropDownIcon.Height = dayDropDownIcon.Font.Height;
+            dayDropDownIcon.Height = Font.Height;
             dayDropDownIcon.Location = new Point(selectedDay.Location.X + selectedDay.Width, VerticalPadding);
             
-            selectedMonth.Width = dayAndMonthTextWidth; // Deixa espaço para o ícone
-            selectedMonth.Height = selectedMonth.Font.Height;
+            selectedMonth.Width = dayAndMonthTextWidth;
+            selectedMonth.Height = Font.Height;
             selectedMonth.Location = new Point(dayDropDownIcon.Location.X + dayDropDownIcon.Width + SlashTextWidth, VerticalPadding);
 
             monthDropDownIcon.Width = dropDownIconTextWidth;
-            monthDropDownIcon.Height = dayDropDownIcon.Font.Height;
+            monthDropDownIcon.Height = Font.Height;
             monthDropDownIcon.Location = new Point(selectedMonth.Location.X + selectedMonth.Width, VerticalPadding);
 
-            selectedYear.Width = yearTextWidth; // Deixa espaço para o ícone
-            selectedYear.Height = selectedYear.Font.Height;
+            selectedYear.Width = yearTextWidth; 
+            selectedYear.Height = Font.Height;
             selectedYear.Location = new Point(monthDropDownIcon.Location.X + monthDropDownIcon.Width + SlashTextWidth, VerticalPadding);
 
             yearDropDownIcon.Width = dropDownIconTextWidth;
-            yearDropDownIcon.Height = yearDropDownIcon.Font.Height;
+            yearDropDownIcon.Height = Font.Height;
             yearDropDownIcon.Location = new Point(selectedYear.Location.X + selectedYear.Width, VerticalPadding);
-
             int minimumWidth = yearDropDownIcon.Location.X + yearDropDownIcon.Width + HorizontalPadding;
-            int mininumHeight = textHeight * 2;
-            MinimumSize = new Size(minimumWidth, 5);
+
+            //int minimumWidth = (int)Math.Round(textUnitSize.Width * (58f / 3f));
+            int minimumHeight = (2 * VerticalPadding) + textUnitSize.Height;
+            
+            MinimumSize = new Size(minimumWidth, minimumHeight);
             Invalidate();
             
         }
@@ -186,7 +186,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 Point screenLocation = this.Parent.PointToScreen(this.Location);
                 Point formLocation = parentForm.PointToClient(screenLocation);
 
-                dropDownInstance.Location = new Point(formLocation.X, formLocation.Y + this.Height + 6);
+                dropDownInstance.Location = new Point(formLocation.X, formLocation.Y + this.Height+1);
                 dropDownInstance.BringToFront();
                 parentForm.Controls.Add(dropDownInstance);
                 parentForm.Controls.SetChildIndex(dropDownInstance, 0);

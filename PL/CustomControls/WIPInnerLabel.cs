@@ -54,6 +54,8 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 g.FillRectangle(brush, this.ClientRectangle);
             }
 
+            //int textX = (Width - textExactSize(text, Font).Width) / 2;
+
             TextRenderer.DrawText(
                 g,
                 text,
