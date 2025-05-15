@@ -80,18 +80,33 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
             return points;
         }
 
+        //Retorna uma nova cor que é a proporção entre de n/10 da primeira em relação a segunda
+        private static Color InterpolateColor(int weightFrom1To10, Color color1, Color color2) 
+
+        {           
+            weightFrom1To10 = Math.Max(1, Math.Min(10, weightFrom1To10));
+
+            float ratio1 = weightFrom1To10 / 10f;
+            float ratio2 = 1f - ratio1;
+
+            int r = (int)(color1.R * ratio1 + color2.R * ratio2);
+            int g = (int)(color1.G * ratio1 + color2.G * ratio2);
+            int b = (int)(color1.B * ratio1 + color2.B * ratio2);
+
+            return Color.FromArgb(r, g, b);
+        }
         public static void DrawBorder(CustomControl control, PaintEventArgs e)
         {
-            e.Graphics.SmoothingMode = SmoothingMode.None;
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             int borderRadius = control.BorderRadius;
             if (borderRadius <= 0) return;
 
             float BorderRadius = borderRadius; //Transforma o valor de BorderRadius em float
             int width = control.Width - 1; //Ajuste necessario do Width para ficar dentro do tamanho do control
             int height = control.Height - 1; //Ajuste necessario do Height para ficar dentro do tamanho do control
-
-            Color arcsColor = control.OnFocusBool ? control.BorderColorFocus : control.BorderColor; //Cor da caneta       
-            Pen arcsPen = new(Color.Blue, 1.0f);
+            Color arcsColor = control.OnFocusBool ? InterpolateColor(10, control.BorderColorFocus, control.BackgroundColor)
+                                                  : InterpolateColor(10, control.BorderColor, control.BackgroundColor);
+            Pen arcsPen = new(arcsColor, 1.0f);
 
             int segments = borderRadius / 2;
             var arcPoints = GenerateArcPoints(false, borderRadius);

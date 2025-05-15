@@ -11,10 +11,29 @@ namespace PL
         {
             InitializeComponent();
             TableSelectorComboBox.SelectedIndex = 0;
+            
         }
-
+        public class Carro
+        {
+            public string Cor { get; set; }
+            public string Modelo { get; set; }
+            public string Ano { get; set; }
+        }
         private void MainForm_Load(object sender, EventArgs e)
         {
+            Carro carro = new Carro();
+            carro.Cor = "Red"; 
+            carro.Modelo = "Uno";
+            carro.Ano = "98";
+            Carro carro1 = new Carro();
+            carro1.Cor = "Red";
+            carro1.Modelo = "Uno";
+            carro1.Ano = "98";
+            Carro carro2 = new Carro();
+            carro2.Cor = "Red";
+            carro2.Modelo = "Uno";
+            carro2.Ano = "98";
+            List<Carro> CarrosList = new List<Carro> { carro, carro1 , carro2 };
 
             List<string> optionsList = new List<string> { "Processo", "Cliente", "Edificação" };
             List<string> buttonsDefaultTextsList = new List<string> { "Pesquisar ", "Adicionar ", "Editar ", "Excluir " };
@@ -37,6 +56,8 @@ namespace PL
                 List<Establishment> establishments = EstablishmentRepos.GetAllEstablishments();
                 dataGridView1.DataSource = establishments;
             }
+            customDataGridView1.SetDataSource(CarrosList);
+
         }
 
         private void addButton_Click(object sender, EventArgs e)

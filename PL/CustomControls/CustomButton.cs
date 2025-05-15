@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AVBC_CLCB_Notifier.PL.Templates
 {
-    public class RoundedButton : UserControl
+    public class CustomButton : UserControl
     {
         private int borderRadius = 5;
         private Color borderColor = Color.Red;
@@ -58,7 +58,7 @@ namespace AVBC_CLCB_Notifier.PL.Templates
             set { innerLabel.ForeColor = value; }
         }
 
-        public RoundedButton()
+        public CustomButton()
         {
 
             this.Padding = new Padding(5);

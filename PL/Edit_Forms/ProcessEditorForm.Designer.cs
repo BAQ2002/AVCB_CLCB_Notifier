@@ -125,7 +125,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             processTypeComboBox.BorderColor = Color.Blue;
             processTypeComboBox.BorderColorFocus = Color.Green;
             processTypeComboBox.BorderFocusExtraWidth = 1;
-            processTypeComboBox.BorderRadius = 6;
+            processTypeComboBox.BorderRadius = 7;
             processTypeComboBox.BorderWidth = 1;
             processTypeComboBox.ForeColor = SystemColors.MenuHighlight;
             processTypeComboBox.HorizontalPadding = 2;

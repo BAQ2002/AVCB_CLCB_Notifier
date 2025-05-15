@@ -13,8 +13,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
 {
     public class DropDownDay : DropDownDateBase
     {
-
-        class DayItem : InnerLabel
+        class DayItemLabel : InnerLabel
         {
             private int _day;
             public int Day
@@ -42,7 +41,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         private InnerLabel BackwardIcon = new InnerLabel(); //Label&&Button para passar para a década anteriror
         private InnerLabel ForwardIcon = new InnerLabel();
 
-        private List<DayItem> DayList = new List<DayItem>();
+        private List<DayItemLabel> DayItemList = new List<DayItemLabel>();
         private string[] MonthTexts =  {"null", "Janeiro", "Fevereiro", "Marco", "Abril", "Maio", "Junho",
                                          "Julho", "Agosto", "Setembro", "Outubro", "Novembro","Dezembro" };
         public DropDownDay(CustomControl control) : base(control)
@@ -76,21 +75,20 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
 
                 SecondaryForeColor = Color.FromArgb((ForeColor.R + 255) / 2, (ForeColor.G + 255) / 2, (ForeColor.B + 255) / 2);
 
-                CreateDayItems();
-                           
+                CreateDayItems();                           
                 AdjustControlSize();
             }
         }
         
         private void UpdateDayList(int year, int month)
         {
-            int ListIndex = 0;
+            int DayItemListIndex = 0; //Indice que faz referencia a lista de DayItemLabel: a cada item que é adicionado aumenta 1(vai para o proximo indice)
 
             DateTime firstDay = new DateTime(year, month, 1); //DateTime do primeiro dia do mes                 
             int monthFirstDayOfWeek = (int)firstDay.DayOfWeek; //Int do Dia da semana do primeiro dia do mes
             int daysInMonth = DateTime.DaysInMonth(year, month); //Quantidade de dias do mes
 
-            if (monthFirstDayOfWeek > 0) //Se o primeiro dia da semana do mes nao for segunda, adiciona os dias do mes anterior ate segunda
+            if (monthFirstDayOfWeek > 0) //Se o primeiro dia da semana do mes nao for domingo, adiciona os dias do mes anterior ate o primeiro domingo do mes
             {
                 int prevMonth = (month == 1) ? 12 : month - 1; //Se o mes for 1: mes anterior sera 12, se nao: sera mes-1
                 int prevYear = (month == 1) ? year - 1 : year; //Se mes for 1: ano anterior sera ano-1, se nao ano sera ==
@@ -99,41 +97,41 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
 
                 for (int i = previousFirstIndex; i <= daysInPreviousMonth; i++) 
                 {
-                    DayItem dayItem = DayList[ListIndex];
-                    dayItem.Day = i; dayItem.Year = prevYear; dayItem.Month = prevMonth;
-                    dayItem.IsCurrentMonth = false; dayItem.ForeColor = SecondaryForeColor;
-                    ListIndex ++;
+                    DayItemLabel dayItemLabel = DayItemList[DayItemListIndex];
+                    dayItemLabel.Day = i; dayItemLabel.Year = prevYear; dayItemLabel.Month = prevMonth;
+                    dayItemLabel.IsCurrentMonth = false; dayItemLabel.ForeColor = SecondaryForeColor;
+                    DayItemListIndex ++;
                 }
             }
 
-            for (int i = 1; i <= daysInMonth; i++) 
+            for (int i = 1; i <= daysInMonth; i++) //Loop para criar os dias do mes atual
             {
-                DayItem dayItem = DayList[ListIndex];
-                dayItem.Day = i; dayItem.Year = year; dayItem.Month = month;
-                dayItem.IsCurrentMonth = true; dayItem.ForeColor = ForeColor;
-                ListIndex ++;
+                DayItemLabel dayItemLabel = DayItemList[DayItemListIndex];
+                dayItemLabel.Day = i; dayItemLabel.Year = year; dayItemLabel.Month = month;
+                dayItemLabel.IsCurrentMonth = true; dayItemLabel.ForeColor = ForeColor;
+                DayItemListIndex ++;
             }
 
-            if (ListIndex < DayList.Count) //Se os dias do mes atual e do mes anterior nao preencheram a quantidade de determinada de labels
+            if (DayItemListIndex < DayItemList.Count) //Se os dias do mes atual e do mes anterior nao preencheram a quantidade de determinada de labels
             {
                 int nextMonth = (month == 12) ? 1 : month + 1; //Se o mes for 12: proximo mes será 1, se nao: sera mes+1
                 int nextYear = (month == 12) ? year + 1 : year; //Se o mes for 12: proximo ano será ano+1, se nao: sera ==
                 int daysInNextMonth = DateTime.DaysInMonth(nextYear, nextMonth);
-                int nextMaxIndex = DayList.Count - ListIndex; //Define ate qual dia do proximo mes deve ser adicionado
+                int nextMaxIndex = DayItemList.Count - DayItemListIndex; //Define ate qual dia do proximo mes deve ser adicionado
 
                 for (int i = 1; i <= nextMaxIndex; i++) 
                 {
-                    DayItem dayItem = DayList[ListIndex];
-                    dayItem.Day = i; dayItem.Year = nextYear; dayItem.Month = nextMonth;
-                    dayItem.IsCurrentMonth = false; dayItem.ForeColor = SecondaryForeColor;
-                    ListIndex ++;
+                    DayItemLabel dayItemLabel = DayItemList[DayItemListIndex];
+                    dayItemLabel.Day = i; dayItemLabel.Year = nextYear; dayItemLabel.Month = nextMonth;
+                    dayItemLabel.IsCurrentMonth = false; dayItemLabel.ForeColor = SecondaryForeColor;
+                    DayItemListIndex ++;
                 }
             }            
         }
 
         protected override void OnLabelClick(int index)
         {
-            var item = DayList[index];
+            var item = DayItemList[index];
 
             if (parentControl is CustomDatePicker dp)
             {
@@ -166,6 +164,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             AdjustControlSize();
         }
 
+        //Método que cria os DayItemLabel: são criados sem o texto ou dia que são declarados ou modificados no UpdateDayList
         private void CreateDayItems()
         {
             int numberOfLabels = NumberOfRows * ItemsPerRow;
@@ -174,30 +173,30 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             {
                 int index = i;
 
-                DayItem dayItem = new DayItem()
+                DayItemLabel dayItemLabel = new DayItemLabel()
                 {
                     Name = $"Item{index}",
                     Font = Font,
                     BackgroundColor = BackgroundColor
                 };        
-                dayItem.MouseEnter += (s, e) =>
+                dayItemLabel.MouseEnter += (s, e) =>
                 {
                     hoveredIndex = index;
-                    dayItem.ForeColor = BackgroundColor;
-                    dayItem.BackgroundColor = BorderColorFocus;
+                    dayItemLabel.ForeColor = BackgroundColor;
+                    dayItemLabel.BackgroundColor = BorderColorFocus;
                     Invalidate();
                 };
-                dayItem.MouseLeave += (s, e) =>
+                dayItemLabel.MouseLeave += (s, e) =>
                 {
                     if (hoveredIndex == index) hoveredIndex = -1;
-                    dayItem.ForeColor = DayList[index].IsCurrentMonth ? ForeColor : SecondaryForeColor; 
-                    dayItem.BackgroundColor = BackgroundColor;
+                    dayItemLabel.ForeColor = DayItemList[index].IsCurrentMonth ? ForeColor : SecondaryForeColor; 
+                    dayItemLabel.BackgroundColor = BackgroundColor;
                     Invalidate();
                 };
-                dayItem.Click += (s, e) => OnLabelClick(index);
+                dayItemLabel.Click += (s, e) => OnLabelClick(index);
 
-                this.Controls.Add(dayItem);
-                DayList.Add(dayItem);
+                this.Controls.Add(dayItemLabel);
+                DayItemList.Add(dayItemLabel);
                           
             }
             UpdateDayList(CurrentYear, CurrentMonth);
@@ -207,7 +206,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         {
             string[] weekDays = { "D", "S", "T", "Q", "Q", "S", "S" };
 
-            if (DayList == null || DayList.Count == 0 || ItemsPerRow <= 0)
+            if (DayItemList == null || DayItemList.Count == 0 || ItemsPerRow <= 0)
                 return;
 
             int xPadding = HorizontalPadding;
@@ -216,7 +215,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             int itemHeight = textExactSize("00", this.Font).Height;
             int itemWidth = textExactSize("00", this.Font).Width;
 
-            int totalItems = DayList.Count;
+            int totalItems = DayItemList.Count;
             int numRows = (int)Math.Ceiling((double)totalItems / ItemsPerRow);
 
             Width = xPadding + (ItemsPerRow * (itemWidth + xPadding));
@@ -243,10 +242,10 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 int locationX = xPadding + (column * (itemWidth + xPadding));
                 int locationY = yPadding + (2 * itemHeight +  yPadding) + (row * (itemHeight + yPadding));
 
-                DayItem dayItem = DayList[i];
-                dayItem.Width = itemWidth;
-                dayItem.Height = itemHeight;
-                dayItem.Location = new Point(locationX, locationY);
+                DayItemLabel dayItemLabel = DayItemList[i];
+                dayItemLabel.Width = itemWidth;
+                dayItemLabel.Height = itemHeight;
+                dayItemLabel.Location = new Point(locationX, locationY);
             }
         }
         

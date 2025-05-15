@@ -1,10 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Compile Update="CustomControls\CustomDataGridView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="CustomControls\DropDowns\DropDownBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="CustomControls\DropDowns\DropDownDay.cs">
+    <Compile Update="CustomControls\DropDowns\DropDownDay\DropDownDayControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="CustomControls\DropDowns\DropDownYear.cs">
@@ -37,7 +40,7 @@
     <Compile Update="Edit_Forms\ClientEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="CustomControls\RoundedButton.cs">
+    <Compile Update="CustomControls\CustomButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="CustomControls\CustomComboBox.cs">

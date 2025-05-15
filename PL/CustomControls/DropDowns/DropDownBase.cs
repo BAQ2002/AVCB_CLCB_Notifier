@@ -149,7 +149,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 int y = itemHeight + (2 * yPadding) + (row * (itemHeight + yPadding));
 
                 InnerLabel lbl = CreateDateLabel(i, MonthList[i].MonthText, x, y, itemWidth, itemHeight);
-                //lbl.ForeColor = DayList[i].IsCurrentMonth ? ForeColor : SecondaryForeColor;
+                //lbl.ForeColor = DayItemList[i].IsCurrentMonth ? ForeColor : SecondaryForeColor;
                 //lbl.Location = new Point();
                 this.Controls.Add(lbl);
             }

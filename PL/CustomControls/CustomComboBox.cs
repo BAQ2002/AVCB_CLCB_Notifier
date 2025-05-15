@@ -63,7 +63,9 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
 
         //Método para ajuste automatizado do tamanho dos componentes internos e do Padding vertical
         private void AdjustControlSize()
-        {                        
+        {
+            AdjustPadding();
+
             string referenceText = string.IsNullOrEmpty(selectIndex.Text) ? "A" : selectIndex.Text;
             int textHeight = TextRenderer.MeasureText(referenceText, selectIndex.Font).Height;
             VerticalPadding = (this.Height - textHeight) / 2;
@@ -171,6 +173,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         //Método para ajuste automatizado do tamanho do elemento
         private void AdjustControlSize(CustomComboBox _sender)
         {
+
             string referenceText = "A";
             int textHeight = TextRenderer.MeasureText(referenceText, this.Font).Height;
             this.Height = (textHeight + VerticalPadding) * _sender.ItemList.Count;

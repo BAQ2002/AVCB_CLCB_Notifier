@@ -54,13 +54,13 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 g.FillRectangle(brush, this.ClientRectangle);
             }
 
-            //int textX = (Width - textExactSize(text, Font).Width) / 2;
+            int textX = (Width - textExactSize(text, Font).Width) / 2;
 
             TextRenderer.DrawText(
                 g,
                 text,
                 Font, 
-                new Point(0,0), 
+                new Point(textX, 0), 
                 this.ForeColor,
                 TextFormatFlags.NoPadding | TextFormatFlags.SingleLine
             );
