@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,13 +19,17 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         private float paddingRelativePercent = 0.6f; // 60% por padrão
 
         private Color secondaryForeColor = SystemColors.GrayText; //Cor de textos secundarios
+
         private Color headerBackgroundColor = SystemColors.GrayText; //Cor do fundo de cabecalhos
+        private Color backgroundColor = SystemColors.Control; //Cor do fundo
+        private Color secondaryBackgroundColor = SystemColors.ControlLightLight; //Cor do fundo secundaria
+
         private Color borderColor = SystemColors.WindowFrame;
         private Color dropdownBorderColor = Color.Green;
         private Color borderColorFocus = SystemColors.Highlight; //Cor da borda
-        private Color backgroundColor = SystemColors.Window; //Cor do fundo
-        private PaddingModeEnum paddingMode = PaddingModeEnum.Absolute;
         
+        private PaddingModeEnum paddingMode = PaddingModeEnum.Absolute;
+        public InnerControls InnerControls { get; } = new();
         public enum PaddingModeEnum
         {
             Absolute,    // HorizontalPadding e VerticalPadding são definidos diretamente
@@ -71,6 +76,13 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             get { return borderFocusExtraWidth; }
             set { borderFocusExtraWidth = value; Invalidate(); }
         }
+
+        public Color SecondaryBackgroundColor
+        {
+            get { return secondaryBackgroundColor; }
+            set { secondaryBackgroundColor = value; Invalidate(); }
+        }
+
         public Color SecondaryForeColor
         {
             get { return secondaryForeColor; }
@@ -114,5 +126,24 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             }
             // Se for Absolute, não altera — valores já foram definidos diretamente
         }
+
+        protected virtual void AdjustControlSize()
+        {
+            AdjustPadding(); // comportamento comum a todos
+                             // Se quiser: Invalidate(); // opcionalmente desenhar o controle aqui
+        }
+        protected override void OnMouseClick(MouseEventArgs e)
+        {
+            base.OnMouseClick(e);
+            InnerControls.HandleClick(this, e.Location); // detecta clique virtual
+        }
+
+        protected override void OnPaint(PaintEventArgs e) 
+        {
+            base.OnPaint(e);
+            NhegazDrawingMethods.DrawControl(this, e);
+            InnerControls.OnPaintAll(this, e);
+        }
+
     }
 }

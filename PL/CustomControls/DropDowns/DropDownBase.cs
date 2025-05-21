@@ -38,9 +38,9 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             this.Font = _control.Font;
         }
 
-        protected InnerLabel CreateDateLabel(int index, string text, int x, int y, int width, int height)
+        protected CustomLabel CreateDateLabel(int index, string text, int x, int y, int width, int height)
         {
-            InnerLabel lbl = new InnerLabel()
+            CustomLabel lbl = new CustomLabel()
             {
                 Name = $"Item{index}",
                 Text = text,
@@ -109,7 +109,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             MonthList.Add(new MonthItem { Month = 9, MonthText = "Set" }); MonthList.Add(new MonthItem { Month = 10, MonthText = "Out" });
             MonthList.Add(new MonthItem { Month = 11, MonthText = "Nov" }); MonthList.Add(new MonthItem { Month = 12, MonthText = "Dez" });
 
-            AdjustControlSize(ItemsPerRow);
+            AdjustControlSize();
         }
 
         protected override void OnLabelClick(int index)
@@ -122,12 +122,17 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             this.Parent?.Controls.Remove(this);
         }
 
-        protected void AdjustControlSize(int itemsPerRow)
+        protected override void AdjustControlSize()
         {
+            base.AdjustControlSize();
+
             this.Controls.Clear();
+
+            int itemsPerRow = ItemsPerRow;
             if (MonthList == null || MonthList.Count == 0 || itemsPerRow <= 0)
                 return;
 
+            
             int xPadding = HorizontalPadding;
             int yPadding = VerticalPadding;
 
@@ -148,7 +153,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 int x = xPadding + (column * (itemWidth + xPadding));
                 int y = itemHeight + (2 * yPadding) + (row * (itemHeight + yPadding));
 
-                InnerLabel lbl = CreateDateLabel(i, MonthList[i].MonthText, x, y, itemWidth, itemHeight);
+                CustomLabel lbl = CreateDateLabel(i, MonthList[i].MonthText, x, y, itemWidth, itemHeight);
                 //lbl.ForeColor = DayItemList[i].IsCurrentMonth ? ForeColor : SecondaryForeColor;
                 //lbl.Location = new Point();
                 this.Controls.Add(lbl);

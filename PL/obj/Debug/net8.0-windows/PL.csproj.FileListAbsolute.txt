@@ -92,3 +92,4 @@ C:\Users\anton\source\repos\AVBC_CLCB_Notifier\PL\obj\Debug\net8.0-windows\AVBC_
 C:\Users\anton\source\repos\AVBC_CLCB_Notifier\PL\obj\Debug\net8.0-windows\AVBC_CLCB_Notifier.PL.CustomControls.CustomComboBox.resources
 C:\Users\anton\source\repos\AVBC_CLCB_Notifier\PL\obj\Debug\net8.0-windows\AVBC_CLCB_Notifier.PL.CustomControls.CustomDatePicker.resources
 C:\Users\anton\source\repos\AVBC_CLCB_Notifier\PL\obj\Debug\net8.0-windows\AVBC_CLCB_Notifier.PL.Templates.CustomButton.resources
+C:\Users\anton\source\repos\AVBC_CLCB_Notifier\PL\obj\Debug\net8.0-windows\AVBC_CLCB_Notifier.PL.CustomControls.DropDownDateBase.resources

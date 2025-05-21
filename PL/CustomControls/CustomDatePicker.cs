@@ -21,9 +21,9 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         public TextBox selectedMonth = new TextBox(); //Opção atualmente selecionada mes
         public TextBox selectedYear = new TextBox(); //Opção atualmente selecionada ano
 
-        public InnerLabel dayDropDownIcon = new InnerLabel(); //Icone de visual
-        public InnerLabel monthDropDownIcon = new InnerLabel();//Icone de visual
-        public InnerLabel yearDropDownIcon = new InnerLabel();//Icone de visual
+        public CustomLabel dayDropDownIcon = new CustomLabel(); //Icone de visual
+        public CustomLabel monthDropDownIcon = new CustomLabel();//Icone de visual
+        public CustomLabel yearDropDownIcon = new CustomLabel();//Icone de visual
 
         private CustomControl dropDownInstance = null;
       

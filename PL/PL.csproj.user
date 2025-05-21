@@ -13,7 +13,7 @@
     <Compile Update="CustomControls\DropDowns\DropDownYear.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="CustomControls\WIPInnerLabel.cs">
+    <Compile Update="CustomControls\CustomLabel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Update="CustomControls\WIPinnerTextBox.cs">

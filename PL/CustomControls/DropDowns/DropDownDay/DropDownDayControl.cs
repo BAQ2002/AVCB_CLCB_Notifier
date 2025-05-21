@@ -13,7 +13,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
 {
     public class DropDownDay : DropDownDateBase
     {
-        class DayItemLabel : InnerLabel
+        class DayItemLabel : CustomLabel
         {
             private int _day;
             public int Day
@@ -37,9 +37,9 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         private int CurrentMonth;
         private int CurrentYear;
 
-        private InnerLabel MonthLabel = new InnerLabel();
-        private InnerLabel BackwardIcon = new InnerLabel(); //Label&&Button para passar para a década anteriror
-        private InnerLabel ForwardIcon = new InnerLabel();
+        private CustomLabel MonthLabel = new CustomLabel();
+        private CustomLabel BackwardIcon = new CustomLabel(); //Label&&Button para passar para a década anteriror
+        private CustomLabel ForwardIcon = new CustomLabel();
 
         private List<DayItemLabel> DayItemList = new List<DayItemLabel>();
         private string[] MonthTexts =  {"null", "Janeiro", "Fevereiro", "Marco", "Abril", "Maio", "Junho",
@@ -230,7 +230,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 int col = i % ItemsPerRow;
                 int x = xPadding + (col * (itemWidth + xPadding));
                 int y = (2 * yPadding) + ForwardIcon.Height;
-                InnerLabel lbl = CreateDateLabel(i, weekDays[i], x, y, itemWidth, itemHeight);
+                CustomLabel lbl = CreateDateLabel(i, weekDays[i], x, y, itemWidth, itemHeight);
                 this.Controls.Add(lbl);
             }
             

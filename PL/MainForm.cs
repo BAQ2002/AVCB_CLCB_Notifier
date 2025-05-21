@@ -33,7 +33,11 @@ namespace PL
             carro2.Cor = "Red";
             carro2.Modelo = "Uno";
             carro2.Ano = "98";
-            List<Carro> CarrosList = new List<Carro> { carro, carro1 , carro2 };
+            Carro carro3 = new Carro();
+            carro3.Cor = "Red";
+            carro3.Modelo = "Uno";
+            carro3.Ano = "98";
+            List<Carro> CarrosList = new List<Carro> { carro, carro1, carro2, carro3 };
 
             List<string> optionsList = new List<string> { "Processo", "Cliente", "Edificação" };
             List<string> buttonsDefaultTextsList = new List<string> { "Pesquisar ", "Adicionar ", "Editar ", "Excluir " };

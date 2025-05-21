@@ -7,7 +7,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 
 namespace AVBC_CLCB_Notifier.PL.CustomControls
 {
-    public class InnerLabel : Control
+    public class CustomLabel : Control
     {
         private string text;
         private Color backgroundColor;
@@ -29,7 +29,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             set { backgroundColor = value; Invalidate(); }
         }
 
-        public InnerLabel()
+        public CustomLabel()
         {
             AdjustControlSize();
         }
