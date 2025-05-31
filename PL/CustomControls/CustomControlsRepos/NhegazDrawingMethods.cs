@@ -1,4 +1,4 @@
-using AVBC_CLCB_Notifier.PL.CustomControls;
+﻿using AVBC_CLCB_Notifier.PL.CustomControls;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,6 +14,8 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
 {
     public static class NhegazDrawingMethods
     {
+        public enum ArcPosition {  Left, Right, Top, Bottom }
+
         public static void DrawControl(CustomControl control, PaintEventArgs e)
         {
             Rectangle rect = new Rectangle(0, 0, control.Width - 1, control.Height - 1);
@@ -37,50 +39,73 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
                     }
                     e.Graphics.ResetClip();
                 }
-                DrawBorder(control, e);
+                NewDrawBorder(control, e);
             }
         }
-
+        
         static float RoundFloat(float valor)
         {
             float parteDecimal = valor - (int)valor;
 
-            // Verifica se a parte decimal � exatamente 0.5
+            // Verifica se a parte decimal é exatamente 0.5
             if (Math.Abs(parteDecimal - 0.5f) < 0.00001f)
             {
-                return valor; // mant�m com .5
+                return valor; // mantém com .5
             }
             else
             {
                 return (float)Math.Round(valor); // arredonda normalmente
             }
         }
-        private static List<PointF> GenerateArcPoints(bool isInner, float BorderRadius)//M�todo que gera os pontos do arco
+        private static List<PointF> GenerateArc(float radius, bool isInner = false)//Método que gera os pontos do arco
         {
 
-            float radius = isInner ? BorderRadius * 0.9f : BorderRadius;
+            radius = isInner ? radius * 0.9f : radius;
             int segments = (int)radius / 2;
 
             List<PointF> points = new(); //lista que armazena os pontos do arco
 
             for (int i = 0; i <= segments; i++)
             {
-                float t = i / (float)segments; //Valor do progresso atual at� o final do arco(de 0 a 1)
-                float angle = (float)(Math.PI / 2 * t); //Valor do angulo do progresso atual(de 0� at� 90�)
+                float t = i / (float)segments; //Valor do progresso atual até o final do arco(de 0 a 1)
+                float angle = (float)(Math.PI / 2 * t); //Valor do angulo do progresso atual(de 0° até 90°)
                 float fx = radius * (1 - (float)Math.Cos(angle)); //Gera o X do ponto atual
                 float fy = radius * (1 - (float)Math.Sin(angle)); //Gera o Y do ponto atual
                 var x = RoundFloat(fx);
                 var y = RoundFloat(fy);
                 points.Add(new PointF(x, y)); //Adiciona o ponto a lista de pontos
             }
-            if (isInner) //Se for o arco interno os pontos s�o criados na ordem contraria para que o path seja fechado corretamente
+            if (isInner) //Se for o arco interno os pontos são criados na ordem contraria para que o path seja fechado corretamente
             {
                 points.Reverse(); //inverte a ordem dos pontos
             }
             return points;
         }
+        private static PointF[] NewGenerateArc(float radius, bool isInner = false)//Método que gera os pontos do arco
+        {
 
-        //Retorna uma nova cor que � a propor��o entre de n/10 da primeira em rela��o a segunda
+            radius = isInner ? radius * 0.9f : radius;
+            int segments = (int)radius / 2;
+
+            PointF[] points = new PointF[segments]; //lista que armazena os pontos do arco
+
+            for (int i = 0; i < segments; i++)
+            {
+                float t = i / (float)segments; //Valor do progresso atual até o final do arco(de 0 a 1)
+                float angle = (float)(Math.PI / 2 * t); //Valor do angulo do progresso atual(de 0° até 90°)
+                float fx = radius * (1 - (float)Math.Cos(angle)); //Gera o X do ponto atual
+                float fy = radius * (1 - (float)Math.Sin(angle)); //Gera o Y do ponto atual
+                var x = RoundFloat(fx);
+                var y = RoundFloat(fy);
+                points[i] = new PointF(x, y); //Adiciona o ponto a lista de pontos
+            }
+            if (isInner) //Se for o arco interno os pontos são criados na ordem contraria para que o path seja fechado corretamente
+            {
+                Array.Reverse(points); //inverte a ordem dos pontos
+            }
+            return points;
+        }
+        //Retorna uma nova cor que é a proporção entre de n/10 da primeira em relação a segunda
         private static Color InterpolateColor(int weightFrom1To10, Color color1, Color color2) 
 
         {           
@@ -95,21 +120,21 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
 
             return Color.FromArgb(r, g, b);
         }
+
+
         public static void DrawBorder(CustomControl control, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            int borderRadius = control.BorderRadius;
+            float borderRadius = control.BorderRadius;
             if (borderRadius <= 0) return;
 
-            float BorderRadius = borderRadius; //Transforma o valor de BorderRadius em float
             int width = control.Width - 1; //Ajuste necessario do Width para ficar dentro do tamanho do control
             int height = control.Height - 1; //Ajuste necessario do Height para ficar dentro do tamanho do control
             Color arcsColor = control.OnFocusBool ? InterpolateColor(10, control.BorderColorFocus, control.BackgroundColor)
                                                   : InterpolateColor(10, control.BorderColor, control.BackgroundColor);
             Pen arcsPen = new(arcsColor, 1.0f);
 
-            int segments = borderRadius / 2;
-            var arcPoints = GenerateArcPoints(false, borderRadius);
+            var arcPoints = GenerateArc(borderRadius);
 
             GraphicsPath topLeftPath = new();
             GraphicsPath topRightPath = new();
@@ -133,12 +158,11 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
 
             if (control.BorderWidth > 1)
             {
-                var innerArcPoints = GenerateArcPoints(true, borderRadius * 0.9f);
+                var innerArcPoints = GenerateArc(borderRadius, true);
                 int offSet = control.BorderWidth - 1;
 
                 foreach (var p in innerArcPoints)
                 {
-
                     //Arco Superior Esquerdo
                     topLeftPath.AddLine(new PointF(p.X + offSet, p.Y + offSet), new PointF(p.X + offSet, p.Y + offSet)); //Para cada ponto na lista de Pontos, cria uma Line de um unico ponto
 
@@ -157,7 +181,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
                     float bottomRightY = height - p.Y;
                     bottomRightPath.AddLine(new PointF(bottomRightX - offSet, bottomRightY - offSet), new PointF(bottomRightX - offSet, bottomRightY - offSet)); //Para cada ponto na lista de Pontos, cria uma Line de um unico ponto
                 }
-                //SmoothBorderArcs(int quality, int BorderRadius);
+                //SmoothBorderArcs(int quality, int borderRadius);
 
                 SolidBrush brush = new SolidBrush(arcsColor);
 
@@ -186,32 +210,130 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
             e.Graphics.DrawLine(pen, 0 + borderRadius, height, width - borderRadius + ExtraLenght, height); //Linha Inferior   
         }
 
-        //public static void SmoothBorderArcs(bool hasInner,int quality, int BorderRadius) 
-        //{
-        //    int outerAdjust = BorderRadius + 1;
-        //    int innerAdjust = BorderRadius - 1;
-        //    GraphicsPath topLeftPath = new();
-        //    GraphicsPath topRightPath = new();
-        //    GraphicsPath bottomLeftPath = new();
-        //    GraphicsPath bottomRightPath = new();
-        //   for (int i = 0; i < quality; i++)
-        //   {
-        //       // Arco Superior Esquerdo  
-        //       topLeftPath.AddLine(new PointF(p.X, p.Y), new PointF(p.X, p.Y));
-        // Arco Superior Direito
-        //        topRightPath.AddLine(new PointF(width - p.X, p.Y), new PointF(width - p.X, p.Y));
-        // Arco Inferior Esquerdo
-        //        bottomLeftPath.AddLine(new PointF(p.X, height - p.Y), new PointF(p.X, height - p.Y));
-        // Arco Inferior Direito
-        //        bottomRightPath.AddLine(new PointF(width - p.X, height - p.Y), new PointF(width - p.X, height - p.Y));
-        //        var outerArcPoints = GenerateArcPoints(false, outerAdjust);
-        //        if(hasInner == true)
-        //        {
-        //            var innerArcPoints = GenerateArcPoints(true, BorderRadius * 0.9f);
-        //        }             
-        //        outerAdjust++;
-        //
-        //    }
-        //}
+        public static void NewDrawBorder(CustomControl control, PaintEventArgs e)
+        {
+            e.Graphics.SmoothingMode = SmoothingMode.None;
+            float borderRadius = control.BorderRadius;
+            if (borderRadius <= 0) return;
+
+            int width = control.Width - 1; //Ajuste necessario do Width para ficar dentro do tamanho do control
+            int height = control.Height - 1; //Ajuste necessario do Height para ficar dentro do tamanho do control
+            Color arcsColor = control.OnFocusBool ? InterpolateColor(10, control.BorderColorFocus, control.BackgroundColor)
+                                                  : InterpolateColor(10, control.BorderColor, control.BackgroundColor);
+            Pen arcsPen = new(arcsColor, 1.0f);
+            GraphicsPath FullPath = new();
+
+            var arcTopLeft = GenerateArc(borderRadius); // 0° → 90°
+            var arcTopRight = arcTopLeft.Select(p => new PointF(width - p.X, p.Y)).Reverse();
+            var arcBottomRight = arcTopLeft.Select(p => new PointF(width - p.X, height - p.Y));
+            var arcBottomLeft = arcTopLeft.Select(p => new PointF(p.X, height - p.Y)).Reverse();
+
+            FullPath.StartFigure();
+            
+            FullPath.AddLines(arcTopLeft.ToArray());
+            FullPath.AddLines(arcTopRight.ToArray());
+            FullPath.AddLines(arcBottomRight.ToArray());
+            FullPath.AddLines(arcBottomLeft.ToArray());
+
+            FullPath.CloseFigure();
+
+            if (control.BorderWidth > 1)
+            {               
+                int offset = control.BorderWidth - 1;
+                var arcInner = GenerateArc(borderRadius* 0.9f, false); // já vem invertido
+
+                FullPath.StartFigure();
+
+                var innerTopLeft = arcInner.Select(p => new PointF(p.X + offset, p.Y + offset));
+                var innerTopRight = arcInner.Select(p => new PointF(width - p.X - offset, p.Y + offset)).Reverse();
+                var innerBottomRight = arcInner.Select(p => new PointF(width - p.X - offset, height - p.Y - offset));
+                var innerBottomLeft = arcInner.Select(p => new PointF(p.X + offset, height - p.Y - offset)).Reverse();
+
+                FullPath.AddLines(innerTopLeft.ToArray());
+                FullPath.AddLines(innerTopRight.ToArray());
+                FullPath.AddLines(innerBottomRight.ToArray());               
+                FullPath.AddLines(innerBottomLeft.ToArray());
+
+                FullPath.CloseFigure();
+                using (SolidBrush brush = new SolidBrush(arcsColor))
+                {
+                    e.Graphics.FillPath(brush, FullPath);
+                }
+            }                        
+            e.Graphics.DrawPath(new Pen(arcsColor, 1f), FullPath);
+        }
+
+        public static GraphicsPath BorderPath(CustomControl control)
+        {
+            float borderRadius = control.BorderRadius;
+            int width = control.Width - 1; //Ajuste necessario do Width para ficar dentro do tamanho do control
+            int height = control.Height - 1; //Ajuste necessario do Height para ficar dentro do tamanho do control
+
+            GraphicsPath FullPath = new();
+
+            var arcTopLeft = GenerateArc(borderRadius); // 0° → 90°
+            var arcTopRight = arcTopLeft.Select(p => new PointF(width - p.X, p.Y)).Reverse();
+            var arcBottomRight = arcTopLeft.Select(p => new PointF(width - p.X, height - p.Y));
+            var arcBottomLeft = arcTopLeft.Select(p => new PointF(p.X, height - p.Y)).Reverse();
+
+            FullPath.StartFigure();
+
+            FullPath.AddLines(arcTopLeft.ToArray());
+            FullPath.AddLines(arcTopRight.ToArray());
+            FullPath.AddLines(arcBottomRight.ToArray());
+            FullPath.AddLines(arcBottomLeft.ToArray());
+
+            FullPath.CloseFigure();
+
+            if (control.BorderWidth > 1)
+            {
+                int offset = control.BorderWidth - 1;
+                var arcInner = GenerateArc(borderRadius * 0.9f, false); // já vem invertido
+
+                FullPath.StartFigure();
+
+                var innerTopLeft = arcInner.Select(p => new PointF(p.X + offset, p.Y + offset));
+                var innerTopRight = arcInner.Select(p => new PointF(width - p.X - offset, p.Y + offset)).Reverse();
+                var innerBottomRight = arcInner.Select(p => new PointF(width - p.X - offset, height - p.Y - offset));
+                var innerBottomLeft = arcInner.Select(p => new PointF(p.X + offset, height - p.Y - offset)).Reverse();
+
+                FullPath.AddLines(innerTopLeft.ToArray());
+                FullPath.AddLines(innerTopRight.ToArray());
+                FullPath.AddLines(innerBottomRight.ToArray());
+                FullPath.AddLines(innerBottomLeft.ToArray());
+
+                FullPath.CloseFigure();
+            }
+            return FullPath;
+        }
+        public static GraphicsPath BackgroundPath(CustomControl control)
+        {
+            float borderRadius = control.BorderWidth > 1 ? control.BorderRadius * 0.9f : control.BorderRadius;
+            int offset = control.BorderWidth > 1 ? control.BorderWidth - 1 : 0;
+
+            int width = control.Width - 1; //Ajuste necessario do Width para ficar dentro do tamanho do control
+            int height = control.Height - 1; //Ajuste necessario do Height para ficar dentro do tamanho do control
+            
+            var baseArc = GenerateArc(borderRadius); // já vem invertido
+
+            GraphicsPath FullPath = new();
+
+            FullPath.StartFigure();
+
+            var arcTopLeft = baseArc.Select(p => new PointF(p.X + offset, p.Y + offset));
+            var arcTopRight = baseArc.Select(p => new PointF(width - p.X - offset, p.Y + offset)).Reverse();
+            var arcBottomRight = baseArc.Select(p => new PointF(width - p.X - offset, height - p.Y - offset));
+            var arcBottomLeft = baseArc.Select(p => new PointF(p.X + offset, height - p.Y - offset)).Reverse();
+
+            FullPath.AddLines(arcTopLeft.ToArray());
+            FullPath.AddLines(arcTopRight.ToArray());
+            FullPath.AddLines(arcBottomRight.ToArray());
+            FullPath.AddLines(arcBottomLeft.ToArray());
+
+            FullPath.CloseFigure();
+            
+            return FullPath;
+        }
+
     }
 }

@@ -19,23 +19,23 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         protected CustomControl parentControl;      
         protected StringCollection itemList = new StringCollection();
 
-        public DropDownDateBase(CustomControl _control)
+        public DropDownDateBase(CustomControl parentControl)
         {
-            this.parentControl = _control;
-            this.BorderRadius = _control.BorderRadius;
-            this.BorderWidth = _control.BorderWidth;
-            this.BorderColor = _control.BorderColor;
-            this.itemFocusColor = _control.BorderColorFocus;
-            this.BackgroundColor = _control.BackgroundColor;
-            this.Width = _control.Width;
-            this.HorizontalPadding = _control.HorizontalPadding;
-            this.VerticalPadding = _control.VerticalPadding;
+            this.parentControl = parentControl;
+            this.BorderRadius = parentControl.BorderRadius;
+            this.BorderWidth = parentControl.BorderWidth;
+            this.BorderColor = parentControl.BorderColor;
+            this.itemFocusColor = parentControl.BorderColorFocus;
+            this.BackgroundColor = parentControl.BackgroundColor;
+            this.Width = parentControl.Width;
+            this.HorizontalPadding = parentControl.HorizontalPadding;
+            this.VerticalPadding = parentControl.VerticalPadding;
             this.MinimumSize = new Size(5, 5);
             this.DoubleBuffered = true;
             this.BackColor = Color.Transparent;
             this.TabStop = true;
-            this.ForeColor = _control.ForeColor;
-            this.Font = _control.Font;
+            this.ForeColor = parentControl.ForeColor;
+            this.Font = parentControl.Font;
         }
 
         protected CustomLabel CreateDateLabel(int index, string text, int x, int y, int width, int height)

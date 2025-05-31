@@ -13,27 +13,42 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace AVBC_CLCB_Notifier.PL.CustomControls
 {
-    public class CustomDataGridView : CustomControl
+    public partial class CustomDataGridView : CustomControl
     {
         private List<object> DataSource = new(); //Lista de objetos que formada pelos 
         private List<PropertyInfo> Properties = new();
-        private List<CustomLabel> ColumnsHeadersList = new();
+        private List<InnerLabel> HeaderLabels = new();
 
-        private InnerLabel[,] DataVirtualLabels;
+        private InnerLabel[,]? DataLabels = null;
         private ColumnWidthModeEnum columnWidthMode = ColumnWidthModeEnum.HeaderWidth;
 
         private int RowHoveredIndex;
         private int columnHoveredIndex;
         private int fixedCharCount = 10;
+        private int linesWidth = 1;
 
-        private bool LinesBetweenColumns;
-        private bool LinesBetweenRows;
+        private bool linesBetweenColumns;
+        private bool linesBetweenRows;
         private bool differentColorsBetweenRows;
-
+        public int LinesWidth
+        {
+            get => linesWidth;
+            set { linesWidth = value; Invalidate();}
+        }
         public bool DifferentColorsBetweenRows
         {
             get => differentColorsBetweenRows;
             set { differentColorsBetweenRows = value; Invalidate(); }
+        }
+        public bool LinesBetweenRows
+        {
+            get => linesBetweenRows;
+            set { linesBetweenRows = value; Invalidate(); }
+        }
+        public bool LinesBetweenColumns
+        {
+            get => linesBetweenColumns;
+            set{ linesBetweenColumns = value; Invalidate(); }
         }
         public ColumnWidthModeEnum ColumnWidthMode
         {
@@ -48,12 +63,10 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         public enum ColumnWidthModeEnum
         {
             HeaderWidth,
-            BiggestContentWidth,
             FixedCharWidth
         }
         public CustomDataGridView()
         {
-
         }
         public void SetDataSource<T>(List<T> _source)
         {
@@ -69,40 +82,41 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                                   .ToList();
 
             // Solicita o redesenho do controle
-            CreateColumnsHeaders();
-            CreateVirtualCells();
+            CreateHeadersLabels();
+            CreateDataLabels();
             AdjustControlSize();
             Invalidate();
         }
-        public void CreateColumnsHeaders()
+        public void CreateHeadersLabels()
         {
-            foreach (var header in ColumnsHeadersList)
-                this.Controls.Remove(header);
+            foreach (var header in HeaderLabels)
+                this.InnerControls.Remove(header);
 
-            ColumnsHeadersList.Clear();
+            HeaderLabels.Clear();
 
             for (int i = 0; i < Properties.Count; i++)
             {
-                CustomLabel columnHeader = new CustomLabel()
+                InnerLabel columnHeader = new InnerLabel()
                 {
-                    Name = $"Item{Properties[i].Name}",
+                    //Name = $"Item{Properties[i].Name}",
                     Text = Properties[i].Name,
                     Font = Font,
-                    BackgroundColor = BackgroundColor
+                    BackgroundColor = HeaderBackgroundColor,
+                    TextHorizontalPadding = true
                 };
 
-                this.Controls.Add(columnHeader);
-                ColumnsHeadersList.Add(columnHeader);
+                this.InnerControls.Add(columnHeader);
+                HeaderLabels.Add(columnHeader);
             }
         }
-        public void CreateVirtualCells()
+        public void CreateDataLabels()
         {
             if (DataSource == null || Properties == null) return;
 
             int rows = DataSource.Count;
             int cols = Properties.Count;
 
-            DataVirtualLabels = new InnerLabel[rows, cols];
+            DataLabels = new InnerLabel[rows, cols];
 
             for (int rowIndex = 0; rowIndex < rows; rowIndex++)
             {
@@ -111,13 +125,18 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                     object val = Properties[colIndex].GetValue(DataSource[rowIndex]) ?? "";
                     string text = val.ToString();
 
-                    var InnerLabel = new InnerLabel(this, text, 
-                                                               DifferentColorsBetweenRows && rowIndex % 2 == 1 ? SecondaryBackgroundColor : BackgroundColor);
-
+                    InnerLabel InnerLabel = new InnerLabel()
+                    {
+                        Text = text,
+                        Font = Font,
+                        ForeColor = ForeColor,
+                        BackgroundColor = DifferentColorsBetweenRows && rowIndex % 2 == 1 ? SecondaryBackgroundColor : BackgroundColor,
+                        TextHorizontalPadding = true
+                    };
                     InnerLabel.Click += (s, e) => MessageBox.Show(InnerLabel.Text);
                     this.InnerControls.Add(InnerLabel);
-                    
-                    DataVirtualLabels[rowIndex, colIndex] = InnerLabel;
+
+                    DataLabels[rowIndex, colIndex] = InnerLabel;
                 }
             }
         }
@@ -125,36 +144,36 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         protected override void AdjustControlSize()
         {
             base.AdjustControlSize();
+            if (DataLabels == null || HeaderLabels == null) return;
 
-            int xPadding = HorizontalPadding; 
+            int xPadding = HorizontalPadding;
             int yPadding = VerticalPadding;
 
-            int rows = DataVirtualLabels.GetLength(0); // Linhas (dados)
-            int cols = DataVirtualLabels.GetLength(1); // Colunas (propriedades)
+            int rows = DataLabels.GetLength(0); // Linhas (dados)
+            int cols = DataLabels.GetLength(1); // Colunas (propriedades)
 
-            int currentX = xPadding;
-
-            for (int col = 0; col < cols; col++)
+            int currentX = BorderWidth;
+            
+            for (int columnIndex = 0; columnIndex < cols; columnIndex++)
             {
-                var header = ColumnsHeadersList[col];  
-                int columnWidth = ColumnWidth(ColumnWidthMode, header.Width, xPadding);
+
+                var header = HeaderLabels[columnIndex]; int columnWidth = ColumnWidth(ColumnWidthMode, header.Width, xPadding);
                 header.Location = new Point(currentX, BorderWidth);
                 header.Width = columnWidth;
                 header.Height = header.Height + yPadding;
- 
-                int currentY = header.Height + yPadding;
+                header.RefreshLayout();
+                int currentY = header.Height;
                 
-                for (int row = 0; row < rows; row++)
+                for (int rowIndex = 0; rowIndex < rows; rowIndex++)
                 {
-                    var cell = DataVirtualLabels[row, col];
+                    var cell = DataLabels[rowIndex, columnIndex];
                     cell.Location = new Point(currentX, currentY);
                     cell.Width = columnWidth;
                     cell.Height = cell.Height + yPadding;
-
-                    currentY += cell.Height;
+                    cell.RefreshLayout();
+                    currentY = LinesBetweenRows ? currentY + (cell.Height + LinesWidth) : currentY + cell.Height;
                 }
-
-                currentX += header.Width;
+                currentX = LinesBetweenColumns ? currentX + (header.Width + LinesWidth): currentX + header.Width;
             }
         }
 
@@ -177,8 +196,32 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         {            
             base.OnPaint(e);           
             
-            if (DataVirtualLabels == null)
+            if (DataLabels == null || HeaderLabels == null)
                 return;
+
+            if (LinesBetweenColumns)
+            {
+                int col = HeaderLabels.Count - 1;
+                Pen pen = new(BorderColor, LinesWidth);
+                for (int i = 0; i < col; i++)
+                {
+                    int locX = HeaderLabels[i].Location.X + HeaderLabels[i].Width;
+                    e.Graphics.DrawLine(pen, new Point(locX, BorderWidth), new Point(locX, Bottom - BorderWidth));
+                }
+            }
+
+            if (LinesBetweenRows) 
+            {
+                int row = DataLabels.GetLength(0);
+                Pen pen = new(BorderColor, LinesWidth);
+                for (int i = 0; i < row; i++)
+                {
+                    int locY = DataLabels[i, 0].Location.Y;// + DataLabels[i,0].Height;
+                    e.Graphics.DrawLine(pen, new Point(BorderWidth, locY), new Point(Right, locY));
+                }
+            }
+
+            
         }
 
     }

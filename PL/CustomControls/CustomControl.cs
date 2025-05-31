@@ -1,9 +1,12 @@
 ﻿using AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 
 namespace AVBC_CLCB_Notifier.PL.CustomControls
@@ -29,7 +32,12 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         private Color borderColorFocus = SystemColors.Highlight; //Cor da borda
         
         private PaddingModeEnum paddingMode = PaddingModeEnum.Absolute;
-        public InnerControls InnerControls { get; } = new();
+        public InnerControls InnerControls { get; }
+
+        public CustomControl()
+        {
+            InnerControls = new InnerControls(this);
+        }
         public enum PaddingModeEnum
         {
             Absolute,    // HorizontalPadding e VerticalPadding são definidos diretamente
@@ -76,13 +84,16 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             get { return borderFocusExtraWidth; }
             set { borderFocusExtraWidth = value; Invalidate(); }
         }
-
         public Color SecondaryBackgroundColor
         {
             get { return secondaryBackgroundColor; }
             set { secondaryBackgroundColor = value; Invalidate(); }
         }
-
+        public Color HeaderBackgroundColor
+        {
+            get { return headerBackgroundColor; }
+            set { headerBackgroundColor = value; Invalidate(); }
+        }
         public Color SecondaryForeColor
         {
             get { return secondaryForeColor; }
@@ -98,7 +109,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             get { return borderColorFocus; }
             set { borderColorFocus = value; Invalidate(); }
         }
-        public Color BackgroundColor
+        public virtual Color BackgroundColor
         {
             get { return backgroundColor; }
             set { backgroundColor = value; Invalidate(); }
@@ -137,13 +148,47 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             base.OnMouseClick(e);
             InnerControls.HandleClick(this, e.Location); // detecta clique virtual
         }
-
-        protected override void OnPaint(PaintEventArgs e) 
+        protected override void OnMouseDoubleClick(MouseEventArgs e)
         {
-            base.OnPaint(e);
-            NhegazDrawingMethods.DrawControl(this, e);
-            InnerControls.OnPaintAll(this, e);
+            base.OnMouseDoubleClick(e);
+            InnerControls.HandleDoubleClick(this, e.Location);
+        }
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            InnerControls.HandleMouseMove(this, e.Location);
         }
 
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+            if (Focused)
+                InnerControls.HandleGotFocus(this, PointToClient(Cursor.Position));
+        }
+
+        protected override void OnLostFocus(EventArgs e)
+        {
+            base.OnLostFocus(e);
+            InnerControls.HandleLostFocus(this, PointToClient(Cursor.Position));
+        }
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            using (GraphicsPath backgroundPath = NhegazDrawingMethods.BackgroundPath(this))
+            {
+                using (SolidBrush brush = new SolidBrush(BackgroundColor))
+                {
+                    e.Graphics.FillPath(brush, backgroundPath);
+                }
+                e.Graphics.SetClip(backgroundPath);
+                InnerControls.OnPaintAll(this, e);
+                e.Graphics.ResetClip();
+            }
+            
+            GraphicsPath borderPath = NhegazDrawingMethods.BorderPath(this);
+            NhegazDrawingMethods.NewDrawBorder(this, e);          
+
+            e.Graphics.ResetClip();
+        }
     }
 }
