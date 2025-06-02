@@ -4,192 +4,182 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static AVBC_CLCB_Notifier.PL.CustomControls.InnerLabel;
+using AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos;
+using System.Drawing.Drawing2D;
 
 namespace AVBC_CLCB_Notifier.PL.CustomControls
 {
     public class InnerLabel : InnerControl
     {
         private Point textLocation = Point.Empty;
-        private bool textHorizontalPadding = false;
-        private bool textVerticalPadding = false;
+
         private string text = "";
+    
+        private TextVerticalAlignment textVerticalAlignment = TextVerticalAlignment.Center;
+        private TextHorizontalAlignment textHorizontalAlignment = TextHorizontalAlignment.Left;
 
-        private int horizontalPaddingAbsolute = 0; // valor em pixels para Absolute
-        private int verticalPaddingAbsolute = 0;
-
-        private TextVerticalAlignmentEnum verticalTextAlignment = TextVerticalAlignmentEnum.Center;
-        private TextHorizontalAlignmentEnum horizontalTextAlignment = TextHorizontalAlignmentEnum.Left;
-
-        private TextHorizontalPaddingEnum horizontalPaddingMode = TextHorizontalPaddingEnum.None;
-        private TextVerticalPaddingEnum verticalPaddingMode = TextVerticalPaddingEnum.None;
+        private HorizontalPaddingMode horizontalPaddingMode = HorizontalPaddingMode.None;
+        private VerticalPaddingMode verticalPaddingMode = VerticalPaddingMode.None;
+        public bool ApplyHorizontalPaddingWhenCentered { get; set; } = false;
+        public bool ApplyVerticalPaddingWhenCentered { get; set; } = false;
         public string Text
         {
             get => text;
-            set { text = value; AdjustControlSize(); }
-        }        
-        public bool TextVerticalPadding
-        {
-            get => textVerticalPadding;
-            set { textVerticalPadding = value; AdjustTextLocation(); }
+            set { text = value; Size = NhegazSizeMethods.textExactSize(Text, Font); }
         }
-        
-        public bool TextHorizontalPadding
+        public TextHorizontalAlignment TextHorizontalAlignment
         {
-            get => textHorizontalPadding;
-            set { textHorizontalPadding = value; AdjustTextLocation(); }
+            get => textHorizontalAlignment;
+            set { textHorizontalAlignment = value; AdjustTextLocation(); }
         }
-        public TextVerticalAlignmentEnum VerticalTextAlignment
+        public TextVerticalAlignment TextVerticalAlignment
         {
-            get => verticalTextAlignment;
-            set { verticalTextAlignment = value; AdjustTextLocation(); }
-        }
-
-        public TextHorizontalAlignmentEnum HorizontalTextAlignment
-        {
-            get => horizontalTextAlignment;
-            set { horizontalTextAlignment = value; AdjustTextLocation(); }
-        }
-        public TextHorizontalPaddingEnum HorizontalPaddingMode
+            get => textVerticalAlignment;
+            set { textVerticalAlignment = value; AdjustTextLocation(); }
+        }     
+        public HorizontalPaddingMode HorizontalPaddingMode
         {
             get => horizontalPaddingMode;
-            set{ horizontalPaddingMode = value;AdjustTextLocation(); }
+            set{ horizontalPaddingMode = value; AdjustTextLocation(); }
         }
-
-        public TextVerticalPaddingEnum VerticalPaddingMode
+        public VerticalPaddingMode VerticalPaddingMode
         {
             get => verticalPaddingMode;
             set{ verticalPaddingMode = value; AdjustTextLocation(); }
         }
-
-        public int HorizontalPaddingAbsolute
+      
+        public InnerLabel() : base()
         {
-            get => horizontalPaddingAbsolute;
-            set{ 
-                horizontalPaddingAbsolute = value;
-                if (horizontalPaddingMode == TextHorizontalPaddingEnum.Absolute)
-                    AdjustTextLocation();
-            }
-        }
-
-        public int VerticalPaddingAbsolute
-        {
-            get => verticalPaddingAbsolute;
-            set
-            {
-                verticalPaddingAbsolute = value;
-                if (verticalPaddingMode == TextVerticalPaddingEnum.Absolute)
-                    AdjustTextLocation();
-            }
-        }
-        public enum TextVerticalAlignmentEnum
-        {
-            Top,
-            Center,
-            Bottom,
-        }
-        public enum TextHorizontalAlignmentEnum
-        {
-            Left,
-            Center,
-            Right
-        }
-
-        public enum TextHorizontalPaddingEnum
-        {
-            None,
-            HalfFontWidth,
-            OneFourthFontWidth,
-            Absolute
-        }
-        public enum TextVerticalPaddingEnum
-        {
-            None,
-            HalfFontHeight,
-            OneFourthFontHeight,
-            Absolute
-        }
-        
-        public InnerLabel()
-        {
-            AdjustControlSize();
         }
   
-        private void AdjustControlSize()
-        {
-            Size = NhegazSizeMethods.textExactSize(Text, Font);
-            
+        protected override void AdjustControlSize()
+        {           
+            base.AdjustControlSize();
+            //AdjustTextLocation();
         }
-        public void RefreshLayout()
+
+        protected override void SymmetricalCircleBackGroundAdjust()
+        {
+            base.SymmetricalCircleBackGroundAdjust();
+
+            TextHorizontalAlignment = TextHorizontalAlignment.Center;
+            TextVerticalAlignment = TextVerticalAlignment.Center;
+        }
+        public override void Update()
         {
             AdjustTextLocation(); // recalcula o ponto do texto baseado na altura atual
         }
-        private void AdjustTextLocation()
-        {
-            Size textSize = NhegazSizeMethods.textExactSize(Text, Font);
 
-            int textX = 0;
-            int textY = 0;
+        private (int horizontalPadding, int verticalPadding) PaddingModeCaser()        
+        {
+            int horizontalPadding = 0;
+            int verticalPadding = 0;
 
             int fontUnitWidth = NhegazSizeMethods.textExactSize("0", Font).Width;
             int fontUnitHeight = NhegazSizeMethods.textExactSize("0", Font).Height;
 
-            int horizontalPadding = 0;
-            int verticalPadding = 0;
-
             switch (HorizontalPaddingMode)
             {
-                case TextHorizontalPaddingEnum.None:
+                case HorizontalPaddingMode.None:
                     horizontalPadding = 0;
                     break;
-                case TextHorizontalPaddingEnum.HalfFontWidth:
+                case HorizontalPaddingMode.HalfFontWidth:
                     horizontalPadding = fontUnitWidth / 2;
                     break;
-                case TextHorizontalPaddingEnum.OneFourthFontWidth:
+                case HorizontalPaddingMode.OneFourthFontWidth:
                     horizontalPadding = fontUnitWidth / 4;
                     break;
-                case TextHorizontalPaddingEnum.Absolute:
-                    horizontalPadding = horizontalPaddingAbsolute;
+                case HorizontalPaddingMode.Absolute:
+                    horizontalPadding = (TextHorizontalAlignment == TextHorizontalAlignment.Left) ? Padding.Left : Padding.Right;
                     break;
             }
 
             switch (VerticalPaddingMode)
             {
-                case TextVerticalPaddingEnum.None:
+                case VerticalPaddingMode.None:
                     verticalPadding = 0;
                     break;
-                case TextVerticalPaddingEnum.HalfFontHeight: // provavelmente deveria ser HalfFontHeight
+                case VerticalPaddingMode.HalfFontHeight: // provavelmente deveria ser HalfFontHeight
                     verticalPadding = fontUnitHeight / 2;
                     break;
-                case TextVerticalPaddingEnum.OneFourthFontHeight:
+                case VerticalPaddingMode.OneFourthFontHeight:
                     verticalPadding = fontUnitHeight / 4;
                     break;
-                case TextVerticalPaddingEnum.Absolute:
-                    verticalPadding = verticalPaddingAbsolute;
+                case VerticalPaddingMode.Absolute:
+                    verticalPadding = (TextVerticalAlignment == TextVerticalAlignment.Top) ? Padding.Top : Padding.Bottom;
+                    break;
+            }
+            return (horizontalPadding, verticalPadding);
+        }
+        private void AdjustTextLocation()
+        {
+            Size textSize = NhegazSizeMethods.textExactSize(Text, Font);
+
+            int textX = 0; int horizontalPadding = 0;
+            int textY = 0; int verticalPadding = 0;
+
+            int fontUnitWidth = NhegazSizeMethods.textExactSize("0", Font).Width;
+            int fontUnitHeight = NhegazSizeMethods.textExactSize("0", Font).Height;
+           
+            switch (HorizontalPaddingMode)
+            {
+                case HorizontalPaddingMode.None:
+                    horizontalPadding = 0;
+                    break;
+                case HorizontalPaddingMode.HalfFontWidth:
+                    horizontalPadding = fontUnitWidth / 2;
+                    break;
+                case HorizontalPaddingMode.OneFourthFontWidth:
+                    horizontalPadding = fontUnitWidth / 4;
+                    break;
+                case HorizontalPaddingMode.Absolute:
+                    horizontalPadding = (TextHorizontalAlignment == TextHorizontalAlignment.Left) ? Padding.Left : Padding.Right;
                     break;
             }
 
-            switch (HorizontalTextAlignment)
+            switch (VerticalPaddingMode)
             {
-                case TextHorizontalAlignmentEnum.Left:
+                case VerticalPaddingMode.None:
+                    verticalPadding = 0;
+                    break;
+                case VerticalPaddingMode.HalfFontHeight: // provavelmente deveria ser HalfFontHeight
+                    verticalPadding = fontUnitHeight / 2;
+                    break;
+                case VerticalPaddingMode.OneFourthFontHeight:
+                    verticalPadding = fontUnitHeight / 4;
+                    break;
+                case VerticalPaddingMode.Absolute:
+                    verticalPadding = (TextVerticalAlignment == TextVerticalAlignment.Top) ? Padding.Top : Padding.Bottom;
+                    break;
+            }
+
+            switch (TextHorizontalAlignment)
+            {
+                case TextHorizontalAlignment.Left:
                     textX = horizontalPadding;
                     break;
-                case TextHorizontalAlignmentEnum.Center:
+                case TextHorizontalAlignment.Center:
                     textX = (Size.Width - textSize.Width) / 2;
+                    if (ApplyHorizontalPaddingWhenCentered)
+                        textX += (Padding.Left - Padding.Right) / 2;
                     break;
-                case TextHorizontalAlignmentEnum.Right:
+                case TextHorizontalAlignment.Right:
                     textX = Size.Width - (textSize.Width + horizontalPadding);
                     break;
             }
 
-            switch (VerticalTextAlignment)
+            switch (TextVerticalAlignment)
             {
-                case TextVerticalAlignmentEnum.Top:
+                case TextVerticalAlignment.Top:
                     textY = verticalPadding;
                     break;
-                case TextVerticalAlignmentEnum.Center:
+                case TextVerticalAlignment.Center:
                     textY = (Size.Height - textSize.Height) / 2;
+                    if (ApplyVerticalPaddingWhenCentered)
+                        textY += (Padding.Top - Padding.Bottom) / 2;
                     break;
-                case TextVerticalAlignmentEnum.Bottom:
+                case TextVerticalAlignment.Bottom:
                     textY = Size.Height - (textSize.Height + verticalPadding);
                     break;
             }                           
@@ -198,16 +188,9 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
 
         public override void OnPaint(CustomControl parent, PaintEventArgs e)
         {
-            if (!Visible) return;
-
-            using (SolidBrush brush = new SolidBrush(BackgroundColor))
-            {
-                Rectangle rect = new(Location, Size);
-                e.Graphics.FillRectangle(brush, rect);
-            }
+            base.OnPaint(parent, e);
 
             int textY = Location.Y + (Size.Height - NhegazSizeMethods.textExactSize(Text, Font).Height) / 2;
-
             TextRenderer.DrawText(
                 e.Graphics,
                 Text,
@@ -216,7 +199,6 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 ForeColor,
                 TextFormatFlags.NoPadding | TextFormatFlags.SingleLine | TextFormatFlags.EndEllipsis | TextFormatFlags.WordEllipsis
             );
-        }
-        
+        }    
     }
 }

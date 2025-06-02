@@ -79,7 +79,18 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             dayDropDownIcon.Click += (s, e) => { this.Focus(); this.OnClick(e, new DropDownDay(this)); };
             //dayDropDownIcon.GotFocus += (s, e) => { this.OnGotFocus(e); };
             //dayDropDownIcon.LostFocus += (s, e) => { this.OnLostFocus(e); };
-
+            dayDropDownIcon.MouseEnter += (s, e) =>
+            {
+                dayDropDownIcon.ForeColor = BackgroundColor;
+                dayDropDownIcon.BackgroundColor = HeaderBackgroundColor;
+                Invalidate();
+            };
+            dayDropDownIcon.MouseLeave += (s, e) =>
+            {
+                dayDropDownIcon.ForeColor = ForeColor;
+                dayDropDownIcon.BackgroundColor = BackgroundColor;
+                Invalidate();
+            };
             this.Controls.Add(selectedMonth);
             selectedMonth.Text = DateTime.Now.Month.ToString("D2");
             selectedMonth.BorderStyle = BorderStyle.None;
@@ -106,6 +117,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             selectedYear.GotFocus += (s, e) => { this.OnGotFocus(e); };
             selectedYear.LostFocus += (s, e) => { this.OnLostFocus(e); };
             //selectedYear.BackColor = Color.Red;
+            
 
             this.InnerControls.Add(yearDropDownIcon);
             yearDropDownIcon.Text = "▼";
@@ -149,7 +161,8 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             dayDropDownIcon.Width = dropDownIconTextWidth;
             dayDropDownIcon.Height = Font.Height;
             dayDropDownIcon.Location = new Point(selectedDay.Location.X + selectedDay.Width, VerticalPadding);
-            
+            dayDropDownIcon.BackGroundShape = BackGroundShape.RoundedRectangle;
+
             selectedMonth.Width = dayAndMonthTextWidth;
             selectedMonth.Height = Font.Height;
             selectedMonth.Location = new Point(dayDropDownIcon.Location.X + dayDropDownIcon.Width + SlashTextWidth, VerticalPadding);

@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static AVBC_CLCB_Notifier.PL.CustomControls.InnerLabel;
 
 namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
 {
@@ -57,7 +58,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
                 return (float)Math.Round(valor); // arredonda normalmente
             }
         }
-        private static List<PointF> GenerateArc(float radius, bool isInner = false)//Método que gera os pontos do arco
+        public static List<PointF> GenerateArc(float radius, bool isInner = false)//Método que gera os pontos do arco
         {
 
             radius = isInner ? radius * 0.9f : radius;
@@ -81,6 +82,8 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
             }
             return points;
         }
+
+
         private static PointF[] NewGenerateArc(float radius, bool isInner = false)//Método que gera os pontos do arco
         {
 
@@ -105,7 +108,10 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
             }
             return points;
         }
-        //Retorna uma nova cor que é a proporção entre de n/10 da primeira em relação a segunda
+
+        /// <summary>
+        /// Retorna uma nova cor que é a proporção entre de n/10 da primeira em relação a segunda.
+        /// </summary>
         private static Color InterpolateColor(int weightFrom1To10, Color color1, Color color2) 
 
         {           
@@ -128,8 +134,8 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
             float borderRadius = control.BorderRadius;
             if (borderRadius <= 0) return;
 
-            int width = control.Width - 1; //Ajuste necessario do Width para ficar dentro do tamanho do control
-            int height = control.Height - 1; //Ajuste necessario do Height para ficar dentro do tamanho do control
+            int width = control.Width - 1; //Ajuste necessario do Width para ficar dentro do tamanho do innerControl
+            int height = control.Height - 1; //Ajuste necessario do Height para ficar dentro do tamanho do innerControl
             Color arcsColor = control.OnFocusBool ? InterpolateColor(10, control.BorderColorFocus, control.BackgroundColor)
                                                   : InterpolateColor(10, control.BorderColor, control.BackgroundColor);
             Pen arcsPen = new(arcsColor, 1.0f);
@@ -216,8 +222,8 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
             float borderRadius = control.BorderRadius;
             if (borderRadius <= 0) return;
 
-            int width = control.Width - 1; //Ajuste necessario do Width para ficar dentro do tamanho do control
-            int height = control.Height - 1; //Ajuste necessario do Height para ficar dentro do tamanho do control
+            int width = control.Width - 1; //Ajuste necessario do Width para ficar dentro do tamanho do innerControl
+            int height = control.Height - 1; //Ajuste necessario do Height para ficar dentro do tamanho do innerControl
             Color arcsColor = control.OnFocusBool ? InterpolateColor(10, control.BorderColorFocus, control.BackgroundColor)
                                                   : InterpolateColor(10, control.BorderColor, control.BackgroundColor);
             Pen arcsPen = new(arcsColor, 1.0f);
@@ -263,11 +269,14 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
             e.Graphics.DrawPath(new Pen(arcsColor, 1f), FullPath);
         }
 
-        public static GraphicsPath BorderPath(CustomControl control)
+        /// <summary>
+        /// A partir das propriedades de CustomControl retorna um GraphicsPath que representa a area da sua Border.
+        /// </summary>
+        public static GraphicsPath ControlBorderPath(CustomControl control)
         {
             float borderRadius = control.BorderRadius;
-            int width = control.Width - 1; //Ajuste necessario do Width para ficar dentro do tamanho do control
-            int height = control.Height - 1; //Ajuste necessario do Height para ficar dentro do tamanho do control
+            int width = control.Width - 1; //Ajuste necessario do Width para ficar dentro do tamanho do innerControl
+            int height = control.Height - 1; //Ajuste necessario do Height para ficar dentro do tamanho do innerControl
 
             GraphicsPath FullPath = new();
 
@@ -288,7 +297,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
             if (control.BorderWidth > 1)
             {
                 int offset = control.BorderWidth - 1;
-                var arcInner = GenerateArc(borderRadius * 0.9f, false); // já vem invertido
+                var arcInner = GenerateArc(borderRadius * 0.9f); // já vem invertido
 
                 FullPath.StartFigure();
 
@@ -306,13 +315,20 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
             }
             return FullPath;
         }
-        public static GraphicsPath BackgroundPath(CustomControl control)
-        {
-            float borderRadius = control.BorderWidth > 1 ? control.BorderRadius * 0.9f : control.BorderRadius;
-            int offset = control.BorderWidth > 1 ? control.BorderWidth - 1 : 0;
 
-            int width = control.Width - 1; //Ajuste necessario do Width para ficar dentro do tamanho do control
-            int height = control.Height - 1; //Ajuste necessario do Height para ficar dentro do tamanho do control
+        /// <summary>
+        /// A partir das propriedades de CustomControl retorna um GraphicsPath que representa a area interna do CustomControl.
+        /// </summary>
+        public static GraphicsPath ControlBackgroundPath(CustomControl customControl)
+        {
+            float borderRadius = customControl.BorderWidth > 1 ? //Se BorderWidth for > 1, considera o arco interno(BorderRadius * 0.9)
+                                 customControl.BorderRadius * 0.9f : customControl.BorderRadius;
+
+            int offset = customControl.BorderWidth > 1 ? 
+                         customControl.BorderWidth - 1 : 0;
+
+            int width = customControl.Width - 1; //Ajuste necessario do Width para ficar dentro do tamanho do innerControl
+            int height = customControl.Height - 1; //Ajuste necessario do Height para ficar dentro do tamanho do innerControl
             
             var baseArc = GenerateArc(borderRadius); // já vem invertido
 
@@ -335,5 +351,58 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
             return FullPath;
         }
 
+        /// <summary>
+        /// A partir das propriedades de InnerControl retorna um GraphicsPath que representa a area interna do InnerControl.
+        /// </summary>
+        public static GraphicsPath InnerControlBackgroundPath(InnerControl innerControl)
+        {
+            int reference = innerControl.Height;
+            float radius = reference / 2;
+            
+            int locX = innerControl.Location.X;
+            int locY = innerControl.Location.Y;
+
+            int width = innerControl.Width;
+            int height = innerControl.Height;
+            
+            GraphicsPath FullPath = new();
+            FullPath.StartFigure();
+
+            switch (innerControl.BackGroundShape)
+            {               
+                case BackGroundShape.FitRectangle:
+
+                    Rectangle rect = new(innerControl.Location, innerControl.Size);
+                    FullPath.AddRectangle(rect);
+
+                    FullPath.CloseFigure();
+                    return FullPath;
+
+                case BackGroundShape.SymmetricCircle:
+                    //reference = innerControl.Height > innerControl.Width ? innerControl.Height : innerControl.Width;                  
+                    radius = reference / 2;
+
+                    break;
+                case BackGroundShape.RoundedRectangle:
+                    radius = reference / 8;
+
+                    break;                       
+            }
+
+            var baseArc = GenerateArc(radius);
+
+            var arcTopLeft = baseArc.Select(p => new PointF(locX + p.X, locY + p.Y));
+            var arcTopRight = baseArc.Select(p => new PointF(locX + (width - p.X), locY + p.Y)).Reverse();
+            var arcBottomRight = baseArc.Select(p => new PointF(locX + (width - p.X), locY + (height - p.Y)));
+            var arcBottomLeft = baseArc.Select(p => new PointF(locX + p.X, locY + (height - p.Y))).Reverse();
+
+            FullPath.AddLines(arcTopLeft.ToArray());
+            FullPath.AddLines(arcTopRight.ToArray());
+            FullPath.AddLines(arcBottomRight.ToArray());
+            FullPath.AddLines(arcBottomLeft.ToArray());
+
+            FullPath.CloseFigure();      
+            return FullPath;
+        }
     }
 }

@@ -77,8 +77,8 @@ namespace PL
             comboBox1.BorderFocusExtraWidth = 1;
             comboBox1.BorderRadius = 6;
             comboBox1.BorderWidth = 1;
-            comboBox1.ForeColor = SystemColors.ControlDark;
-            comboBox1.HeaderBackgroundColor = SystemColors.ButtonHighlight;
+            comboBox1.ForeColor = SystemColors.InfoText;
+            comboBox1.HeaderBackgroundColor = SystemColors.ActiveCaption;
             comboBox1.HorizontalPadding = 5;
             comboBox1.ItemList = (System.Collections.Specialized.StringCollection)resources.GetObject("comboBox1.ItemList");
             comboBox1.Location = new Point(386, 91);
@@ -195,7 +195,7 @@ namespace PL
             customDatePicker1.ForeColor = SystemColors.ActiveCaption;
             customDatePicker1.HeaderBackgroundColor = SystemColors.GrayText;
             customDatePicker1.HorizontalPadding = 4;
-            customDatePicker1.Location = new Point(85, 134);
+            customDatePicker1.Location = new Point(85, 136);
             customDatePicker1.Margin = new Padding(3, 2, 3, 2);
             customDatePicker1.MinimumSize = new Size(96, 23);
             customDatePicker1.Name = "customDatePicker1";
@@ -204,7 +204,7 @@ namespace PL
             customDatePicker1.PaddingRelativePercent = 0.9F;
             customDatePicker1.SecondaryBackgroundColor = SystemColors.ControlLightLight;
             customDatePicker1.SecondaryForeColor = SystemColors.GrayText;
-            customDatePicker1.Size = new Size(125, 30);
+            customDatePicker1.Size = new Size(108, 35);
             customDatePicker1.TabIndex = 24;
             customDatePicker1.VerticalPadding = 4;
             // 

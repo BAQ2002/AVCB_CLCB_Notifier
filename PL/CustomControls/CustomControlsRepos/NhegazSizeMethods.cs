@@ -10,7 +10,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
     {
 
         /// <summary>
-        /// Retorna o Tamanho(Width, Height) a partir de um texto e uma font.
+        /// Retorna o Tamanho(Width, Height) exato a partir de um texto e uma Font.
         /// </summary>
         public static Size textExactSize(string text, Font font)
         {
@@ -21,6 +21,20 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 TextFormatFlags.NoPadding | TextFormatFlags.SingleLine
             );
             return size;
+        }
+
+        public static SizeF textExactSizeTrue(string text, Font font)
+        {
+            using (Bitmap bmp = new Bitmap(1, 1))
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+
+                StringFormat format = StringFormat.GenericTypographic;
+                format.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
+
+                return g.MeasureString(text, font, int.MaxValue, format);
+            }
         }
     }
 }

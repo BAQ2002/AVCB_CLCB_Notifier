@@ -36,7 +36,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         {
             get => base.BackgroundColor;
             set
-            { 
+            {  
                 base.BackgroundColor = value;
                 selectIndex.BackgroundColor = value; dropDownIcon.BackgroundColor = value; Invalidate();
             }
@@ -71,8 +71,20 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             this.InnerControls.Add(dropDownIcon);
             dropDownIcon.Text = "▼";
             dropDownIcon.DoubleClick += (s, e) => { this.Focus(); base.OnClick(e); };
-            dropDownIcon.Click += (s, e) => { this.Focus(); base.OnClick(e); };
-
+            dropDownIcon.Click += (s, e) => { this.Focus(); base.OnClick(e); MessageBox.Show(dropDownIcon.Height.ToString()); };
+            //▼
+            dropDownIcon.MouseEnter += (s, e) =>
+            {
+                dropDownIcon.ForeColor = BackgroundColor;
+                dropDownIcon.BackgroundColor = HeaderBackgroundColor;
+                Invalidate();
+            };
+            dropDownIcon.MouseLeave += (s, e) =>
+            {
+                dropDownIcon.ForeColor = ForeColor;
+                dropDownIcon.BackgroundColor = BackgroundColor;
+                Invalidate();
+            };
             AdjustControlSize();
         }
 
@@ -84,11 +96,16 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             int selectIndexX = BorderWidth + HorizontalPadding;
             int selectIndexY = (Height - selectIndex.Height) / 2;
             selectIndex.Location = new Point(selectIndexX, selectIndexY);
+            //selectIndex.BackgroundColor = HeaderBackgroundColor;
 
+            
+            dropDownIcon.BackGroundShape = BackGroundShape.SymmetricCircle;
+            dropDownIcon.ApplyVerticalPaddingWhenCentered = true;
+            dropDownIcon.Padding.Top = 2;
+            dropDownIcon.Height += 3;
             int dropDownIconX = Width - (dropDownIcon.Width + HorizontalPadding + BorderWidth);
             int dropDownIconY = (Height - dropDownIcon.Height) / 2;
             dropDownIcon.Location = new Point(dropDownIconX, dropDownIconY);
-
             Invalidate();
         }
         private void ToggleDropDown()
@@ -251,9 +268,8 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 lbl.Location = new Point(BorderWidth, currentY);
                 lbl.Height = lbl.Height + VerticalPadding;
                 lbl.Width = Width;
-                lbl.TextHorizontalPadding = true;
-                lbl.HorizontalPaddingMode = InnerLabel.TextHorizontalPaddingEnum.Absolute;
-                lbl.HorizontalPaddingAbsolute = HorizontalPadding;
+                lbl.HorizontalPaddingMode = HorizontalPaddingMode.Absolute;
+                lbl.Padding.Left = HorizontalPadding;
 
                 currentY += lbl.Height; 
                 

@@ -1,8 +1,11 @@
-﻿using System;
+﻿using AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos;
+using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace AVBC_CLCB_Notifier.PL.CustomControls
 {
@@ -108,33 +111,42 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
 
     public abstract class InnerControl
     {
+        
         public bool Visible { get; set; } = true;
         public Font Font { get; set; } = SystemFonts.DefaultFont;
         public Color ForeColor { get; set; } = SystemColors.ControlText;
         //public Color HoverForeColor { get; set; } = SystemColors.ControlText;
         public Color BackgroundColor { get; set; } = SystemColors.Control;
-        //public Color hoverBackgroundColor { get; set; } = SystemColors.Control;
+        //public Color hoverBackgroundColor { get; set; } = SystemColors.Control;       
         public Size Size { get; set; } = new(0, 0);
         public Point Location { get; set; } = new(0, 0);
         public Rectangle Bounds => new(Location, Size);
+        public InternalPadding Padding { get; }
         public bool HitBox(Point p) => Bounds.Contains(p);
+        private BackGroundShape backGroundShape = BackGroundShape.FitRectangle;
+        public BackGroundShape BackGroundShape 
+        {
+            get => backGroundShape;
+            set { backGroundShape = value; AdjustControlSize(); }
+        }
         public int Width
         {
             get => Size.Width;
-            set => Size = new Size(value, Size.Height);
+            set { Size = new Size(value, Size.Height); AdjustControlSize(); }
         }
         public int Height
         {
             get => Size.Height;
-            set => Size = new Size(Size.Width, value);
+            set { Size = new Size(Size.Width, value); AdjustControlSize(); }
         }
 
+        public InnerControl()
+        {
+            Padding = new(this);
+        }      
+        private bool isHovering = false; public bool IsHovering => isHovering;
 
-        private bool isHovering = false;
-
-        public bool IsHovering => isHovering;
-
-        public event EventHandler? Click;  // evento estilo padrão .NET
+        public event EventHandler? Click;  
         public event EventHandler? DoubleClick;
 
         public event EventHandler? GotFocus;
@@ -148,7 +160,6 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         {
             Click?.Invoke(sender, EventArgs.Empty);
         }
-
         public void RaiseDoubleClick(object sender)
         {
             DoubleClick?.Invoke(sender, EventArgs.Empty);
@@ -157,7 +168,6 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         {
             GotFocus?.Invoke(sender, EventArgs.Empty);
         }
-
         public void RaiseLostFocus(object sender)
         {
             LostFocus?.Invoke(sender, EventArgs.Empty);
@@ -178,8 +188,36 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 MouseLeave?.Invoke(this, EventArgs.Empty);
             }
         }
+        protected virtual void AdjustControlSize()
+        {
+            if (BackGroundShape == BackGroundShape.SymmetricCircle) 
+            {
+                SymmetricalCircleBackGroundAdjust();
+            }
+        }
 
-        public abstract void OnPaint(CustomControl parent, PaintEventArgs e);
+        protected virtual void SymmetricalCircleBackGroundAdjust()
+        {
+            int reference = Height > Width ? Height : Width;
+            Size = new Size(reference, reference);
+        }
+
+        public virtual void Update()
+        {
+
+        }
+        public virtual void OnPaint(CustomControl parent, PaintEventArgs e)
+        {
+            if (!Visible) return;
+            using (GraphicsPath backgroundPath = NhegazDrawingMethods.InnerControlBackgroundPath(this)) //Define o GraphicsPath da area interna do Control
+            {
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+                using (SolidBrush brush = new SolidBrush(BackgroundColor)) //Preenche a area com o BackgroundColor
+                {
+                    e.Graphics.FillPath(brush, backgroundPath);
+                }          
+            }
+        }
     }
-
 }

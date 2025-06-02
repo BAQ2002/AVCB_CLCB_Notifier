@@ -102,7 +102,6 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                     Text = Properties[i].Name,
                     Font = Font,
                     BackgroundColor = HeaderBackgroundColor,
-                    TextHorizontalPadding = true
                 };
 
                 this.InnerControls.Add(columnHeader);
@@ -131,7 +130,6 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                         Font = Font,
                         ForeColor = ForeColor,
                         BackgroundColor = DifferentColorsBetweenRows && rowIndex % 2 == 1 ? SecondaryBackgroundColor : BackgroundColor,
-                        TextHorizontalPadding = true
                     };
                     InnerLabel.Click += (s, e) => MessageBox.Show(InnerLabel.Text);
                     this.InnerControls.Add(InnerLabel);
@@ -161,7 +159,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 header.Location = new Point(currentX, BorderWidth);
                 header.Width = columnWidth;
                 header.Height = header.Height + yPadding;
-                header.RefreshLayout();
+                header.Update();
                 int currentY = header.Height;
                 
                 for (int rowIndex = 0; rowIndex < rows; rowIndex++)
@@ -170,7 +168,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                     cell.Location = new Point(currentX, currentY);
                     cell.Width = columnWidth;
                     cell.Height = cell.Height + yPadding;
-                    cell.RefreshLayout();
+                    cell.Update();
                     currentY = LinesBetweenRows ? currentY + (cell.Height + LinesWidth) : currentY + cell.Height;
                 }
                 currentX = LinesBetweenColumns ? currentX + (header.Width + LinesWidth): currentX + header.Width;

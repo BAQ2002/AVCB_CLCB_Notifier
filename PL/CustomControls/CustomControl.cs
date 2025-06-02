@@ -174,21 +174,34 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            using (GraphicsPath backgroundPath = NhegazDrawingMethods.BackgroundPath(this))
+
+            using (GraphicsPath backgroundPath = NhegazDrawingMethods.ControlBackgroundPath(this)) //Define o GraphicsPath da area interna do Control
             {
-                using (SolidBrush brush = new SolidBrush(BackgroundColor))
+                e.Graphics.SmoothingMode = SmoothingMode.None;
+                using (SolidBrush brush = new SolidBrush(BackgroundColor)) //Preenche a area com o BackgroundColor
                 {
                     e.Graphics.FillPath(brush, backgroundPath);
                 }
-                e.Graphics.SetClip(backgroundPath);
-                InnerControls.OnPaintAll(this, e);
+                e.Graphics.SetClip(backgroundPath); //Define que o limite do Paint é o GraphicsPath da area interna do Control
+                InnerControls.OnPaintAll(this, e); //Realiza o Paint de todos InnerControls
                 e.Graphics.ResetClip();
-            }
+            }         
             
-            GraphicsPath borderPath = NhegazDrawingMethods.BorderPath(this);
-            NhegazDrawingMethods.NewDrawBorder(this, e);          
+            using (GraphicsPath borderPath = NhegazDrawingMethods.ControlBorderPath(this))
+            {
+                if (BorderWidth > 1) 
+                {
+                    e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                    using (SolidBrush brush = new SolidBrush(BorderColor))
+                    {
+                        e.Graphics.FillPath(brush, borderPath);
+                    }
+                }
 
-            e.Graphics.ResetClip();
+                e.Graphics.DrawPath(new Pen(BorderColor, 1f), borderPath);
+            }
+            //NhegazDrawingMethods.NewDrawBorder(this, e);          
+
         }
     }
 }
