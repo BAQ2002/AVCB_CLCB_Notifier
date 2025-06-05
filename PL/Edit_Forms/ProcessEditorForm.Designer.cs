@@ -70,7 +70,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             processNumberInput.BackColor = SystemColors.ButtonHighlight;
             processNumberInput.BackgroundColor = Color.White;
             processNumberInput.BorderColor = Color.Crimson;
-            processNumberInput.BorderColorFocus = Color.Blue;
+            processNumberInput.OnFocusBorderColor = Color.Blue;
             processNumberInput.BorderFocusExtraWidth = 1;
             processNumberInput.BorderRadius = 5;
             processNumberInput.BorderWidth = 1;
@@ -123,7 +123,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             processTypeComboBox.BackColor = Color.Transparent;
             processTypeComboBox.BackgroundColor = Color.MistyRose;
             processTypeComboBox.BorderColor = Color.Blue;
-            processTypeComboBox.BorderColorFocus = Color.Green;
+            processTypeComboBox.OnFocusBorderColor = Color.Green;
             processTypeComboBox.BorderFocusExtraWidth = 1;
             processTypeComboBox.BorderRadius = 7;
             processTypeComboBox.BorderWidth = 1;
@@ -185,7 +185,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             // 
             establishmentFantasyNameInput.BackgroundColor = Color.White;
             establishmentFantasyNameInput.BorderColor = Color.Crimson;
-            establishmentFantasyNameInput.BorderColorFocus = Color.Blue;
+            establishmentFantasyNameInput.OnFocusBorderColor = Color.Blue;
             establishmentFantasyNameInput.BorderFocusExtraWidth = 1;
             establishmentFantasyNameInput.BorderRadius = 5;
             establishmentFantasyNameInput.BorderWidth = 1;
@@ -226,7 +226,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             // 
             clientNameInput.BackgroundColor = Color.White;
             clientNameInput.BorderColor = Color.Crimson;
-            clientNameInput.BorderColorFocus = Color.Blue;
+            clientNameInput.OnFocusBorderColor = Color.Blue;
             clientNameInput.BorderFocusExtraWidth = 1;
             clientNameInput.BorderRadius = 5;
             clientNameInput.BorderWidth = 1;
@@ -313,7 +313,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             // 
             statusOutput.BackgroundColor = Color.White;
             statusOutput.BorderColor = Color.Crimson;
-            statusOutput.BorderColorFocus = Color.Blue;
+            statusOutput.OnFocusBorderColor = Color.Blue;
             statusOutput.BorderFocusExtraWidth = 1;
             statusOutput.BorderRadius = 5;
             statusOutput.BorderWidth = 1;
@@ -351,7 +351,7 @@ namespace AVBC_CLCB_Notifier.PL.Edit_Forms
             // 
             extraInfoInput.BackgroundColor = Color.White;
             extraInfoInput.BorderColor = Color.Crimson;
-            extraInfoInput.BorderColorFocus = Color.Blue;
+            extraInfoInput.OnFocusBorderColor = Color.Blue;
             extraInfoInput.BorderFocusExtraWidth = 1;
             extraInfoInput.BorderRadius = 5;
             extraInfoInput.BorderWidth = 1;

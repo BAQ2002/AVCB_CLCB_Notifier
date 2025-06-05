@@ -76,7 +76,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
                 var y = RoundFloat(fy);
                 points.Add(new PointF(x, y)); //Adiciona o ponto a lista de pontos
             }
-            if (isInner) //Se for o arco interno os pontos são criados na ordem contraria para que o path seja fechado corretamente
+            if (isInner) //Se for o arco interno os pontos são criados na ordem contraria para que o iconPath seja fechado corretamente
             {
                 points.Reverse(); //inverte a ordem dos pontos
             }
@@ -102,7 +102,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
                 var y = RoundFloat(fy);
                 points[i] = new PointF(x, y); //Adiciona o ponto a lista de pontos
             }
-            if (isInner) //Se for o arco interno os pontos são criados na ordem contraria para que o path seja fechado corretamente
+            if (isInner) //Se for o arco interno os pontos são criados na ordem contraria para que o iconPath seja fechado corretamente
             {
                 Array.Reverse(points); //inverte a ordem dos pontos
             }
@@ -112,12 +112,12 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
         /// <summary>
         /// Retorna uma nova cor que é a proporção entre de n/10 da primeira em relação a segunda.
         /// </summary>
-        private static Color InterpolateColor(int weightFrom1To10, Color color1, Color color2) 
+        public static Color InterpolateColor(int n, Color color1, Color color2) 
 
         {           
-            weightFrom1To10 = Math.Max(1, Math.Min(10, weightFrom1To10));
+            n = Math.Max(1, Math.Min(10, n));
 
-            float ratio1 = weightFrom1To10 / 10f;
+            float ratio1 = n / 10f;
             float ratio2 = 1f - ratio1;
 
             int r = (int)(color1.R * ratio1 + color2.R * ratio2);
@@ -136,7 +136,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
 
             int width = control.Width - 1; //Ajuste necessario do Width para ficar dentro do tamanho do innerControl
             int height = control.Height - 1; //Ajuste necessario do Height para ficar dentro do tamanho do innerControl
-            Color arcsColor = control.OnFocusBool ? InterpolateColor(10, control.BorderColorFocus, control.BackgroundColor)
+            Color arcsColor = control.OnFocusBool ? InterpolateColor(10, control.OnFocusBorderColor, control.BackgroundColor)
                                                   : InterpolateColor(10, control.BorderColor, control.BackgroundColor);
             Pen arcsPen = new(arcsColor, 1.0f);
 
@@ -206,7 +206,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
             int borderFocusWidth = (control.BorderWidth + control.BorderFocusExtraWidth) * 2 - 1; //Ajuste necessario para o enquadramento da caneta
 
             int penWidth = control.OnFocusBool ? borderFocusWidth : borderWidth; //Largura da caneta
-            Color baseColor = control.OnFocusBool ? control.BorderColorFocus : control.BorderColor; //Cor da caneta
+            Color baseColor = control.OnFocusBool ? control.OnFocusBorderColor : control.BorderColor; //Cor da caneta
             Pen pen = new(baseColor, penWidth);
 
             int ExtraLenght = pen.Width > 1 ? 1 : 0;
@@ -224,7 +224,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
 
             int width = control.Width - 1; //Ajuste necessario do Width para ficar dentro do tamanho do innerControl
             int height = control.Height - 1; //Ajuste necessario do Height para ficar dentro do tamanho do innerControl
-            Color arcsColor = control.OnFocusBool ? InterpolateColor(10, control.BorderColorFocus, control.BackgroundColor)
+            Color arcsColor = control.OnFocusBool ? InterpolateColor(10, control.OnFocusBorderColor, control.BackgroundColor)
                                                   : InterpolateColor(10, control.BorderColor, control.BackgroundColor);
             Pen arcsPen = new(arcsColor, 1.0f);
             GraphicsPath FullPath = new();
@@ -351,19 +351,94 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
             return FullPath;
         }
 
+        public static GraphicsPath DropDownIcon(InnerControl innerControl, int iconSize)
+        {
+            GraphicsPath iconPath = new GraphicsPath();
+
+            float halfIconSize = iconSize / 2f;        
+            
+            int locX = innerControl.Location.X; float offSetX = (innerControl.Width - iconSize) / 2;
+            int locY = innerControl.Location.Y; float offSetY = (innerControl.Height - iconSize) / 2;
+
+            // Triângulo apontando para baixo
+            PointF topLeft = new PointF(locX + offSetX, locY + offSetY);
+            PointF topRight = new PointF(locX + iconSize + offSetX, locY + offSetY);
+            PointF bottomCenter = new PointF(locX + halfIconSize + offSetX, iconSize + offSetY);
+
+            iconPath.StartFigure();
+            iconPath.AddLine(topLeft, topRight);
+            iconPath.AddLine(topRight, bottomCenter);
+            iconPath.AddLine(bottomCenter, topLeft);
+            iconPath.CloseFigure();
+
+            return iconPath;
+        }
+        public static GraphicsPath AddIconPath(InnerControl innerControl, int iconSize)
+        {
+            GraphicsPath path = new GraphicsPath();
+
+            float centerX = innerControl.Location.X + (innerControl.Width / 2f);
+            float centerY = innerControl.Location.Y + (innerControl.Height / 2f);
+
+            float halfThickness = iconSize / 6f; // espessura dos traços
+            float halfLength = iconSize / 2f;
+
+            // Linha horizontal
+            path.StartFigure();
+            path.AddRectangle(new RectangleF(
+                centerX - halfLength,
+                centerY - halfThickness,
+                iconSize,
+                halfThickness * 2));
+
+            // Linha vertical
+            path.StartFigure();
+            path.AddRectangle(new RectangleF(
+                centerX - halfThickness,
+                centerY - halfLength,
+                halfThickness * 2,
+                iconSize));
+
+            return path;
+        }
+
+        public static GraphicsPath DropDownIconPath(InnerControl innerControl, int iconSize)
+        {
+            GraphicsPath iconPath = new GraphicsPath();
+
+            float centerX = innerControl.Location.X + ((innerControl.Width - 1) / 2f);
+            float centerY = innerControl.Location.Y + ((innerControl.Height - 1) / 2f);
+
+            float halfIconSize = iconSize / 2f;
+            float height = iconSize * (float)Math.Sqrt(3) / 2f; // altura de triângulo equilátero; pode ajustar se quiser mais achatado
+
+            // Triângulo isósceles apontando para baixo
+            PointF topLeft = new PointF(centerX - halfIconSize, centerY - height / 2);
+            PointF topRight = new PointF(centerX + halfIconSize, centerY - height / 2);
+            PointF bottomCenter = new PointF(centerX, centerY + height / 2);
+
+            iconPath.StartFigure();
+            iconPath.AddLine(topLeft, topRight);
+            iconPath.AddLine(topRight, bottomCenter);
+            iconPath.AddLine(bottomCenter, topLeft);
+            iconPath.CloseFigure();
+
+            return iconPath;
+        }
+
         /// <summary>
         /// A partir das propriedades de InnerControl retorna um GraphicsPath que representa a area interna do InnerControl.
         /// </summary>
         public static GraphicsPath InnerControlBackgroundPath(InnerControl innerControl)
         {
             int reference = innerControl.Height;
-            float radius = reference / 2;
+            float radius = reference / 2;         
             
             int locX = innerControl.Location.X;
             int locY = innerControl.Location.Y;
 
-            int width = innerControl.Width;
-            int height = innerControl.Height;
+            int width = innerControl.Width - 1;
+            int height = innerControl.Height - 1;
             
             GraphicsPath FullPath = new();
             FullPath.StartFigure();
@@ -379,7 +454,6 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
                     return FullPath;
 
                 case BackGroundShape.SymmetricCircle:
-                    //reference = innerControl.Height > innerControl.Width ? innerControl.Height : innerControl.Width;                  
                     radius = reference / 2;
 
                     break;
@@ -402,6 +476,35 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
             FullPath.AddLines(arcBottomLeft.ToArray());
 
             FullPath.CloseFigure();      
+            return FullPath;
+        }
+
+        public static GraphicsPath RectBackgroundPath(Rectangle rect, int radius)
+        {           
+            int locX = rect.Location.X;
+            int locY = rect.Location.Y;
+
+            int width = rect.Width - 1;
+            int height = rect.Height - 1;
+
+            radius = Math.Min(radius, Math.Min(width, height) / 2);
+
+            GraphicsPath FullPath = new();
+            FullPath.StartFigure();
+
+            var baseArc = GenerateArc(radius);
+
+            var arcTopLeft = baseArc.Select(p => new PointF(locX + p.X, locY + p.Y));
+            var arcTopRight = baseArc.Select(p => new PointF(locX + (width - p.X), locY + p.Y)).Reverse();
+            var arcBottomRight = baseArc.Select(p => new PointF(locX + (width - p.X), locY + (height - p.Y)));
+            var arcBottomLeft = baseArc.Select(p => new PointF(locX + p.X, locY + (height - p.Y))).Reverse();
+
+            FullPath.AddLines(arcTopLeft.ToArray());
+            FullPath.AddLines(arcTopRight.ToArray());
+            FullPath.AddLines(arcBottomRight.ToArray());
+            FullPath.AddLines(arcBottomLeft.ToArray());
+
+            FullPath.CloseFigure();
             return FullPath;
         }
     }

@@ -46,6 +46,8 @@ namespace PL
             customDatePicker1 = new CustomDatePicker();
             dataGridView1 = new DataGridView();
             customDataGridView1 = new CustomDataGridView();
+            customComboBox1 = new CustomComboBox();
+            dateTimePicker1 = new DateTimePicker();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
@@ -73,10 +75,10 @@ namespace PL
             comboBox1.BackColor = Color.Transparent;
             comboBox1.BackgroundColor = SystemColors.Control;
             comboBox1.BorderColor = Color.Red;
-            comboBox1.BorderColorFocus = Color.Blue;
             comboBox1.BorderFocusExtraWidth = 1;
             comboBox1.BorderRadius = 6;
             comboBox1.BorderWidth = 1;
+            comboBox1.Font = new Font("Arial", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             comboBox1.ForeColor = SystemColors.InfoText;
             comboBox1.HeaderBackgroundColor = SystemColors.ActiveCaption;
             comboBox1.HorizontalPadding = 5;
@@ -86,6 +88,7 @@ namespace PL
             comboBox1.MinimumSize = new Size(4, 4);
             comboBox1.Name = "comboBox1";
             comboBox1.OnFocusBool = false;
+            comboBox1.OnFocusBorderColor = Color.Blue;
             comboBox1.PaddingMode = CustomControl.PaddingModeEnum.Absolute;
             comboBox1.PaddingRelativePercent = 1F;
             comboBox1.SecondaryBackgroundColor = SystemColors.ControlLightLight;
@@ -188,23 +191,24 @@ namespace PL
             customDatePicker1.BackColor = Color.Transparent;
             customDatePicker1.BackgroundColor = SystemColors.Window;
             customDatePicker1.BorderColor = SystemColors.WindowFrame;
-            customDatePicker1.BorderColorFocus = SystemColors.Highlight;
             customDatePicker1.BorderFocusExtraWidth = 1;
             customDatePicker1.BorderRadius = 6;
-            customDatePicker1.BorderWidth = 3;
-            customDatePicker1.ForeColor = SystemColors.ActiveCaption;
+            customDatePicker1.BorderWidth = 1;
+            customDatePicker1.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            customDatePicker1.ForeColor = SystemColors.HotTrack;
             customDatePicker1.HeaderBackgroundColor = SystemColors.GrayText;
-            customDatePicker1.HorizontalPadding = 4;
-            customDatePicker1.Location = new Point(85, 136);
+            customDatePicker1.HorizontalPadding = 3;
+            customDatePicker1.Location = new Point(37, 148);
             customDatePicker1.Margin = new Padding(3, 2, 3, 2);
-            customDatePicker1.MinimumSize = new Size(96, 23);
+            customDatePicker1.MinimumSize = new Size(143, 28);
             customDatePicker1.Name = "customDatePicker1";
             customDatePicker1.OnFocusBool = false;
-            customDatePicker1.PaddingMode = CustomControl.PaddingModeEnum.Absolute;
-            customDatePicker1.PaddingRelativePercent = 0.9F;
+            customDatePicker1.OnFocusBorderColor = SystemColors.Highlight;
+            customDatePicker1.PaddingMode = CustomControl.PaddingModeEnum.RelativeToFont;
+            customDatePicker1.PaddingRelativePercent = 0.2F;
             customDatePicker1.SecondaryBackgroundColor = SystemColors.ControlLightLight;
             customDatePicker1.SecondaryForeColor = SystemColors.GrayText;
-            customDatePicker1.Size = new Size(108, 35);
+            customDatePicker1.Size = new Size(143, 28);
             customDatePicker1.TabIndex = 24;
             customDatePicker1.VerticalPadding = 4;
             // 
@@ -221,9 +225,9 @@ namespace PL
             // 
             // customDataGridView1
             // 
+            customDataGridView1.BackColor = Color.Transparent;
             customDataGridView1.BackgroundColor = SystemColors.Control;
             customDataGridView1.BorderColor = SystemColors.WindowFrame;
-            customDataGridView1.BorderColorFocus = SystemColors.Highlight;
             customDataGridView1.BorderFocusExtraWidth = 1;
             customDataGridView1.BorderRadius = 9;
             customDataGridView1.BorderWidth = 1;
@@ -238,6 +242,7 @@ namespace PL
             customDataGridView1.Location = new Point(228, 119);
             customDataGridView1.Name = "customDataGridView1";
             customDataGridView1.OnFocusBool = false;
+            customDataGridView1.OnFocusBorderColor = SystemColors.Highlight;
             customDataGridView1.PaddingMode = CustomControl.PaddingModeEnum.RelativeToFont;
             customDataGridView1.PaddingRelativePercent = 1F;
             customDataGridView1.SecondaryBackgroundColor = SystemColors.ControlLightLight;
@@ -246,12 +251,49 @@ namespace PL
             customDataGridView1.TabIndex = 25;
             customDataGridView1.VerticalPadding = 1;
             // 
+            // customComboBox1
+            // 
+            customComboBox1.BackColor = Color.Transparent;
+            customComboBox1.BackgroundColor = SystemColors.Control;
+            customComboBox1.BorderColor = SystemColors.WindowFrame;
+            customComboBox1.BorderFocusExtraWidth = 1;
+            customComboBox1.BorderRadius = 5;
+            customComboBox1.BorderWidth = 1;
+            customComboBox1.HeaderBackgroundColor = SystemColors.GrayText;
+            customComboBox1.HorizontalPadding = 1;
+            customComboBox1.ItemList = (System.Collections.Specialized.StringCollection)resources.GetObject("customComboBox1.ItemList");
+            customComboBox1.Location = new Point(502, 148);
+            customComboBox1.MinimumSize = new Size(5, 5);
+            customComboBox1.Name = "customComboBox1";
+            customComboBox1.OnFocusBool = false;
+            customComboBox1.OnFocusBorderColor = SystemColors.Highlight;
+            customComboBox1.PaddingMode = CustomControl.PaddingModeEnum.Absolute;
+            customComboBox1.PaddingRelativePercent = 0.6F;
+            customComboBox1.SecondaryBackgroundColor = SystemColors.ControlLightLight;
+            customComboBox1.SecondaryForeColor = SystemColors.GrayText;
+            customComboBox1.SelectIndexText = "Teste123456";
+            customComboBox1.Size = new Size(112, 23);
+            customComboBox1.TabIndex = 26;
+            customComboBox1.VerticalPadding = 1;
+            // 
+            // dateTimePicker1
+            // 
+            dateTimePicker1.CalendarFont = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dateTimePicker1.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dateTimePicker1.Format = DateTimePickerFormat.Short;
+            dateTimePicker1.Location = new Point(43, 206);
+            dateTimePicker1.Name = "dateTimePicker1";
+            dateTimePicker1.Size = new Size(172, 27);
+            dateTimePicker1.TabIndex = 27;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
             ClientSize = new Size(843, 371);
+            Controls.Add(dateTimePicker1);
+            Controls.Add(customComboBox1);
             Controls.Add(customDataGridView1);
             Controls.Add(customDatePicker1);
             Controls.Add(innerTextBox2);
@@ -290,6 +332,7 @@ namespace PL
         private CustomDatePicker customDatePicker1;
         private DataGridView dataGridView1;
         private CustomDataGridView customDataGridView1;
-      
+        private CustomComboBox customComboBox1;
+        private DateTimePicker dateTimePicker1;
     }
 }

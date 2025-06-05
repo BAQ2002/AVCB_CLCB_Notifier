@@ -43,7 +43,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos
                 int borderWidth = control.BorderWidth * 2 - 1;
                 int borderFocusWidth = (control.BorderWidth + control.BorderFocusExtraWidth) * 2 - 1;
 
-                Pen pen = new(control.OnFocusBool ? control.BorderColorFocus : control.BorderColor,
+                Pen pen = new(control.OnFocusBool ? control.OnFocusBorderColor : control.BorderColor,
                               control.OnFocusBool ? borderFocusWidth : borderWidth);
 
                 Color arcsColor = Color.FromArgb(128, pen.Color.R, pen.Color.G, pen.Color.B);

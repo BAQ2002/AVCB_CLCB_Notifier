@@ -98,7 +98,6 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             {
                 InnerLabel columnHeader = new InnerLabel()
                 {
-                    //Name = $"Item{Properties[i].Name}",
                     Text = Properties[i].Name,
                     Font = Font,
                     BackgroundColor = HeaderBackgroundColor,
@@ -185,7 +184,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             if (columnWidthMode == ColumnWidthModeEnum.FixedCharWidth)
             {
                 string sample = new string('0', FixedCharCount);
-                columnWidth = NhegazSizeMethods.textExactSize(sample, Font).Width + xPadding;
+                columnWidth = NhegazSizeMethods.TextExactSize(sample, Font).Width + xPadding;
             }
 
             return columnWidth;

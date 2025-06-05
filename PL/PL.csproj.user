@@ -4,6 +4,9 @@
     <Compile Update="CustomControls\CustomDataGridView\CustomDataGridView.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="CustomControls\CustomLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Update="CustomControls\DropDowns\DropDownBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -13,16 +16,13 @@
     <Compile Update="CustomControls\DropDowns\DropDownYear.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="CustomControls\CustomLabel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="CustomControls\WIPinnerTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="CustomControls\InnerTextBox.cs">
+    <Compile Update="CustomControls\InnerElements\InnerTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Update="CustomControls\CustomControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="CustomControls\RoundedTextBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Edit_Forms\Form1.cs">
@@ -47,9 +47,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="CustomControls\CustomDatePicker.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="CustomControls\RoundedTextBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>

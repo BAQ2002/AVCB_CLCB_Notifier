@@ -21,7 +21,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
 
         private StringCollection itemList  = new(); //Opções da combo Box     
         private InnerLabel selectIndex = new(); //Opção atualmente selecionada
-        private InnerLabel dropDownIcon = new(); //Icone de visual
+        private InnerButton dropDownIcon = new(); //Icone de visual
         private DropDownInstance dropDownInstance = null;
         public string SelectIndexText
         {
@@ -52,27 +52,26 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         }
         public override Font Font
         {
-            get { return selectIndex.Font; }
-            set { selectIndex.Font = value; dropDownIcon.Font = value; AdjustControlSize(); }
+            get => base.Font; 
+            set { base.Font = value; selectIndex.Font = value; dropDownIcon.Font = value; AdjustControlSize(); }
         }
 
         public CustomComboBox()
         {          
-            DoubleBuffered = true;
+
             Size = new Size(121, 23);            
-            BackColor = Color.Transparent;
+            
             MinimumSize =new Size(5, 5);
             
-            this.InnerControls.Add(selectIndex);
+            InnerControls.Add(selectIndex);
             selectIndex.Text = "Teste123456";
             selectIndex.DoubleClick += (s, e) => { this.Focus(); base.OnClick(e); };
             selectIndex.Click += (s, e) => { this.Focus(); base.OnClick(e); };          
 
-            this.InnerControls.Add(dropDownIcon);
-            dropDownIcon.Text = "▼";
+            InnerControls.Add(dropDownIcon);
             dropDownIcon.DoubleClick += (s, e) => { this.Focus(); base.OnClick(e); };
             dropDownIcon.Click += (s, e) => { this.Focus(); base.OnClick(e); MessageBox.Show(dropDownIcon.Height.ToString()); };
-            //▼
+            
             dropDownIcon.MouseEnter += (s, e) =>
             {
                 dropDownIcon.ForeColor = BackgroundColor;
@@ -88,25 +87,24 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             AdjustControlSize();
         }
 
-        //Método para ajuste automatizado do tamanho dos componentes internos e do Padding vertical
-        protected override void AdjustControlSize()
+        /// <summary>
+        /// Método para ajuste automatizado do tamanho dos componentes internos e do Padding vertical
+        /// </summary>
+        protected override void AdjustInnerLocations()
         {
-            base.AdjustControlSize();
-
             int selectIndexX = BorderWidth + HorizontalPadding;
             int selectIndexY = (Height - selectIndex.Height) / 2;
             selectIndex.Location = new Point(selectIndexX, selectIndexY);
-            //selectIndex.BackgroundColor = HeaderBackgroundColor;
 
-            
-            dropDownIcon.BackGroundShape = BackGroundShape.SymmetricCircle;
-            dropDownIcon.ApplyVerticalPaddingWhenCentered = true;
-            dropDownIcon.Padding.Top = 2;
-            dropDownIcon.Height += 3;
             int dropDownIconX = Width - (dropDownIcon.Width + HorizontalPadding + BorderWidth);
             int dropDownIconY = (Height - dropDownIcon.Height) / 2;
             dropDownIcon.Location = new Point(dropDownIconX, dropDownIconY);
-            Invalidate();
+        }
+        protected override void AdjustInnerSizes()
+        {
+            dropDownIcon.BackGroundShape = BackGroundShape.SymmetricCircle;
+            dropDownIcon.Height = 19;
+            dropDownIcon.IconSize = 10;
         }
         private void ToggleDropDown()
         {
@@ -188,7 +186,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-            AdjustControlSize();
+            AdjustInnerLocations();
             Invalidate();
         }
     }
@@ -235,7 +233,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 InnerLabel.MouseEnter += (s, e) =>
                 {
                     InnerLabel.ForeColor = BackgroundColor;
-                    InnerLabel.BackgroundColor = BorderColorFocus;
+                    InnerLabel.BackgroundColor = OnFocusBorderColor;
                     Invalidate();
                 };
                 InnerLabel.MouseLeave += (s, e) =>

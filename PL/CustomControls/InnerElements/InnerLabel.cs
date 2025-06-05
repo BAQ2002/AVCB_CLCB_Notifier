@@ -26,7 +26,13 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         public string Text
         {
             get => text;
-            set { text = value; Size = NhegazSizeMethods.textExactSize(Text, Font); }
+            set { text = value; Size = NhegazSizeMethods.TextExactSize(Text, Font); }
+        }
+        public override Font Font
+        {
+            get => base.Font;
+            set
+            { base.Font = value; Size = NhegazSizeMethods.TextExactSize(Text, Font); }
         }
         public TextHorizontalAlignment TextHorizontalAlignment
         {
@@ -56,12 +62,11 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         protected override void AdjustControlSize()
         {           
             base.AdjustControlSize();
-            //AdjustTextLocation();
         }
 
-        protected override void SymmetricalCircleBackGroundAdjust()
+        protected override void SymmetricalCircleAdjust()
         {
-            base.SymmetricalCircleBackGroundAdjust();
+            base.SymmetricalCircleAdjust();
 
             TextHorizontalAlignment = TextHorizontalAlignment.Center;
             TextVerticalAlignment = TextVerticalAlignment.Center;
@@ -76,8 +81,8 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             int horizontalPadding = 0;
             int verticalPadding = 0;
 
-            int fontUnitWidth = NhegazSizeMethods.textExactSize("0", Font).Width;
-            int fontUnitHeight = NhegazSizeMethods.textExactSize("0", Font).Height;
+            int fontUnitWidth = NhegazSizeMethods.TextExactSize("0", Font).Width;
+            int fontUnitHeight = NhegazSizeMethods.TextExactSize("0", Font).Height;
 
             switch (HorizontalPaddingMode)
             {
@@ -114,13 +119,13 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         }
         private void AdjustTextLocation()
         {
-            Size textSize = NhegazSizeMethods.textExactSize(Text, Font);
+            Size textSize = NhegazSizeMethods.TextExactSize(Text, Font);
 
             int textX = 0; int horizontalPadding = 0;
             int textY = 0; int verticalPadding = 0;
 
-            int fontUnitWidth = NhegazSizeMethods.textExactSize("0", Font).Width;
-            int fontUnitHeight = NhegazSizeMethods.textExactSize("0", Font).Height;
+            int fontUnitWidth = NhegazSizeMethods.TextExactSize("0", Font).Width;
+            int fontUnitHeight = NhegazSizeMethods.TextExactSize("0", Font).Height;
            
             switch (HorizontalPaddingMode)
             {
@@ -143,7 +148,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 case VerticalPaddingMode.None:
                     verticalPadding = 0;
                     break;
-                case VerticalPaddingMode.HalfFontHeight: // provavelmente deveria ser HalfFontHeight
+                case VerticalPaddingMode.HalfFontHeight:
                     verticalPadding = fontUnitHeight / 2;
                     break;
                 case VerticalPaddingMode.OneFourthFontHeight:
@@ -190,7 +195,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         {
             base.OnPaint(parent, e);
 
-            int textY = Location.Y + (Size.Height - NhegazSizeMethods.textExactSize(Text, Font).Height) / 2;
+            int textY = Location.Y + (Size.Height - NhegazSizeMethods.TextExactSize(Text, Font).Height) / 2;
             TextRenderer.DrawText(
                 e.Graphics,
                 Text,

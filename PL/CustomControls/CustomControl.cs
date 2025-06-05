@@ -22,20 +22,21 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         private float paddingRelativePercent = 0.6f; // 60% por padrão
 
         private Color secondaryForeColor = SystemColors.GrayText; //Cor de textos secundarios
-
         private Color headerBackgroundColor = SystemColors.GrayText; //Cor do fundo de cabecalhos
         private Color backgroundColor = SystemColors.Control; //Cor do fundo
         private Color secondaryBackgroundColor = SystemColors.ControlLightLight; //Cor do fundo secundaria
 
         private Color borderColor = SystemColors.WindowFrame;
         private Color dropdownBorderColor = Color.Green;
-        private Color borderColorFocus = SystemColors.Highlight; //Cor da borda
+        private Color onFocusBorderColor = SystemColors.Highlight; //Cor da borda
         
         private PaddingModeEnum paddingMode = PaddingModeEnum.Absolute;
         public InnerControls InnerControls { get; }
 
         public CustomControl()
         {
+            DoubleBuffered = true;
+            BackColor = Color.Transparent;
             InnerControls = new InnerControls(this);
         }
         public enum PaddingModeEnum
@@ -89,7 +90,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             get { return secondaryBackgroundColor; }
             set { secondaryBackgroundColor = value; Invalidate(); }
         }
-        public Color HeaderBackgroundColor
+        public virtual Color HeaderBackgroundColor
         {
             get { return headerBackgroundColor; }
             set { headerBackgroundColor = value; Invalidate(); }
@@ -104,10 +105,10 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             get { return borderColor; }
             set { borderColor = value; Invalidate(); }
         }
-        public Color BorderColorFocus
+        public Color OnFocusBorderColor
         {
-            get { return borderColorFocus; }
-            set { borderColorFocus = value; Invalidate(); }
+            get { return onFocusBorderColor; }
+            set { onFocusBorderColor = value; Invalidate(); }
         }
         public virtual Color BackgroundColor
         {
@@ -127,6 +128,11 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 }
             }
         }
+ 
+        /// <summary>
+        /// Metodo responsavel pelo ajuste dos valores de Padding.
+        /// </summary>
+        /// 
         protected virtual void AdjustPadding()
         {
             if (PaddingMode == PaddingModeEnum.RelativeToFont)
@@ -138,10 +144,39 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             // Se for Absolute, não altera — valores já foram definidos diretamente
         }
 
+        /// <summary>
+        /// Metodo responsavel pelo ajuste das posicoes dos InnerControls.
+        /// </summary>
+        /// 
+        protected virtual void AdjustInnerLocations()
+        {
+
+        }
+
+        /// <summary>
+        /// Método responsavel pelo ajuste do tamanho dos InnerControls.
+        /// </summary>
+        protected virtual void AdjustInnerSizes()
+        {}
+
+        /// <summary>
+        /// Método responsavel por definir o MinimumSize a partir dos InnerControls.
+        /// </summary>
+        protected virtual void SetMinimumSize()
+        {
+
+        }
+
+        /// <summary>
+        /// Método que invoca todos ajustes de posicoes e tamanhos.
+        /// </summary>
         protected virtual void AdjustControlSize()
         {
-            AdjustPadding(); // comportamento comum a todos
-                             // Se quiser: Invalidate(); // opcionalmente desenhar o controle aqui
+            AdjustPadding();
+            AdjustInnerLocations();
+            AdjustInnerSizes();
+            SetMinimumSize();
+            Invalidate();
         }
         protected override void OnMouseClick(MouseEventArgs e)
         {
@@ -158,14 +193,12 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             base.OnMouseMove(e);
             InnerControls.HandleMouseMove(this, e.Location);
         }
-
         protected override void OnGotFocus(EventArgs e)
         {
             base.OnGotFocus(e);
             if (Focused)
                 InnerControls.HandleGotFocus(this, PointToClient(Cursor.Position));
         }
-
         protected override void OnLostFocus(EventArgs e)
         {
             base.OnLostFocus(e);
@@ -174,34 +207,45 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-
+            e.Graphics.SmoothingMode = SmoothingMode.None;
+            DrawBackGround(e);
+            DrawInnerControls(e);
+            DrawBorder(e);
+        }
+        protected virtual void DrawBackGround(PaintEventArgs e)
+        {
             using (GraphicsPath backgroundPath = NhegazDrawingMethods.ControlBackgroundPath(this)) //Define o GraphicsPath da area interna do Control
             {
-                e.Graphics.SmoothingMode = SmoothingMode.None;
                 using (SolidBrush brush = new SolidBrush(BackgroundColor)) //Preenche a area com o BackgroundColor
                 {
                     e.Graphics.FillPath(brush, backgroundPath);
                 }
                 e.Graphics.SetClip(backgroundPath); //Define que o limite do Paint é o GraphicsPath da area interna do Control
-                InnerControls.OnPaintAll(this, e); //Realiza o Paint de todos InnerControls
-                e.Graphics.ResetClip();
-            }         
-            
+                
+            }
+        }
+        protected virtual void DrawInnerControls(PaintEventArgs e)
+        {
+            InnerControls.OnPaintAll(this, e); 
+            e.Graphics.ResetClip();
+        }
+        protected virtual void DrawBorder(PaintEventArgs e)
+        {
             using (GraphicsPath borderPath = NhegazDrawingMethods.ControlBorderPath(this))
             {
-                if (BorderWidth > 1) 
+                Color paintBorderColor = OnFocusBool ? OnFocusBorderColor : BorderColor;
+                if (BorderWidth > 1)
                 {
                     e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                    using (SolidBrush brush = new SolidBrush(BorderColor))
+                    using (SolidBrush borderBrush = new SolidBrush(paintBorderColor))
                     {
-                        e.Graphics.FillPath(brush, borderPath);
+                        e.Graphics.FillPath(borderBrush, borderPath);
                     }
                 }
-
-                e.Graphics.DrawPath(new Pen(BorderColor, 1f), borderPath);
+                e.Graphics.DrawPath(new Pen(paintBorderColor, 1f), borderPath);
             }
-            //NhegazDrawingMethods.NewDrawBorder(this, e);          
 
         }
+       
     }
 }

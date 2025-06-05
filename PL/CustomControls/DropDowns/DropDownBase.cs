@@ -22,20 +22,22 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         public DropDownDateBase(CustomControl parentControl)
         {
             this.parentControl = parentControl;
-            this.BorderRadius = parentControl.BorderRadius;
-            this.BorderWidth = parentControl.BorderWidth;
-            this.BorderColor = parentControl.BorderColor;
-            this.itemFocusColor = parentControl.BorderColorFocus;
-            this.BackgroundColor = parentControl.BackgroundColor;
-            this.Width = parentControl.Width;
-            this.HorizontalPadding = parentControl.HorizontalPadding;
-            this.VerticalPadding = parentControl.VerticalPadding;
-            this.MinimumSize = new Size(5, 5);
-            this.DoubleBuffered = true;
-            this.BackColor = Color.Transparent;
-            this.TabStop = true;
-            this.ForeColor = parentControl.ForeColor;
-            this.Font = parentControl.Font;
+            BorderRadius = parentControl.BorderRadius;
+            BorderWidth = parentControl.BorderWidth;
+            BorderColor = parentControl.BorderColor;
+            itemFocusColor = parentControl.OnFocusBorderColor;
+            BackgroundColor = parentControl.BackgroundColor;
+            Width = parentControl.Width;
+            HorizontalPadding = parentControl.HorizontalPadding;
+            VerticalPadding = parentControl.VerticalPadding;
+            HeaderBackgroundColor = parentControl.HeaderBackgroundColor;
+
+            MinimumSize = new Size(5, 5);
+            DoubleBuffered = true;
+            BackColor = Color.Transparent;
+            TabStop = true;
+            ForeColor = parentControl.ForeColor;
+            Font = parentControl.Font;
         }
 
         protected CustomLabel CreateDateLabel(int index, string text, int x, int y, int width, int height)
@@ -56,7 +58,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             {
                 hoveredIndex = index;
                 lbl.ForeColor = BackgroundColor;
-                lbl.BackgroundColor = BorderColorFocus;
+                lbl.BackgroundColor = OnFocusBorderColor;
                 Invalidate();
             };
 
@@ -82,7 +84,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
 
             return size;
         }
-        protected abstract void OnLabelClick(int index);
+        protected virtual void OnLabelClick(int index) { }
     }
     
     public class DropDownMonth : DropDownDateBase

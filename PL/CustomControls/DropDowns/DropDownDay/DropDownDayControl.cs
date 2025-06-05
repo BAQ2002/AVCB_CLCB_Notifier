@@ -8,12 +8,13 @@ using System.Collections.Specialized;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 using System.Windows.Forms;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using static System.Net.Mime.MediaTypeNames;
+using System.Buffers.Text;
+using System.Drawing.Drawing2D;
 namespace AVBC_CLCB_Notifier.PL.CustomControls
 {
     public class DropDownDay : DropDownDateBase
     {
-        class DayItemLabel : CustomLabel
+        class DayItemLabel : InnerLabel
         {
             private int _day;
             public int Day
@@ -22,7 +23,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 set
                 {
                     _day = value;
-                    Text = _day.ToString("D2"); // Atualiza a visualização
+                    Text = _day.ToString(); // Atualiza a visualização
                 }
             }
 
@@ -37,13 +38,32 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         private int CurrentMonth;
         private int CurrentYear;
 
-        private CustomLabel MonthLabel = new CustomLabel();
-        private CustomLabel BackwardIcon = new CustomLabel(); //Label&&Button para passar para a década anteriror
-        private CustomLabel ForwardIcon = new CustomLabel();
+        private InnerLabel MonthLabel = new();
+        private InnerLabel BackwardIcon = new (); //Label&&Button para passar para a década anteriror
+        private InnerLabel ForwardIcon = new ();
+        private DayItemLabel[,] DayGrid;
+        private InnerLabel[] HeaderLabels;
+
 
         private List<DayItemLabel> DayItemList = new List<DayItemLabel>();
         private string[] MonthTexts =  {"null", "Janeiro", "Fevereiro", "Marco", "Abril", "Maio", "Junho",
                                          "Julho", "Agosto", "Setembro", "Outubro", "Novembro","Dezembro" };
+
+        public override Font Font
+        {
+            get => base.Font;
+            set { base.Font = value; MonthLabel.Font = value; ForwardIcon.Font = value; BackwardIcon.Font = value; AdjustControlSize(); }
+        }
+        public override Color ForeColor 
+        {
+            get => base.ForeColor;
+            set { base.ForeColor = value; MonthLabel.ForeColor = value; ForwardIcon.ForeColor = value; BackwardIcon.ForeColor = value; Invalidate(); }
+        }
+        public override Color HeaderBackgroundColor
+        {
+            get => base.HeaderBackgroundColor;
+            set { base.HeaderBackgroundColor = value; MonthLabel.BackgroundColor = Color.Transparent; ForwardIcon.BackgroundColor = value; BackwardIcon.BackgroundColor = value; Invalidate(); }
+        }
         public DropDownDay(CustomControl control) : base(control)
         {            
             if (parentControl is CustomDatePicker dp)
@@ -54,32 +74,83 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 CurrentMonth = int.Parse(dp.selectedMonth.Text);
                 CurrentYear = int.Parse(dp.selectedYear.Text);
                 
-                this.Controls.Add(BackwardIcon);
+                InnerControls.Add(BackwardIcon);
                 BackwardIcon.Text = "◀";
-                BackwardIcon.ForeColor = this.ForeColor;
-                BackwardIcon.BackgroundColor = BackgroundColor;
                 BackwardIcon.Click += (s, e) => { ChangeMonth(-1); Invalidate(); };
                 BackwardIcon.DoubleClick += (s, e) => { ChangeMonth(-2); Invalidate(); };
 
-                this.Controls.Add(ForwardIcon);
+                InnerControls.Add(ForwardIcon);
                 ForwardIcon.Text = "▶";
-                ForwardIcon.ForeColor = this.ForeColor;
-                ForwardIcon.BackgroundColor = BackgroundColor;
                 ForwardIcon.Click += (s, e) => { ChangeMonth(1); Invalidate(); };
                 ForwardIcon.DoubleClick += (s, e) => { ChangeMonth(2); Invalidate(); };
 
-                this.Controls.Add(MonthLabel);
-                MonthLabel.ForeColor = this.ForeColor;
-                MonthLabel.BackgroundColor = BackgroundColor;
+                InnerControls.Add(MonthLabel);
                 MonthLabel.Text = MonthTexts[CurrentMonth];
 
                 SecondaryForeColor = Color.FromArgb((ForeColor.R + 255) / 2, (ForeColor.G + 255) / 2, (ForeColor.B + 255) / 2);
 
-                CreateDayItems();                           
+                CreateDayItems();
+                CreateHeaderLabels();
                 AdjustControlSize();
             }
         }
-        
+        private void NewUpdateDayList(int year, int month)
+        {
+            DateTime firstDay = new DateTime(year, month, 1);
+            int firstDayOfWeek = (int)firstDay.DayOfWeek; // domingo = 0, segunda = 1, ...
+
+            int daysInCurrentMonth = DateTime.DaysInMonth(year, month);
+
+            int prevMonth = (month == 1) ? 12 : month - 1;
+            int prevYear = (month == 1) ? year - 1 : year;
+            int daysInPrevMonth = DateTime.DaysInMonth(prevYear, prevMonth);
+
+            int nextMonth = (month == 12) ? 1 : month + 1;
+            int nextYear = (month == 12) ? year + 1 : year;
+
+            int gridIndex = 0;
+
+            for (int row = 0; row < NumberOfRows; row++)
+            {
+                for (int col = 0; col < ItemsPerRow; col++)
+                {
+                    DayItemLabel label = DayGrid[row, col];
+
+                    int flatIndex = gridIndex++;
+                    if (flatIndex < firstDayOfWeek)
+                    {
+                        // Dias do mês anterior
+                        int day = daysInPrevMonth - firstDayOfWeek + flatIndex + 1;
+                        label.Day = day;
+                        label.Month = prevMonth;
+                        label.Year = prevYear;
+                        label.IsCurrentMonth = false;
+                        label.ForeColor = SecondaryForeColor;
+                    }
+                    else if (flatIndex < firstDayOfWeek + daysInCurrentMonth)
+                    {
+                        // Dias do mês atual
+                        int day = flatIndex - firstDayOfWeek + 1;
+                        label.Day = day;
+                        label.Month = month;
+                        label.Year = year;
+                        label.IsCurrentMonth = true;
+                        label.ForeColor = ForeColor;
+                    }
+                    else
+                    {
+                        // Dias do próximo mês
+                        int day = flatIndex - (firstDayOfWeek + daysInCurrentMonth) + 1;
+                        label.Day = day;
+                        label.Month = nextMonth;
+                        label.Year = nextYear;
+                        label.IsCurrentMonth = false;
+                        label.ForeColor = SecondaryForeColor;
+                    }
+                }
+            }
+        }
+
         private void UpdateDayList(int year, int month)
         {
             int DayItemListIndex = 0; //Indice que faz referencia a lista de DayItemLabel: a cada item que é adicionado aumenta 1(vai para o proximo indice)
@@ -129,9 +200,9 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             }            
         }
 
-        protected override void OnLabelClick(int index)
+        protected void OnLabelClick(int rowIndex, int colIndex)
         {
-            var item = DayItemList[index];
+            var item = DayGrid[ rowIndex, colIndex];
 
             if (parentControl is CustomDatePicker dp)
             {
@@ -160,99 +231,147 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 CurrentMonth += offset;
             }
             MonthLabel.Text = MonthTexts[CurrentMonth];
-            UpdateDayList(CurrentYear, CurrentMonth);
+            NewUpdateDayList(CurrentYear, CurrentMonth);
             AdjustControlSize();
         }
 
-        //Método que cria os DayItemLabel: são criados sem o texto ou dia que são declarados ou modificados no UpdateDayList
-        private void CreateDayItems()
+        /// <summary>
+        /// Esse Método deve ser responsavel por chamar os metodos que criam os elementos virtuais, tais como DayItems 
+        /// </summary>
+        protected void CreateDayItems()
         {
-            int numberOfLabels = NumberOfRows * ItemsPerRow;
+            DayGrid = new DayItemLabel[NumberOfRows, ItemsPerRow];
 
-            for (int i = 0; i < numberOfLabels; i++)
+            for (int row = 0; row < NumberOfRows; row++)
             {
-                int index = i;
+                for (int col = 0; col < ItemsPerRow; col++)
+                {
+                    int index = row * ItemsPerRow + col;
 
-                DayItemLabel dayItemLabel = new DayItemLabel()
-                {
-                    Name = $"Item{index}",
-                    Font = Font,
-                    BackgroundColor = BackgroundColor
-                };        
-                dayItemLabel.MouseEnter += (s, e) =>
-                {
-                    hoveredIndex = index;
-                    dayItemLabel.ForeColor = BackgroundColor;
-                    dayItemLabel.BackgroundColor = BorderColorFocus;
-                    Invalidate();
-                };
-                dayItemLabel.MouseLeave += (s, e) =>
-                {
-                    if (hoveredIndex == index) hoveredIndex = -1;
-                    dayItemLabel.ForeColor = DayItemList[index].IsCurrentMonth ? ForeColor : SecondaryForeColor; 
-                    dayItemLabel.BackgroundColor = BackgroundColor;
-                    Invalidate();
-                };
-                dayItemLabel.Click += (s, e) => OnLabelClick(index);
+                    var label = new DayItemLabel
+                    {
+                        Font = Font,
+                        BackgroundColor = BackgroundColor,
+                        BackGroundShape = BackGroundShape.SymmetricCircle
+                    };
 
-                this.Controls.Add(dayItemLabel);
-                DayItemList.Add(dayItemLabel);
-                          
+                    int capturedRow = row;
+                    int capturedCol = col;
+
+                    label.MouseEnter += (s, e) =>
+                    {
+                        label.ForeColor = BackgroundColor;
+                        label.BackgroundColor = OnFocusBorderColor;
+                        Invalidate();
+                    };
+                    label.MouseLeave += (s, e) =>
+                    {
+                        label.ForeColor = DayGrid[capturedRow, capturedCol].IsCurrentMonth ? ForeColor : SecondaryForeColor;
+                        label.BackgroundColor = BackgroundColor;
+                        Invalidate();
+                    };
+                    label.Click += (s, e) => OnLabelClick(capturedRow, capturedCol);
+
+                    InnerControls.Add(label);
+                    DayGrid[row, col] = label;
+                }
+                
             }
-            UpdateDayList(CurrentYear, CurrentMonth);
+            NewUpdateDayList(CurrentYear, CurrentMonth);
         }
 
-        protected void AdjustControlSize()
+        public void CreateHeaderLabels()
         {
             string[] weekDays = { "D", "S", "T", "Q", "Q", "S", "S" };
+            HeaderLabels = new InnerLabel[weekDays.Length];
 
-            if (DayItemList == null || DayItemList.Count == 0 || ItemsPerRow <= 0)
+            for (int i = 0; i < weekDays.Length; i++)
+            {
+                var headerLabel = new InnerLabel
+                {
+                    Text = weekDays[i],
+                    Font = Font,
+                    BackgroundColor = HeaderBackgroundColor,
+                    BackGroundShape = BackGroundShape.SymmetricCircle
+                };
+                InnerControls.Add(headerLabel);
+                HeaderLabels[i] = headerLabel;
+            }
+        }
+
+        protected override void AdjustControlSize()
+        {
+            
+
+            if (DayGrid == null || DayGrid.Length == 0 || ItemsPerRow <= 0)
                 return;
 
             int xPadding = HorizontalPadding;
             int yPadding = VerticalPadding;
 
-            int itemHeight = textExactSize("00", this.Font).Height;
-            int itemWidth = textExactSize("00", this.Font).Width;
+            int itemUniformSize = NhegazSizeMethods.TextProportionalSize("00", this.Font, 1.3f).Height;
 
-            int totalItems = DayItemList.Count;
+            int totalItems = NumberOfRows * ItemsPerRow;
             int numRows = (int)Math.Ceiling((double)totalItems / ItemsPerRow);
 
-            Width = xPadding + (ItemsPerRow * (itemWidth + xPadding));
-            Height = yPadding + ((numRows + 2) * (itemHeight + yPadding));
+            Width = xPadding + (ItemsPerRow * (itemUniformSize + xPadding));
+            Height = yPadding + ((numRows + 2) * (itemUniformSize + yPadding));
 
             BackwardIcon.Location = new Point(xPadding, yPadding);
             ForwardIcon.Location = new Point(Width - (ForwardIcon.Width + xPadding), yPadding);
             MonthLabel.Location = new Point((Width - MonthLabel.Width) / 2, yPadding);
 
-            for (int i = 0; i < weekDays.Length; i++)
+            AdjustInnerLocations();
+
+        }
+        protected override void AdjustInnerSizes()
+        {
+        }
+        protected override void AdjustInnerLocations()
+        {
+            int xPadding = HorizontalPadding;
+            int yPadding = VerticalPadding;
+            int itemUniformSize = NhegazSizeMethods.TextProportionalSize("00", this.Font, 1.3f).Height;
+
+            int headerY = (2 * yPadding) + ForwardIcon.Height;
+            int baseGridY = headerY + itemUniformSize + yPadding;
+
+            for (int col = 0; col < ItemsPerRow; col++)
             {
-                int col = i % ItemsPerRow;
-                int x = xPadding + (col * (itemWidth + xPadding));
-                int y = (2 * yPadding) + ForwardIcon.Height;
-                CustomLabel lbl = CreateDateLabel(i, weekDays[i], x, y, itemWidth, itemHeight);
-                this.Controls.Add(lbl);
-            }
-            
-            for (int i = 0; i < totalItems; i++)
-            {     
-                int row = i / ItemsPerRow;
-                int column = i % ItemsPerRow;
+                int x = xPadding + col * (itemUniformSize + xPadding);
 
-                int locationX = xPadding + (column * (itemWidth + xPadding));
-                int locationY = yPadding + (2 * itemHeight +  yPadding) + (row * (itemHeight + yPadding));
+                var header = HeaderLabels[col];
+                header.Location = new Point(x, headerY);
+                header.Width = itemUniformSize;
+                header.Height = itemUniformSize;
 
-                DayItemLabel dayItemLabel = DayItemList[i];
-                dayItemLabel.Width = itemWidth;
-                dayItemLabel.Height = itemHeight;
-                dayItemLabel.Location = new Point(locationX, locationY);
+                for (int row = 0; row < NumberOfRows; row++)
+                {
+                    int y = baseGridY + row * (itemUniformSize + yPadding);
+
+                    var label = DayGrid[row, col];
+                    label.Location = new Point(x, y);
+                    label.Width = itemUniformSize;
+                    label.Height = itemUniformSize;
+                }
             }
         }
-        
+
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
-            NhegazDrawingMethods.DrawControl(this, e);
+            e.Graphics.SmoothingMode = SmoothingMode.None;
+            base.DrawBackGround(e);
+            Rectangle HeaderRectangle = new Rectangle(HorizontalPadding, VerticalPadding, Width - HorizontalPadding, HeaderLabels[0].Height);
+
+            using (GraphicsPath headerBackgroundPath = NhegazDrawingMethods.RectBackgroundPath(HeaderRectangle, 4))//Define o GraphicsPath da area interna do Control
+            {
+                using (SolidBrush brush = new SolidBrush(HeaderBackgroundColor)) //Preenche a area com o BackgroundColor
+                {
+                    e.Graphics.FillPath(brush, headerBackgroundPath);
+                }
+            }
+            base.DrawInnerControls(e);
+            base.DrawBorder(e);
         }
     }
 }

@@ -12,10 +12,34 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         /// <summary>
         /// Retorna o Tamanho(Width, Height) exato a partir de um texto e uma Font.
         /// </summary>
-        public static Size textExactSize(string text, Font font)
+        public static Size TextExactSize(string text, Font font)
         {
             Size size = TextRenderer.MeasureText(
                 text,
+                font,
+                new Size(int.MaxValue, int.MaxValue),
+                TextFormatFlags.NoPadding | TextFormatFlags.SingleLine
+            );
+            return size;
+        }
+        public static Size TextProportionalSize(string text, Font font, float? proportion = 1f)
+        {
+            Size size = TextRenderer.MeasureText(
+                text,
+                font,
+                new Size(int.MaxValue, int.MaxValue),
+                TextFormatFlags.NoPadding | TextFormatFlags.SingleLine
+            );
+            float scale = proportion ?? 1f;
+            size.Width = (int)(size.Width * scale);
+            size.Height = (int)(size.Height * scale);
+            return size;
+        }
+
+        public static Size FontUnitSize(Font font)
+        {
+            Size size = TextRenderer.MeasureText(
+                "0",
                 font,
                 new Size(int.MaxValue, int.MaxValue),
                 TextFormatFlags.NoPadding | TextFormatFlags.SingleLine

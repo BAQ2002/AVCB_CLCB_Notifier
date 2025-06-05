@@ -110,10 +110,9 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
 
 
     public abstract class InnerControl
-    {
-        
+    {       
         public bool Visible { get; set; } = true;
-        public Font Font { get; set; } = SystemFonts.DefaultFont;
+        public virtual Font Font { get; set; } = SystemFonts.DefaultFont;
         public Color ForeColor { get; set; } = SystemColors.ControlText;
         //public Color HoverForeColor { get; set; } = SystemColors.ControlText;
         public Color BackgroundColor { get; set; } = SystemColors.Control;
@@ -123,6 +122,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         public Rectangle Bounds => new(Location, Size);
         public InternalPadding Padding { get; }
         public bool HitBox(Point p) => Bounds.Contains(p);
+
         private BackGroundShape backGroundShape = BackGroundShape.FitRectangle;
         public BackGroundShape BackGroundShape 
         {
@@ -132,7 +132,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         public int Width
         {
             get => Size.Width;
-            set { Size = new Size(value, Size.Height); AdjustControlSize(); }
+            set { Size = new Size(value, Size.Height); AdjustControlSize();}
         }
         public int Height
         {
@@ -154,7 +154,6 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
 
         public event EventHandler? MouseEnter;
         public event EventHandler? MouseLeave;
-
 
         public void RaiseClick(object sender)
         {
@@ -192,16 +191,21 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         {
             if (BackGroundShape == BackGroundShape.SymmetricCircle) 
             {
-                SymmetricalCircleBackGroundAdjust();
+                SymmetricalCircleAdjust();
             }
         }
 
-        protected virtual void SymmetricalCircleBackGroundAdjust()
+        /// <summary>
+        /// Metodo responsavel por realizar ajustes para BackgroundShape.SymmetricalCircle
+        /// </summary>
+        protected virtual void SymmetricalCircleAdjust()
         {
-            int reference = Height > Width ? Height : Width;
-            Size = new Size(reference, reference);
-        }
+            if (Size.Width == Size.Height)
+                return;
 
+            int reference = Math.Max(Width, Height); Size = new Size(reference, reference);
+        }
+ 
         public virtual void Update()
         {
 
@@ -209,9 +213,9 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         public virtual void OnPaint(CustomControl parent, PaintEventArgs e)
         {
             if (!Visible) return;
-            using (GraphicsPath backgroundPath = NhegazDrawingMethods.InnerControlBackgroundPath(this)) //Define o GraphicsPath da area interna do Control
+            using (GraphicsPath backgroundPath = NhegazDrawingMethods.InnerControlBackgroundPath(this)) //Define o GraphicsPath da area interna do InnerControl
             {
-                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias; 
 
                 using (SolidBrush brush = new SolidBrush(BackgroundColor)) //Preenche a area com o BackgroundColor
                 {
