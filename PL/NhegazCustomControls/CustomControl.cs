@@ -11,7 +11,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 
 namespace AVBC_CLCB_Notifier.PL.CustomControls
 {
-    public class CustomControl : UserControl
+    public abstract class CustomControl : UserControl
     {
         private bool onFocusBool = false;
         private int borderRadius = 5;
@@ -23,13 +23,15 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
 
         private Color secondaryForeColor = SystemColors.GrayText; //Cor de textos secundarios
         private Color headerBackgroundColor = SystemColors.GrayText; //Cor do fundo de cabecalhos
-        private Color backgroundColor = SystemColors.Control; //Cor do fundo
+        private Color backgroundColor = SystemColors.Window; //Cor do fundo
         private Color secondaryBackgroundColor = SystemColors.ControlLightLight; //Cor do fundo secundaria
 
         private Color borderColor = SystemColors.WindowFrame;
         private Color dropdownBorderColor = Color.Green;
         private Color onFocusBorderColor = SystemColors.Highlight; //Cor da borda
         
+        private Color hoverColor = SystemColors.Highlight;
+
         private PaddingModeEnum paddingMode = PaddingModeEnum.Absolute;
         public InnerControls InnerControls { get; }
 
@@ -48,71 +50,71 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         public PaddingModeEnum PaddingMode
         {
             get => paddingMode;
-            set
-            {
-                paddingMode = value;
-                Invalidate();     // Redesenha o controle
-            }
-        }
-        
-        public int BorderRadius
-        {
-            get { return borderRadius; }
-            set { borderRadius = value; Invalidate(); }
-        }
+            set { paddingMode = value; Invalidate(); }
+        } 
         public bool OnFocusBool
         {
-            get { return onFocusBool; }
+            get => onFocusBool;
             set { onFocusBool = value; Invalidate(); }
         }
         public int HorizontalPadding
         {
-            get { return horizontalPadding; }
+            get => horizontalPadding; 
             set { horizontalPadding = value; Invalidate(); }
         }
         public int VerticalPadding
         {
-            get { return verticalPadding; }
+            get => verticalPadding; 
             set { verticalPadding = value; Invalidate(); }
+        }
+        public int BorderRadius
+        {
+            get => borderRadius;
+            set { borderRadius = value; Invalidate(); }
         }
         public int BorderWidth
         {
-            get { return borderWidth; }
+            get => borderWidth; 
             set { borderWidth = value; Invalidate(); }
         }
         public int BorderFocusExtraWidth
         {
-            get { return borderFocusExtraWidth; }
+            get => borderFocusExtraWidth;
             set { borderFocusExtraWidth = value; Invalidate(); }
         }
         public Color SecondaryBackgroundColor
         {
-            get { return secondaryBackgroundColor; }
+            get => secondaryBackgroundColor; 
             set { secondaryBackgroundColor = value; Invalidate(); }
         }
         public virtual Color HeaderBackgroundColor
         {
-            get { return headerBackgroundColor; }
+            get => headerBackgroundColor; 
             set { headerBackgroundColor = value; Invalidate(); }
         }
         public Color SecondaryForeColor
         {
-            get { return secondaryForeColor; }
+            get => secondaryForeColor; 
             set { secondaryForeColor = value; Invalidate(); }
         }
         public Color BorderColor
         {
-            get { return borderColor; }
+            get => borderColor; 
             set { borderColor = value; Invalidate(); }
         }
         public Color OnFocusBorderColor
         {
-            get { return onFocusBorderColor; }
+            get => onFocusBorderColor; 
             set { onFocusBorderColor = value; Invalidate(); }
+        }
+        public Color HoverColor
+        {
+            get => hoverColor;
+            set { hoverColor = value; Invalidate(); }
         }
         public virtual Color BackgroundColor
         {
-            get { return backgroundColor; }
+            get => backgroundColor; 
             set { backgroundColor = value; Invalidate(); }
         }
         public float PaddingRelativePercent
@@ -128,6 +130,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 }
             }
         }
+        //protected abstract void SetHooverColors();
  
         /// <summary>
         /// Metodo responsavel pelo ajuste dos valores de Padding.
@@ -144,11 +147,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             // Se for Absolute, não altera — valores já foram definidos diretamente
         }
 
-        /// <summary>
-        /// Metodo responsavel pelo ajuste das posicoes dos InnerControls.
-        /// </summary>
-        /// 
-        protected virtual void AdjustInnerLocations()
+        protected virtual void AdjustHoverColors()
         {
 
         }
@@ -157,7 +156,22 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         /// Método responsavel pelo ajuste do tamanho dos InnerControls.
         /// </summary>
         protected virtual void AdjustInnerSizes()
-        {}
+        { }    
+        protected virtual void AdjustInnerSizes(int col, int itemSize)
+        { }
+        protected virtual void AdjustInnerSizes(int row, int col, int itemSize)
+        { }
+
+        /// <summary>
+        /// Metodo responsavel pelo ajuste das posicoes dos InnerControls.
+        /// </summary>
+        /// 
+        protected virtual void AdjustInnerLocations()
+        { }
+        protected virtual void AdjustInnerLocations(int index, int x, int y)
+        { }
+        protected virtual void AdjustInnerLocations(int row, int col, int x, int y)
+        {}     
 
         /// <summary>
         /// Método responsavel por definir o MinimumSize a partir dos InnerControls.
@@ -214,7 +228,9 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         }
         protected virtual void DrawBackGround(PaintEventArgs e)
         {
-            using (GraphicsPath backgroundPath = NhegazDrawingMethods.ControlBackgroundPath(this)) //Define o GraphicsPath da area interna do Control
+            float borderRadius = BorderWidth > 1 ? BorderRadius * 0.9f : BorderRadius;
+
+            using (GraphicsPath backgroundPath = NhegazDrawingMethods.ControlBackgroundPath(new Rectangle(Location, Size), borderRadius, BorderWidth)) //Define o GraphicsPath da area interna do Control
             {
                 using (SolidBrush brush = new SolidBrush(BackgroundColor)) //Preenche a area com o BackgroundColor
                 {
@@ -231,12 +247,15 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         }
         protected virtual void DrawBorder(PaintEventArgs e)
         {
-            using (GraphicsPath borderPath = NhegazDrawingMethods.ControlBorderPath(this))
-            {
-                Color paintBorderColor = OnFocusBool ? OnFocusBorderColor : BorderColor;
-                if (BorderWidth > 1)
-                {
-                    e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+            Color paintBorderColor = OnFocusBool ? OnFocusBorderColor : BorderColor;
+            int borderWidth = OnFocusBool ? BorderWidth + BorderFocusExtraWidth : BorderWidth;
+
+            using (GraphicsPath borderPath = NhegazDrawingMethods.ControlBorderPath(new Rectangle(Location, Size), BorderRadius, borderWidth))
+            {              
+                if (borderWidth > 1)
+                {                   
                     using (SolidBrush borderBrush = new SolidBrush(paintBorderColor))
                     {
                         e.Graphics.FillPath(borderBrush, borderPath);

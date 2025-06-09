@@ -1,35 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System;
-using System.Drawing;
-using System.ComponentModel;
-using System.Collections.Specialized;
-using System.Drawing.Drawing2D;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using System.Collections;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
-using AVBC_CLCB_Notifier.PL.CustomControls.CustomControlsRepos;
+﻿using System.Collections.Specialized;
 
 namespace AVBC_CLCB_Notifier.PL.CustomControls
 {
-    public class CustomComboBox : CustomControl
+    public partial class CustomComboBox : CustomControl
     {
 
         private StringCollection itemList  = new(); //Opções da combo Box     
         private InnerLabel selectIndex = new(); //Opção atualmente selecionada
-        private InnerButton dropDownIcon = new(); //Icone de visual
+        private InnerButton dropDownIcon = new(ButtonIcon.DropDown, BackGroundShape.SymmetricCircle); //Icone de visual
         private DropDownInstance dropDownInstance = null;
         public string SelectIndexText
         {
-            get { return selectIndex.Text; }
+            get => selectIndex.Text; 
             set { selectIndex.Text = value; Invalidate(); }
         }
         public StringCollection ItemList { 
-            get { return itemList; }
+            get => itemList; 
             set { itemList = value; Invalidate(); }
         }
         public override Color BackgroundColor
@@ -57,55 +43,26 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         }
 
         public CustomComboBox()
-        {          
-
+        {
             Size = new Size(121, 23);            
             
             MinimumSize =new Size(5, 5);
             
             InnerControls.Add(selectIndex);
             selectIndex.Text = "Teste123456";
-            selectIndex.DoubleClick += (s, e) => { this.Focus(); base.OnClick(e); };
-            selectIndex.Click += (s, e) => { this.Focus(); base.OnClick(e); };          
+            selectIndex.DoubleClick += (s, e) => { Focus(); base.OnClick(e); };
+            selectIndex.Click += (s, e) => { Focus(); base.OnClick(e); };          
 
             InnerControls.Add(dropDownIcon);
-            dropDownIcon.DoubleClick += (s, e) => { this.Focus(); base.OnClick(e); };
-            dropDownIcon.Click += (s, e) => { this.Focus(); base.OnClick(e); MessageBox.Show(dropDownIcon.Height.ToString()); };
+            dropDownIcon.DoubleClick += (s, e) => { Focus(); base.OnClick(e); };
+            dropDownIcon.Click += (s, e) => { Focus(); base.OnClick(e); };           
             
-            dropDownIcon.MouseEnter += (s, e) =>
-            {
-                dropDownIcon.ForeColor = BackgroundColor;
-                dropDownIcon.BackgroundColor = HeaderBackgroundColor;
-                Invalidate();
-            };
-            dropDownIcon.MouseLeave += (s, e) =>
-            {
-                dropDownIcon.ForeColor = ForeColor;
-                dropDownIcon.BackgroundColor = BackgroundColor;
-                Invalidate();
-            };
-            AdjustControlSize();
+            AdjustControlSize();           
+            AdjustHoverColors();
         }
 
-        /// <summary>
-        /// Método para ajuste automatizado do tamanho dos componentes internos e do Padding vertical
-        /// </summary>
-        protected override void AdjustInnerLocations()
-        {
-            int selectIndexX = BorderWidth + HorizontalPadding;
-            int selectIndexY = (Height - selectIndex.Height) / 2;
-            selectIndex.Location = new Point(selectIndexX, selectIndexY);
-
-            int dropDownIconX = Width - (dropDownIcon.Width + HorizontalPadding + BorderWidth);
-            int dropDownIconY = (Height - dropDownIcon.Height) / 2;
-            dropDownIcon.Location = new Point(dropDownIconX, dropDownIconY);
-        }
-        protected override void AdjustInnerSizes()
-        {
-            dropDownIcon.BackGroundShape = BackGroundShape.SymmetricCircle;
-            dropDownIcon.Height = 19;
-            dropDownIcon.IconSize = 10;
-        }
+        
+        //dropDownIcon.SetHoverColors(BackgroundColor, HeaderBackgroundColor);
         private void ToggleDropDown()
         {
             if (dropDownInstance != null) // Se o dropdown já estiver aberto, fecha ele
@@ -126,7 +83,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 Point screenLocation = this.Parent.PointToScreen(this.Location);
                 Point formLocation = parentForm.PointToClient(screenLocation);
 
-                dropDownInstance.Location = new Point(formLocation.X, formLocation.Y + Height + BorderWidth);
+                dropDownInstance.Location = new Point(formLocation.X, formLocation.Y + Height + 1);
                 dropDownInstance.BringToFront();
                 parentForm.Controls.Add(dropDownInstance);
                 parentForm.Controls.SetChildIndex(dropDownInstance, 0);
@@ -145,18 +102,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             base.OnDoubleClick(e);
             OnClick(e);
         }
-        //protected override void OnLostFocus(EventArgs e)
-        //{
-         //   base.OnLostFocus(e);
-          //  if (dropDownInstance != null)
-          //  {
-         //       Form parentForm = this.FindForm();
-         //       parentForm.Controls.Remove(dropDownInstance);
-         //       dropDownInstance = null;
-         //       OnFocusBool = false;
-         //       return;
-        //    }
-        //}
+
         protected override void OnLostFocus(EventArgs e)
         {
             base.OnLostFocus(e);
@@ -188,9 +134,9 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             base.OnResize(e);
             AdjustInnerLocations();
             Invalidate();
-        }
+        }     
     }
-
+    
     public class DropDownInstance : CustomControl
     {
         private CustomComboBox ParentComboBox;
@@ -283,7 +229,7 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 ParentComboBox.SelectIndexText = labelText; // Atualiza a opção selecionada
                 ParentComboBox.OnFocusBool = false;
             }
-            this.Parent?.Controls.Remove(this); // Fecha o dropdown após a seleção
+            Parent?.Controls.Remove(this); // Fecha o dropdown após a seleção
         }
         
         protected override void OnPaint(PaintEventArgs e)

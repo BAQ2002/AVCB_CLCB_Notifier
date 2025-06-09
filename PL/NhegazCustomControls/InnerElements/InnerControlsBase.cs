@@ -139,7 +139,8 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
             get => Size.Height;
             set { Size = new Size(Size.Width, value); AdjustControlSize(); }
         }
-
+        public int Top => Location.Y; public int Left => Location.X;
+        public int Right => Location.X + Size.Width; public int Bottom => Location.Y + Size.Height;
         public InnerControl()
         {
             Padding = new(this);
@@ -205,11 +206,29 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
 
             int reference = Math.Max(Width, Height); Size = new Size(reference, reference);
         }
- 
+
         public virtual void Update()
         {
 
         }
+        public void SetHoverColors(Color foreColorOnHover, Color backColorOnHover)
+        {
+            Color originalFore = ForeColor;
+            Color originalBack = BackgroundColor;
+
+            MouseEnter += (s, e) =>
+            {
+                ForeColor = foreColorOnHover;
+                BackgroundColor = backColorOnHover;
+            };
+
+            MouseLeave += (s, e) =>
+            {
+                ForeColor = originalFore;
+                BackgroundColor = originalBack;
+            };
+        }
+
         public virtual void OnPaint(CustomControl parent, PaintEventArgs e)
         {
             if (!Visible) return;

@@ -22,8 +22,6 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         private InnerLabel[,]? DataLabels = null;
         private ColumnWidthModeEnum columnWidthMode = ColumnWidthModeEnum.HeaderWidth;
 
-        private int RowHoveredIndex;
-        private int columnHoveredIndex;
         private int fixedCharCount = 10;
         private int linesWidth = 1;
 

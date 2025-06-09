@@ -10,10 +10,12 @@ using static AVBC_CLCB_Notifier.PL.CustomControls.CustomControl;
 
 namespace AVBC_CLCB_Notifier.PL.CustomControls
 {
-    public enum ButtonPreSet
+    public enum ButtonIcon
     {
         None,
         DropDown,
+        Forward,
+        Backward,
         Add,
         Edit,
         Delete
@@ -38,12 +40,14 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 AdjustIconSize();
             }
         }
-        public ButtonPreSet ButtonPreSet {  get; set; } = ButtonPreSet.None;
 
-        public InnerButton(ButtonPreSet? preSet = null, BackGroundShape? backGroundShape = null, IconSizeMode? iconSizeMode = null)
+        public ButtonIcon ButtonIcon { get; set; } = ButtonIcon.None;
+
+        public InnerButton(ButtonIcon? icon = null, BackGroundShape? backGroundShape = null, IconSizeMode? iconSizeMode = null)
         {
-            if (preSet.HasValue) 
-                ButtonPreSet = preSet.Value;           
+            if (icon.HasValue)
+                ButtonIcon = icon.Value;
+            
 
             if (backGroundShape.HasValue)
                 BackGroundShape = backGroundShape.Value;
@@ -60,19 +64,36 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
                 IconSize = (int)(fontHeight * IconSizePercent);
             }
         }
+        //protected override void AdjustControlSize()
+        //{
+        //    if (ButtonIcon == ButtonIcon.None);
+        //}
 
+        private GraphicsPath? GetIconPath()
+        {
+            return ButtonIcon switch
+            {
+                ButtonIcon.DropDown => NhegazDrawingMethods.DropDownIconPath(this, IconSize),
+                ButtonIcon.Forward => NhegazDrawingMethods.ForwardIconPath(this, IconSize),
+                ButtonIcon.Backward => NhegazDrawingMethods.BackwardIconPath(this, IconSize),
+                ButtonIcon.Add => NhegazDrawingMethods.AddIconPath(this, IconSize),
+                ButtonIcon.Delete => NhegazDrawingMethods.AddIconPath(this, IconSize),
+                _ => null
+            };
+        }
+        
         public override void OnPaint(CustomControl parent, PaintEventArgs e)
         {
             base.OnPaint(parent, e);
-            using (GraphicsPath IconPath = NhegazDrawingMethods.DropDownIconPath(this, IconSize))
-            {
-                using (SolidBrush brush = new SolidBrush(ForeColor)) //Preenche a area com o BackgroundColor
-                {
-                    e.Graphics.FillPath(brush, IconPath);
-                    
-                }
-                e.Graphics.DrawPath(new Pen(ForeColor, 1f), IconPath);
-            }
+
+            using var iconPath = GetIconPath();
+            if (iconPath == null) return;
+
+            using (SolidBrush brush = new SolidBrush(ForeColor))
+                e.Graphics.FillPath(brush, iconPath);
+
+            using (Pen pen = new Pen(ForeColor, 1f))
+                e.Graphics.DrawPath(pen, iconPath);
         }
     }
 }

@@ -23,16 +23,17 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         private VerticalPaddingMode verticalPaddingMode = VerticalPaddingMode.None;
         public bool ApplyHorizontalPaddingWhenCentered { get; set; } = false;
         public bool ApplyVerticalPaddingWhenCentered { get; set; } = false;
+        public bool ReSizeBasedOnText {  get; set; } = true;
+        public bool ReSizeBasedOnFont { get; set; } = true;
         public string Text
         {
             get => text;
-            set { text = value; Size = NhegazSizeMethods.TextExactSize(Text, Font); }
+            set { text = value; AdjustSizeBasedOnText(); AdjustTextLocation(); }
         }
         public override Font Font
         {
             get => base.Font;
-            set
-            { base.Font = value; Size = NhegazSizeMethods.TextExactSize(Text, Font); }
+            set { base.Font = value; AdjustSizeBasedOnFont(); AdjustTextLocation(); }
         }
         public TextHorizontalAlignment TextHorizontalAlignment
         {
@@ -75,7 +76,16 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         {
             AdjustTextLocation(); // recalcula o ponto do texto baseado na altura atual
         }
-
+        public void AdjustSizeBasedOnFont()
+        {
+            if (ReSizeBasedOnFont == true)
+                Size = NhegazSizeMethods.TextExactSize(Text, Font);
+        }
+        public void AdjustSizeBasedOnText()
+        {
+            if (ReSizeBasedOnText == true)
+                Size = NhegazSizeMethods.TextExactSize(Text, Font);
+        }
         private (int horizontalPadding, int verticalPadding) PaddingModeCaser()        
         {
             int horizontalPadding = 0;
@@ -195,7 +205,6 @@ namespace AVBC_CLCB_Notifier.PL.CustomControls
         {
             base.OnPaint(parent, e);
 
-            int textY = Location.Y + (Size.Height - NhegazSizeMethods.TextExactSize(Text, Font).Height) / 2;
             TextRenderer.DrawText(
                 e.Graphics,
                 Text,
